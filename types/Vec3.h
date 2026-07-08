@@ -20,7 +20,7 @@ public:
         friend Vec3 operator-(const Vec3&, const Vec3&);
         Vec3 operator*(const GLfloat rhs) const;
         Vec3 operator=(const Vec3& rhs);
-        friend bool operator==(Vec3&,  Vec3&);
+        friend bool operator==(const Vec3&, const Vec3&);
         // Object mgmt
         Vec3();
         Vec3(const GLfloat, const GLfloat, const GLfloat);
