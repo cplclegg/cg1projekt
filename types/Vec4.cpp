@@ -3,6 +3,7 @@
 //
 #include "Vec4.h"
 #include <cmath>
+#include <cassert>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 using namespace std;
@@ -19,12 +20,13 @@ const GLfloat& Vec4::operator() (const int component) const
     return m_vector[component];
 }
 
-Vec4 operator*(const Vec4& rhs, const Vec4& lhs)
+GLfloat operator*(const Vec4& rhs, const Vec4& lhs)
 {
+    assert (rhs.m_dimension == 4 && lhs.m_dimension == 4);
     GLfloat result = 0.0f;
-    for (int i = 0; i<m_dimension; ++i)
+    for (int i = 0; i<lhs.m_dimension; ++i)
     {
-        result += m_vector[i]*m_vector[i];
+        result += rhs.m_vector[i]*lhs.m_vector[i];
     }
     return result;
 }
@@ -35,11 +37,11 @@ Vec4 Vec4::operator*(const GLfloat rhs) const
             m_vector[0] * rhs,
             m_vector[1] * rhs,
             m_vector[2] * rhs,
-            m_vector[3] * rhs;
+            m_vector[3] * rhs
     };
 }
 
-Vec3 operator+(const Vec4& lhs, const Vec4& rhs)
+Vec4 operator+(const Vec4& lhs, const Vec4& rhs)
 {
     return Vec4 {
         lhs(0)+rhs(0),
@@ -49,7 +51,7 @@ Vec3 operator+(const Vec4& lhs, const Vec4& rhs)
     };
 }
 
-Vec3 operator-(const Vec3& lhs, const Vec3& rhs)
+Vec4 operator-(const Vec4& lhs, const Vec4& rhs)
 {
     return Vec4 {
         lhs(0)-rhs(0),
@@ -59,7 +61,7 @@ Vec3 operator-(const Vec3& lhs, const Vec3& rhs)
     };
 }
 
-Vec3 Vec3::operator=(const Vec3& rhs)
+Vec4 Vec4::operator=(const Vec4& rhs)
 {
     return Vec4 {
         rhs(0),
@@ -69,12 +71,13 @@ Vec3 Vec3::operator=(const Vec3& rhs)
     };
 }
 
-bool operator==(const Vec3& lhs, const Vec3& rhs)
+bool operator==(const Vec4& lhs, const Vec4& rhs)
 {
+    assert (rhs.m_dimension == 4 && lhs.m_dimension == 4);
     bool equal = true;
-    for (int i = 0; i < m_dimension; ++i)
+    for (int i = 0; i < lhs.m_dimension; ++i)
     {
-        equal = equal && m_vector[i] == rhs(i);
+        equal = equal && (lhs(i) == rhs(i));
     }
     return equal;
 }
@@ -107,7 +110,7 @@ GLfloat Vec4::getLength()
     GLfloat squareSum = 0;
     for (int i = 0; i < m_dimension; ++i)
     {
-        squaresum += m_vector[i]*m_vector[i];
+        squareSum += m_vector[i]*m_vector[i];
     }
     return sqrt(squareSum);
 }
