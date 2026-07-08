@@ -51,7 +51,7 @@ Vec3 operator+(const Vec4& lhs, const Vec4& rhs)
 
 Vec3 operator-(const Vec3& lhs, const Vec3& rhs)
 {
-    return Vec4{
+    return Vec4 {
         lhs(0)-rhs(0),
         lhs(1)-rhs(1),
         lhs(2)-rhs(2),
@@ -86,13 +86,13 @@ Vec4::Vec4()
 {
 }
 
-Vec3::Vec3(const GLfloat firstComponent, const GLfloat secondComponent, const GLfloat thirdComponent, const GLfloat fourthComponent)
+Vec4::Vec4(const GLfloat firstComponent, const GLfloat secondComponent, const GLfloat thirdComponent, const GLfloat fourthComponent)
     : m_vector {firstComponent, secondComponent, thirdComponent, fourthComponent}
 {
 }
 
-Vec3::Vec3(const Vec3& other)
-    : m_vector {0.0f, 0.0f, 0.0f}
+Vec4::Vec4(const Vec4& other)
+    : m_vector {0.0f, 0.0f, 0.0f, 0.0f}
 {
     for (int i = 0; i < m_dimension; ++i)
     {
@@ -102,8 +102,13 @@ Vec3::Vec3(const Vec3& other)
 
 // Methods
 
-GLfloat Vec3::getLength()
+GLfloat Vec4::getLength()
 {
-    return sqrt( m_vector[0]*m_vector[0] + m_vector[1]*m_vector[1] + m_vector[2]*m_vector[2] );
+    GLfloat squareSum = 0;
+    for (int i = 0; i < m_dimension; ++i)
+    {
+        squaresum += m_vector[i]*m_vector[i];
+    }
+    return sqrt(squareSum);
 }
 
