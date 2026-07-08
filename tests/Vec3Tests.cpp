@@ -137,8 +137,9 @@ void vectorProductTestVec3()
     }
 }
 
-int main()
+void vec3Tests()
 {
+    cout << "Running tests for Class Vec3" << endl << endl;
     scalarProdTestVec3();
     lenTestVec3();
     vectorProductTestVec3();
@@ -147,6 +148,6 @@ int main()
     scalarMultTestVec3();
     equalsTestVec3();
     copyConstTestVec3();
-
+    cout << "End of test results for Class Vec3" << endl << endl;
 }
 

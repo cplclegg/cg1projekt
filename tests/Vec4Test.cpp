@@ -120,8 +120,9 @@ void scalarProdTestVec4()
     }
 }
 
-int main()
+void vec4Tests()
 {
+    cout << "Running tests for Class Vec4" << endl << endl;
     scalarProdTestVec4();
     lenTestVec4();
     addSubtractTestVec4();
@@ -129,6 +130,6 @@ int main()
     scalarMultTestVec4();
     equalsTestVec4();
     copyConstTestVec4();
-
+    cout << "End of test results for Class Vec4" << endl << endl;
 }
 
