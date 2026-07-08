@@ -1,0 +1,109 @@
+//
+// Created by tomnir on 08.07.26.
+//
+#include "Vec4.h"
+#include <cmath>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+using namespace std;
+
+// Operators
+
+GLfloat& Vec4::operator() (const int component)
+{
+    return m_vector[component];
+}
+
+const GLfloat& Vec4::operator() (const int component) const
+{
+    return m_vector[component];
+}
+
+Vec4 operator*(const Vec4& rhs, const Vec4& lhs)
+{
+    GLfloat result = 0.0f;
+    for (int i = 0; i<m_dimension; ++i)
+    {
+        result += m_vector[i]*m_vector[i];
+    }
+    return result;
+}
+
+Vec4 Vec4::operator*(const GLfloat rhs) const
+{
+    return Vec4 {
+            m_vector[0] * rhs,
+            m_vector[1] * rhs,
+            m_vector[2] * rhs,
+            m_vector[3] * rhs;
+    };
+}
+
+Vec3 operator+(const Vec4& lhs, const Vec4& rhs)
+{
+    return Vec4 {
+        lhs(0)+rhs(0),
+        lhs(1)+rhs(1),
+        lhs(2)+rhs(2),
+        lhs(3)+rhs(3)
+    };
+}
+
+Vec3 operator-(const Vec3& lhs, const Vec3& rhs)
+{
+    return Vec4{
+        lhs(0)-rhs(0),
+        lhs(1)-rhs(1),
+        lhs(2)-rhs(2),
+        lhs(3)-rhs(3)
+    };
+}
+
+Vec3 Vec3::operator=(const Vec3& rhs)
+{
+    return Vec4 {
+        rhs(0),
+        rhs(1),
+        rhs(2),
+        rhs(3)
+    };
+}
+
+bool operator==(const Vec3& lhs, const Vec3& rhs)
+{
+    bool equal = true;
+    for (int i = 0; i < m_dimension; ++i)
+    {
+        equal = equal && m_vector[i] == rhs(i);
+    }
+    return equal;
+}
+
+// Constructors
+
+Vec4::Vec4()
+    : m_vector {0.0f, 0.0f, 0.0f, 0.0f}
+{
+}
+
+Vec3::Vec3(const GLfloat firstComponent, const GLfloat secondComponent, const GLfloat thirdComponent, const GLfloat fourthComponent)
+    : m_vector {firstComponent, secondComponent, thirdComponent, fourthComponent}
+{
+}
+
+Vec3::Vec3(const Vec3& other)
+    : m_vector {0.0f, 0.0f, 0.0f}
+{
+    for (int i = 0; i < m_dimension; ++i)
+    {
+        m_vector[i] = other(i);
+    }
+}
+
+// Methods
+
+GLfloat Vec3::getLength()
+{
+    return sqrt( m_vector[0]*m_vector[0] + m_vector[1]*m_vector[1] + m_vector[2]*m_vector[2] );
+}
+
