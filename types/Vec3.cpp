@@ -40,25 +40,26 @@ Vec3 Vec3::operator*(const GLfloat rhs) const
 
 Vec3 operator+(const Vec3& lhs, const Vec3& rhs)
 {
-    Vec3 result {};
-    result(0) = lhs(0)+rhs(0);
-    result(1) = lhs(1)+rhs(1);
-    result(2) = lhs(2)+rhs(2);
-    return result;
+	return Vec3 {
+	lhs(0)+rhs(0),
+	lhs(1)+rhs(1),
+	lhs(2)+rhs(2)
+	};
 }
 
 Vec3 operator-(const Vec3& lhs, const Vec3& rhs)
 {
-    return Vec3( lhs(0)-rhs(0), lhs(1)-rhs(1), rhs(2)-lhs(2) );
+    return Vec3 {
+	lhs(0)-rhs(0),
+	lhs(1)-rhs(1),
+	lhs(2)-rhs(2)
+	};
+
 }
 
 Vec3 Vec3::operator=(const Vec3& rhs)
 {
-    Vec3 result {};
-    result(0)=rhs(0);
-    result(1)=rhs(1);
-    result(2)=rhs(2);
-    return result;
+	return Vec3 {rhs};
 }
 
 bool operator==(const Vec3& lhs, const Vec3& rhs)
