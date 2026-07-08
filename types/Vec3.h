@@ -4,28 +4,29 @@
 
 #ifndef CG1PROJEKT_VEC3_H
 #define CG1PROJEKT_VEC3_H
-#include <GL/glew>
-#include <GL/glfw>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 class Vec3
 {
 private:
-        const std::size_t m_dimension;
-        GLfloat m_vector[m_dimension];
+        const std::size_t m_dimension = 3;
+        GLfloat m_vector[3];
 public:
+        // Operators
+        GLfloat& operator() (const int);
+        const GLfloat& operator() (const int) const;
+        friend Vec3 operator*(const Vec3&, const Vec3&);
+        friend Vec3 operator+(const Vec3&, const Vec3&);
+        friend Vec3 operator-(const Vec3&, const Vec3&);
+        Vec3 operator*(const GLfloat rhs) const;
+        Vec3 operator=(const Vec3& rhs);
+        friend bool operator==(Vec3&,  Vec3&);
         // Object mgmt
         Vec3();
-        Vec3(const GLfloat firstComponent, const GLfloat secondComponen, const GLfloat thirdComponent);
-        Vec3(Vec3);
-        // Operators
-        friend Vec3 operator*(const Vec3& lhs, const Vec3& rhs);
-        friend Vec3 operator+(const Vec3& lhs, const Vec3& rhs);
-        friend Vec3 operator-(const Vec3& lhs, const Vec3& rhs);
-        Vec3 operator*(const double rhs);
-        Vec3& operator=(const Vec3& rhs);
-        friend bool operator==(const Vec3& lhs, const Vec3& rhs);
-        GLfloat& operator() (const size_t component);
+        Vec3(const GLfloat, const GLfloat, const GLfloat);
+        Vec3(const Vec3&);
         // Methods
         GLfloat getLength();
-        GLfloat scalarProduct(const Vec3& rhs);
+        GLfloat scalarProduct(const Vec3&);
 };
 #endif //CG1PROJEKT_VEC3_H
