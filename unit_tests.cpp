@@ -7,4 +7,5 @@ int main(void)
 {
     vec3Tests();
     vec4Tests();
+    mat4Tests();
 }
