@@ -3,3 +3,164 @@
 //
 
 #include "Mat4.h"
+#include <cmath>
+#include <iostream>
+using namespace std;
+// Constructors and management
+
+Mat4::Mat4()
+    : m_matrix {1.0f, 0.0f, 0.0f, 0.0f,
+                0.0f, 1.0f, 0.0f, 0.0f,
+                0.0f, 0.0f, 1.0f, 0.0f,
+                0.0f, 0.0f, 0.0f, 1.0f}
+{
+
+}
+
+Mat4::Mat4(const Mat4& other)
+    : m_matrix {}
+{
+    for (size_t col = 0; col < m_dimension; ++col)
+    {
+        for (size_t row = 0; row < m_dimension; ++row)
+        {
+			size_t index = 4*row+col;
+            m_matrix[index] = other(col, row);
+        }
+    }
+}
+
+size_t Mat4::index(const size_t col, const size_t row)
+{
+    return (4*row + col);
+}
+
+// Operators
+
+GLfloat& Mat4::operator() (const size_t col, const size_t row)
+{
+	size_t index = 4*row+col;
+    return m_matrix[index];
+	//return m_matrix[col][row];
+}
+
+const GLfloat& Mat4::operator() (const size_t col, const size_t row) const
+{
+	size_t index = row*4+col;
+    return m_matrix[index];
+}
+
+Mat4 operator*(const Mat4& lhs, const Mat4& rhs)
+{
+    Mat4 result {};
+    for (size_t col = 0; col < lhs.m_dimension; ++col)
+    {
+        for (size_t row = 0; row < lhs.m_dimension; ++row)
+        {
+            result(col, row)  = lhs(0, row)*rhs(col, 0);
+            result(col, row) += lhs(1, row)*rhs(col,1);
+            result(col, row) += lhs(2, row)*rhs(col,2);
+            result(col, row) += lhs(3, row)*rhs(col,3);
+        }
+    }
+    return result;
+}
+
+Mat4 Mat4::operator* (const GLfloat rhs)
+{
+    Mat4 result {};
+    for (size_t col = 0; col < m_dimension; ++col)
+    {
+        for (size_t row = 0; row < m_dimension; ++row)
+        {
+			size_t index = 4*row+col;
+            result(col, row) = m_matrix[index] * rhs;
+        }
+    }
+    return result;
+}
+
+Mat4 operator*(const GLfloat lhs, const Mat4& rhs)
+{
+    Mat4 result {};
+    for (size_t col; col < rhs.m_dimension; ++col)
+    {
+        for (size_t row; row < rhs.m_dimension; ++row)
+        {
+            result(col, row) = rhs(col, row)*lhs;
+        }
+    }
+    return result;
+}
+
+bool operator==(const Mat4& lhs, const Mat4& rhs)
+{
+    bool equal = true;
+    for (size_t col = 0; col < lhs.m_dimension; ++col)
+    {
+        for (size_t row = 0; row < lhs.m_dimension; ++row)
+        {
+            equal = equal && (lhs(col, row) == rhs(col, row));
+        }
+    }
+    return equal;
+}
+
+Mat4 Mat4::operator=(const Mat4& rhs)
+{
+    return Mat4 {rhs};
+}
+
+ostream& operator<<(ostream& os, const Mat4& matrix)
+{
+    for (size_t col = 0; col < matrix.m_dimension; ++col)
+    {
+        for (size_t row = 0; row < matrix.m_dimension; ++row)
+        {
+			size_t index = row*4+col;
+            os << matrix.m_matrix[index] << " ";
+        }
+    }
+    return os;
+}
+
+// Methods
+
+void Mat4::translate(const Vec3& vector)
+{
+    Mat4 translationMatrix {};
+    Mat4 oldMatrix {*this};
+    translationMatrix(3,0) = vector(0);
+    translationMatrix(3,1) = vector(1);
+    translationMatrix(3,2) = vector(2);
+    Mat4 temp { translationMatrix*oldMatrix };
+    for (size_t col = 0; col < m_dimension; ++col)
+    {
+        for (size_t row = 0; row < m_dimension; ++row)
+        {
+			size_t index = row*4+col;
+            m_matrix[index] = temp(col, row);
+        }
+    }
+}
+
+Mat4 Mat4::translateCopy(const Vec3& vector)
+{
+    Mat4 translationMatrix {};
+    translationMatrix(3,0) = vector(0);
+    translationMatrix(3,1) = vector(1);
+    translationMatrix(3,2) = vector(2);
+    Mat4 temp {*this};
+    temp.translate(vector);
+    return temp;
+}
+
+void Mat4::directPrint()
+{
+	for (size_t i = 0; i < 16; ++i)
+	{
+		if (i%4==0) cout << endl;
+		cout << m_matrix[i] << " ";
+	}
+	cout << endl;
+}
