@@ -59,7 +59,29 @@ void accessorParenthesesTest()
 
 void scaleTest()
 {
-
+    Mat4 test {};
+    Vec3 sVector {2,3,4};
+    Mat4 copy {test.scaleCopy(sVector)};
+    test.scale(sVector);
+    bool testOK = true;
+    bool copyOK = true;
+    for (size_t i = 0; i<3; ++i)
+    {
+        testOK = testOK && test(i,i) == sVector(i);
+        copyOK = copyOK && copy(i,i) == sVector(i);
+    }
+    testOK = testOK && test(3,3) == 1;
+    copyOK = copyOK && copy(3,3) == 1;
+    if (testOK && copyOK)
+    {
+        cout << "OK - scale und scaleCopy ok." << endl;
+    } else
+    {
+        cout << "scale und scaleCopy nicht ok. Matrix: " << endl;
+        test.directPrint();
+        cout << "Kopie: " << endl;
+        copy.directPrint();
+    }
 }
 
 void rotationTests()
@@ -73,5 +95,6 @@ void mat4Tests()
 {
     cout << "Running tests for class Mat4" << endl << endl;
 	translationTest();
+    scaleTest();
     cout << endl << "End of test results for class Mat4" << endl;
 }
