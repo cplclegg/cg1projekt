@@ -13,8 +13,8 @@ private:
     GLfloat m_vector[4];
 public:
     // Operators
-    GLfloat& operator() (const int);
-    const GLfloat& operator() (const int) const;
+    GLfloat& operator() (const size_t);
+    const GLfloat& operator() (const size_t) const;
     friend GLfloat operator*(const Vec4&, const Vec4&);
 	friend Vec4 operator*(const GLfloat lhs, const Vec4& rhs);
     friend Vec4 operator+(const Vec4&, const Vec4&);

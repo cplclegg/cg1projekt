@@ -10,12 +10,12 @@ using namespace std;
 
 // Operators
 
-GLfloat& Vec4::operator() (const int component)
+GLfloat& Vec4::operator() (const size_t component)
 {
     return m_vector[component];
 }
 
-const GLfloat& Vec4::operator() (const int component) const
+const GLfloat& Vec4::operator() (const size_t component) const
 {
     return m_vector[component];
 }
