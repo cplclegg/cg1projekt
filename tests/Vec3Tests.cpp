@@ -154,6 +154,6 @@ void vec3Tests()
     scalarMultTestVec3();
     equalsTestVec3();
     copyConstTestVec3();
-    cout << "End of test results for Class Vec3" << endl << endl;
+    cout << endl << "End of test results for Class Vec3" << endl << endl;
 }
 
