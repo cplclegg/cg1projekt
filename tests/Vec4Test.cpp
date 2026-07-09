@@ -44,12 +44,18 @@ void scalarMultTestVec4()
 {
     Vec4 vecA {1,1,1,1};
     Vec4 vecB { vecA * 2 };
-    if ( (vecB(0) == 2) && (vecB(1) == 2) && (vecB(2) == 2) && (vecB(3) == 2))
+	Vec4 vecC { 3 * vecA };
+	bool scalarRightOK = (vecB(0) == 2) && (vecB(1) == 2) && (vecB(2) == 2) && (vecB(3) == 2);
+	bool scalarLeftOK  = (vecC(0) == 3) && (vecC(1) == 3) && (vecC(2) == 3) && (vecC(3) == 3);
+    if (scalarRightOK && scalarLeftOK)
     {
         cout << "OK - Vektor-Skalar-Multiplikation ok." << endl;
     } else
     {
-        cout << "Vektor-Skalar-Multiplikation nicht ok. Erwartet: 2 2 2 2. Erhalten: " << vecB(0) << " " << vecB(1) << " " << vecB(2) << " " << vecB(3) << endl;
+		cout << "Vektor-Skalar-Multiplikation nicht ok. Erwartet: 2 2 2 2. Erhalten: "
+			 << vecB(0) << " " << vecB(1) << " " << vecB(2) << " " << vecC(3) << endl
+	 		 << "Vektor-Skalar-Multiplikation nicht ok. Erwartet: 3 3 3 3. Erhalten: "
+	 		 << vecC(0) << " " << vecC(1) << " " << vecC(2) << " " << vecC(3) << endl;
     }
 }
 

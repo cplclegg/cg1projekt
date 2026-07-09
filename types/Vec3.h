@@ -16,6 +16,7 @@ public:
         GLfloat& operator() (const int);
         const GLfloat& operator() (const int) const;
         friend Vec3 operator*(const Vec3&, const Vec3&);
+		friend Vec3 operator*(const GLfloat, const Vec3&);
         friend Vec3 operator+(const Vec3&, const Vec3&);
         friend Vec3 operator-(const Vec3&, const Vec3&);
         Vec3 operator*(const GLfloat rhs) const;

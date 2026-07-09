@@ -31,13 +31,23 @@ GLfloat operator*(const Vec4& rhs, const Vec4& lhs)
     return result;
 }
 
+Vec4 operator*(const GLfloat lhs, const Vec4& rhs)
+{
+	return Vec4 {
+		rhs(0)*lhs,
+		rhs(1)*lhs,
+		rhs(2)*lhs,
+		rhs(3)*lhs
+	};
+}
+
 Vec4 Vec4::operator*(const GLfloat rhs) const
 {
     return Vec4 {
-            m_vector[0] * rhs,
-            m_vector[1] * rhs,
-            m_vector[2] * rhs,
-            m_vector[3] * rhs
+        m_vector[0] * rhs,
+        m_vector[1] * rhs,
+        m_vector[2] * rhs,
+        m_vector[3] * rhs
     };
 }
 

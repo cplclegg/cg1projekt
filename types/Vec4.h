@@ -16,6 +16,7 @@ public:
     GLfloat& operator() (const int);
     const GLfloat& operator() (const int) const;
     friend GLfloat operator*(const Vec4&, const Vec4&);
+	friend Vec4 operator*(const GLfloat lhs, const Vec4& rhs);
     friend Vec4 operator+(const Vec4&, const Vec4&);
     friend Vec4 operator-(const Vec4&, const Vec4&);
     Vec4 operator*(const GLfloat rhs) const;

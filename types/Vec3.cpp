@@ -29,6 +29,14 @@ Vec3 operator*(const Vec3& rhs, const Vec3& lhs)
     return result;
 }
 
+Vec3 operator*(const GLfloat lhs, const Vec3& rhs)
+{
+	return Vec3 {
+		rhs(0)*lhs,
+		rhs(1)*lhs,
+		rhs(2)*lhs
+	};
+}
 Vec3 Vec3::operator*(const GLfloat rhs) const
 {
     return Vec3 {
