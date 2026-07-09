@@ -37,6 +37,7 @@ public:
 
     void translate (const Vec3&);
     Mat4 translateCopy (const Vec3&);
+    static size_t mIndex(size_t col, size_t row);
 
     void scale (const Vec3&);
     Mat4 scaleCopy(const Vec3&);

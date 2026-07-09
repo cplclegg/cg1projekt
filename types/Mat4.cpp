@@ -24,8 +24,7 @@ Mat4::Mat4(const Mat4& other)
     {
         for (size_t row = 0; row < m_dimension; ++row)
         {
-			size_t index = 4*row+col;
-            m_matrix[index] = other(col, row);
+            m_matrix[Mat4::mIndex(col, row)] = other(col, row);
         }
     }
 }
@@ -39,15 +38,12 @@ size_t Mat4::index(const size_t col, const size_t row)
 
 GLfloat& Mat4::operator() (const size_t col, const size_t row)
 {
-	size_t index = 4*row+col;
-    return m_matrix[index];
-	//return m_matrix[col][row];
+    return m_matrix[Mat4::mIndex(col, row)];
 }
 
 const GLfloat& Mat4::operator() (const size_t col, const size_t row) const
 {
-	size_t index = row*4+col;
-    return m_matrix[index];
+    return m_matrix[Mat4::mIndex(col, row)];
 }
 
 Mat4 operator*(const Mat4& lhs, const Mat4& rhs)
@@ -73,8 +69,7 @@ Mat4 Mat4::operator* (const GLfloat rhs)
     {
         for (size_t row = 0; row < m_dimension; ++row)
         {
-			size_t index = 4*row+col;
-            result(col, row) = m_matrix[index] * rhs;
+            result(col, row) = m_matrix[Mat4::mIndex(col, row)] * rhs;
         }
     }
     return result;
@@ -117,8 +112,7 @@ ostream& operator<<(ostream& os, const Mat4& matrix)
     {
         for (size_t row = 0; row < matrix.m_dimension; ++row)
         {
-			size_t index = row*4+col;
-            os << matrix.m_matrix[index] << " ";
+            os << matrix.m_matrix[Mat4::mIndex(col, row)] << " ";
         }
     }
     return os;
@@ -138,20 +132,46 @@ void Mat4::translate(const Vec3& vector)
     {
         for (size_t row = 0; row < m_dimension; ++row)
         {
-			size_t index = row*4+col;
-            m_matrix[index] = temp(col, row);
+            m_matrix[Mat4::mIndex(col, row)] = temp(col, row);
         }
     }
 }
 
 Mat4 Mat4::translateCopy(const Vec3& vector)
 {
-    Mat4 translationMatrix {};
-    translationMatrix(3,0) = vector(0);
-    translationMatrix(3,1) = vector(1);
-    translationMatrix(3,2) = vector(2);
     Mat4 temp {*this};
     temp.translate(vector);
+    return temp;
+}
+
+size_t Mat4::mIndex(size_t col, size_t row)
+{
+    size_t index = row*4+col;
+    return index;
+}
+
+void Mat4::scale(const Vec3& vector)
+{
+    Mat4 scaleMatrix {};
+    Mat4 oldMatrix {*this};
+    for (size_t i = 0; i < 3; ++i)
+    {
+        scaleMatrix(i,i) = vector(i);
+    }
+    Mat4 temp = scaleMatrix*oldMatrix;
+    for (size_t col = 0; col < m_dimension; ++col)
+    {
+        for (size_t row = 0; row < m_dimension; ++row)
+        {
+            m_matrix[Mat4::mIndex(col, row)] = temp(col, row);
+        }
+    }
+}
+
+Mat4 Mat4::scaleCopy(const Vec3& vector)
+{
+    Mat4 temp {*this};
+    temp.scale(vector);
     return temp;
 }
 
