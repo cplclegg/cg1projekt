@@ -158,7 +158,7 @@ void Mat4::scale(const Vec3& vector)
     {
         scaleMatrix(i,i) = vector(i);
     }
-    Mat4 temp = scaleMatrix*oldMatrix;
+    Mat4 temp {scaleMatrix*oldMatrix};
     for (size_t col = 0; col < m_dimension; ++col)
     {
         for (size_t row = 0; row < m_dimension; ++row)
@@ -173,6 +173,83 @@ Mat4 Mat4::scaleCopy(const Vec3& vector)
     Mat4 temp {*this};
     temp.scale(vector);
     return temp;
+}
+
+// --------------------------------------------------------------------------- //
+
+void Mat4::rotateX(const GLfloat& angle)
+{
+    Mat4 rotationMatrix {};
+    rotationMatrix(1,1) = cos(angle);
+    rotationMatrix(2,1) = -sin(angle);
+    rotationMatrix(1,2) = sin(angle);
+    rotationMatrix(2,2) = cos(angle);
+    Mat4 oldMatrix{ *this };
+    Mat4 temp { rotationMatrix*oldMatrix };
+    for (size_t col = 0; col < m_dimension; ++col)
+    {
+        for (size_t row = 0; row < m_dimension; ++row)
+        {
+            m_matrix[Mat4::mIndex(col, row)] = temp(col, row);
+        }
+    }
+}
+
+void Mat4::rotateY(const GLfloat& angle)
+{
+    Mat4 rotationMatrix {};
+    rotationMatrix(0,0) = cos(angle);
+    rotationMatrix(0,2) = -sin(angle);
+    rotationMatrix(2,0) = sin(angle);
+    rotationMatrix(2,2) = cos(angle);
+    Mat4 oldMatrix{ *this };
+    Mat4 temp { rotationMatrix*oldMatrix };
+    for (size_t col = 0; col < m_dimension; ++col)
+    {
+        for (size_t row = 0; row < m_dimension; ++row)
+        {
+            m_matrix[Mat4::mIndex(col, row)] = temp(col, row);
+        }
+    }
+}
+
+void Mat4::rotateZ(const GLfloat& angle)
+{
+    Mat4 rotationMatrix {};
+    rotationMatrix(0,0) = cos(angle);
+    rotationMatrix(1,0) = -sin(angle);
+    rotationMatrix(0,1) = sin(angle);
+    rotationMatrix(1,1) = cos(angle);
+    Mat4 oldMatrix{ *this };
+    Mat4 temp { rotationMatrix*oldMatrix };
+    for (size_t col = 0; col < m_dimension; ++col)
+    {
+        for (size_t row = 0; row < m_dimension; ++row)
+        {
+            m_matrix[Mat4::mIndex(col, row)] = temp(col, row);
+        }
+    }
+}
+
+Mat4 Mat4::rotateCopyX(const GLfloat& angle)
+{
+    Mat4 result {*this};
+    result.rotateX(angle);
+    return result;
+}
+
+Mat4 Mat4::rotateCopyY(const GLfloat& angle)
+{
+    Mat4 result {*this};
+    result.rotateY(angle);
+    return result;
+}
+
+Mat4 Mat4::rotateCopyZ(const GLfloat& angle)
+{
+    Mat4 result {*this};
+    result.rotateZ(angle);
+    return result;
 }
 
 void Mat4::directPrint()

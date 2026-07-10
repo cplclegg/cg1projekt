@@ -42,15 +42,15 @@ public:
     void scale (const Vec3&);
     Mat4 scaleCopy(const Vec3&);
 
-    void rotateX(const GLfloat);
-    void rotateY(const GLfloat);
-    void rotateZ(const GLfloat);
-    Mat4 rotateCopyX(const GLfloat);
-    Mat4 rotateCopyY(const GLfloat);
-    Mat4 rotateCopyZ(const GLfloat);
+    void rotateX(const GLfloat&);
+    void rotateY(const GLfloat&);
+    void rotateZ(const GLfloat&);
+    Mat4 rotateCopyX(const GLfloat&);
+    Mat4 rotateCopyY(const GLfloat&);
+    Mat4 rotateCopyZ(const GLfloat&);
 
-    void lookAt(const GLfloat, const GLfloat, const GLfloat); //     params: eye, center, up
-    Mat4 lookAtCopy(const GLfloat, const GLfloat, const GLfloat); // params: eye, center, up
+    void lookAt(const Vec3&, const Vec3&, const Vec3&); //     params: eye, center, up
+    Mat4 lookAtCopy(const Vec3&, const Vec3&, const Vec3&); // params: eye, center, up
 
     void perspective(const GLfloat, const GLfloat, const GLfloat, const GLfloat); //     params: fovy, aspect, near, far
     void perspectiveCopy(const GLfloat, const GLfloat, const GLfloat, const GLfloat); // params: fovy, aspect, near, far
