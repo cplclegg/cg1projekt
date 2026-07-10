@@ -2,6 +2,7 @@
 // Created by tomnir on 09.07.26.
 //
 #include <iostream>
+#include <cmath>
 #include "../types/types.h"
 using namespace std;
 
@@ -86,9 +87,41 @@ void scaleTest()
 
 void rotationTests()
 {
-    bool xRotationOK;
-    bool yRotationOK;
-    bool zRotationOK;
+    Mat4 xtest {};
+    Mat4 ytest {};
+    Mat4 ztest {};
+    auto angle = (GLfloat) M_PI_2;
+    Mat4 xcopy {xtest.rotateCopyX(angle)};
+    Mat4 ycopy {ytest.rotateCopyY(angle)};
+    Mat4 zcopy {ztest.rotateCopyZ(angle)};
+    xtest.rotateX(angle);
+    ytest.rotateY(angle);
+    ztest.rotateZ(angle);
+
+    bool xRotationOK = xtest(1,1) == cos(angle) && xtest(1,2) == sin(angle) && xtest(2,1) == -sin(angle) && xtest(2,2) == cos(angle);
+    bool xRotCopyOK  = xcopy(1,1) == cos(angle) && xcopy(1,2) == sin(angle) && xcopy(2,1) == -sin(angle) && xcopy(2,2) == cos(angle);
+    bool yRotationOK = ytest(0,0) == cos(angle) && ytest(2,0) == sin(angle) && ytest(0,2) == -sin(angle) && ytest(2,2) == cos(angle);
+    bool yRotCopyOK  = ycopy(0,0) == cos(angle) && ycopy(2,0) == sin(angle) && ycopy(0,2) == -sin(angle) && ycopy(2,2) == cos(angle);
+    bool zRotationOK = ztest(0,0) == cos(angle) && ztest(0,1) == sin(angle) && ztest(1,0) == -sin(angle) && ztest(1,1) == cos(angle);
+    bool zRotCopyOK  = zcopy(0,0) == cos(angle) && zcopy(0,1) == sin(angle) && zcopy(1,0) == -sin(angle) && zcopy(1,1) == cos(angle);
+
+    if (xRotationOK && xRotCopyOK && yRotationOK && yRotCopyOK && zRotationOK &&zRotCopyOK)
+    {
+        cout << "OK - Rotationsmatrizen ok." << endl;
+    } else
+    {
+        cout << "Rotationsmatrizen nicht ok. x und xcopy: " << endl;
+        xtest.directPrint();
+        xcopy.directPrint();
+        cout << endl << " y und ycopy: " << endl;
+        ytest.directPrint();
+        ycopy.directPrint();
+        cout << endl << " z und zcopy: " << endl;
+        ztest.directPrint();
+        zcopy.directPrint();
+        cout << endl;
+    }
+
 }
 
 void mat4Tests()
@@ -96,5 +129,6 @@ void mat4Tests()
     cout << "Running tests for class Mat4" << endl << endl;
 	translationTest();
     scaleTest();
+    rotationTests();
     cout << endl << "End of test results for class Mat4" << endl;
 }
