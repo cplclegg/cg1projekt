@@ -54,7 +54,7 @@ void normalize() normalizes the Vec4 it is called on, dividing each component by
 
 ## Matrix types
 ### Mat4
-Mat4 represents a 4x4 value by storing the components in a 1-dimensional array and indexing in column major order by 
+Mat4 represents a 4x4 matrix by storing the components in a 1-dimensional array and indexing in column major order by 
 provided access operators and indexing methods.
 
 Constructors:  
