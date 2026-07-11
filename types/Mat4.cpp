@@ -7,7 +7,8 @@
 #include <cassert>
 #include <iostream>
 using namespace std;
-// Constructors and management
+
+// ------------- Constructors -------------- //
 
 Mat4::Mat4()
     : m_matrix {1.0f, 0.0f, 0.0f, 0.0f,
@@ -30,7 +31,7 @@ Mat4::Mat4(const Mat4& other)
     }
 }
 
-// Operators
+// ------------- Operators -------------- //
 
 GLfloat& Mat4::operator() (const size_t col, const size_t row)
 {
