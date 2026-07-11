@@ -4,6 +4,7 @@
 
 #include "Mat4.h"
 #include <cmath>
+#include <cassert>
 #include <iostream>
 using namespace std;
 // Constructors and management
@@ -118,7 +119,9 @@ ostream& operator<<(ostream& os, const Mat4& matrix)
     return os;
 }
 
-// Methods
+// ------------- Methods -------------- //
+
+// ------------- Translations -------------- //
 
 void Mat4::translate(const Vec3& vector)
 {
@@ -128,12 +131,9 @@ void Mat4::translate(const Vec3& vector)
     translationMatrix(3,1) = vector(1);
     translationMatrix(3,2) = vector(2);
     Mat4 temp { translationMatrix*oldMatrix };
-    for (size_t col = 0; col < m_dimension; ++col)
+    for (size_t i = 0; i<16; ++i)
     {
-        for (size_t row = 0; row < m_dimension; ++row)
-        {
-            m_matrix[Mat4::mIndex(col, row)] = temp(col, row);
-        }
+        m_matrix[i] = temp.m_matrix[i];
     }
 }
 
@@ -144,11 +144,7 @@ Mat4 Mat4::translateCopy(const Vec3& vector)
     return temp;
 }
 
-size_t Mat4::mIndex(size_t col, size_t row)
-{
-    size_t index = row*4+col;
-    return index;
-}
+// ------------- Scaling -------------- //
 
 void Mat4::scale(const Vec3& vector)
 {
@@ -159,12 +155,9 @@ void Mat4::scale(const Vec3& vector)
         scaleMatrix(i,i) = vector(i);
     }
     Mat4 temp {scaleMatrix*oldMatrix};
-    for (size_t col = 0; col < m_dimension; ++col)
+    for (size_t i = 0; i<16; ++i)
     {
-        for (size_t row = 0; row < m_dimension; ++row)
-        {
-            m_matrix[Mat4::mIndex(col, row)] = temp(col, row);
-        }
+        m_matrix[i] = temp.m_matrix[i];
     }
 }
 
@@ -175,7 +168,7 @@ Mat4 Mat4::scaleCopy(const Vec3& vector)
     return temp;
 }
 
-// --------------------------------------------------------------------------- //
+// ------------- Rotations -------------- //
 
 void Mat4::rotateX(const GLfloat& angle)
 {
@@ -186,12 +179,9 @@ void Mat4::rotateX(const GLfloat& angle)
     rotationMatrix(2,2) = cos(angle);
     Mat4 oldMatrix{ *this };
     Mat4 temp { rotationMatrix*oldMatrix };
-    for (size_t col = 0; col < m_dimension; ++col)
+    for (size_t i = 0; i<16; ++i)
     {
-        for (size_t row = 0; row < m_dimension; ++row)
-        {
-            m_matrix[Mat4::mIndex(col, row)] = temp(col, row);
-        }
+        m_matrix[i] = temp.m_matrix[i];
     }
 }
 
@@ -204,12 +194,9 @@ void Mat4::rotateY(const GLfloat& angle)
     rotationMatrix(2,2) = cos(angle);
     Mat4 oldMatrix{ *this };
     Mat4 temp { rotationMatrix*oldMatrix };
-    for (size_t col = 0; col < m_dimension; ++col)
+    for (size_t i = 0; i<16; ++i)
     {
-        for (size_t row = 0; row < m_dimension; ++row)
-        {
-            m_matrix[Mat4::mIndex(col, row)] = temp(col, row);
-        }
+        m_matrix[i] = temp.m_matrix[i];
     }
 }
 
@@ -222,12 +209,9 @@ void Mat4::rotateZ(const GLfloat& angle)
     rotationMatrix(1,1) = cos(angle);
     Mat4 oldMatrix{ *this };
     Mat4 temp { rotationMatrix*oldMatrix };
-    for (size_t col = 0; col < m_dimension; ++col)
+    for (size_t i = 0; i<16; ++i)
     {
-        for (size_t row = 0; row < m_dimension; ++row)
-        {
-            m_matrix[Mat4::mIndex(col, row)] = temp(col, row);
-        }
+        m_matrix[i] = temp.m_matrix[i];
     }
 }
 
@@ -252,6 +236,75 @@ Mat4 Mat4::rotateCopyZ(const GLfloat& angle)
     return result;
 }
 
+// ------------- Camera -------------- //
+
+void Mat4::lookAt(const Vec3& eye, const Vec3& center, const Vec3& up)
+{
+    assert (eye != center);
+    Mat4 translationMatrix {};
+    translationMatrix.translate(-eye);
+    Vec3 n {eye-center};
+    Vec3 u {up*n};
+    Vec3 v {n*u};
+    n.normalize();
+    u.normalize();
+    v.normalize();
+    Mat4 rotationMatrix {};
+    for (size_t i = 0; i<3; ++i)
+    {
+        rotationMatrix(i, 0) = u(i);
+        rotationMatrix(i, 1) = v(i);
+        rotationMatrix(i, 2) = n(i);
+    }
+    Mat4 temp { rotationMatrix*translationMatrix };
+    for (size_t i = 0; i<16; ++i)
+    {
+        m_matrix[i] = temp.m_matrix[i];
+    }
+}
+
+Mat4 Mat4::lookAtCopy(const Vec3& eye, const Vec3& center, const Vec3& up)
+{
+    Mat4 result {*this};
+    result.lookAt(eye, center, up);
+    return result;
+}
+
+void Mat4::perspective(const GLfloat fovy, const GLfloat aspect, const GLfloat near, const GLfloat far)
+{
+    assert(fovy >= 0 && fovy <= M_PI);
+    const GLfloat& alpha {fovy};
+    GLfloat beta = aspect*alpha;
+    const GLfloat& n {near};
+    const GLfloat& f {far};
+    GLfloat l = -near*tan(beta/2);
+    GLfloat r = near*tan(beta/2);
+    GLfloat b = -near*tan(alpha/2);
+    GLfloat t = near*tan(alpha/2);
+
+    Mat4 frustumMatrix {};
+    frustumMatrix(0,0) = 2 / (r-l);
+    frustumMatrix(1,1) = 2 / (t-t);
+    frustumMatrix(2,0) = ((r+l) / (r-l)) / n;
+    frustumMatrix(2,1) = ((t+b) / (t-b)) / n;
+    frustumMatrix(2,2) = ((f+n) / (f-n)) / -n;
+    frustumMatrix(2,3) = -(1/n);
+    frustumMatrix(3,2) = -((2*f) / (f-n));
+    for (size_t i=0; i<16; ++i)
+    {
+        m_matrix[i]=frustumMatrix.m_matrix[i];
+    }
+}
+
+Mat4 Mat4::perspectiveCopy(const GLfloat fovy, const GLfloat aspect, const GLfloat near, const GLfloat far)
+{
+    Mat4 result {*this};
+    result.perspective(fovy, aspect, near, far);
+    return result;
+}
+
+// ------------- Utility -------------- //
+
 void Mat4::directPrint()
 {
 	for (size_t i = 0; i < 16; ++i)
@@ -260,4 +313,10 @@ void Mat4::directPrint()
 		cout << m_matrix[i] << " ";
 	}
 	cout << endl;
+}
+
+size_t Mat4::mIndex(size_t col, size_t row)
+{
+    size_t index = row*4+col;
+    return index;
 }
