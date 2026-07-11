@@ -168,6 +168,6 @@ void vec4Tests()
     copyConstTestVec4();
     operatorMinusTestVec4();
     normalizeTestVec4();
-    cout << "End of test results for Class Vec4" << endl << endl;
+    cout << endl << "End of test results for Class Vec4" << endl << endl;
 }
 
