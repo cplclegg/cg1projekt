@@ -31,7 +31,9 @@ void equalsTestVec4()
     Vec4 vecB {2,2,2,2};
     bool equal = vecA == vecA;
     bool nequal = vecA == vecB;
-    if (equal && !nequal)
+    bool equal2 = vecA != vecA; // should be false
+    bool nequal2 = vecA != vecB; // should be true
+    if (equal && !nequal && !equal2 && nequal2)
     {
         cout << "OK - Gleichheitsvergleich mit operator== ok." << endl;
     } else
@@ -126,6 +128,34 @@ void scalarProdTestVec4()
     }
 }
 
+void operatorMinusTestVec4()
+{
+    Vec4 test { 1, 2, 3, 4};
+    Vec4 negative = -test;
+    bool correctResult = (negative(0) == -1 && negative(1) == -2 && negative(2) == -3 && negative(3) == -4);
+    if (correctResult)
+    {
+        cout << "OK - operator- returns correct negative vector." << endl;
+    } else
+    {
+        cout << "Negation with operator- not returning correct result. Vector: " << negative(0) << " " << negative(1) << " " << negative(2) << " " << negative(3) << endl;
+    }
+}
+
+void normalizeTestVec4()
+{
+    Vec4 test {2, 2, 2, 2};
+    test.normalize();
+    bool normalizationCorrect = ( abs(test(0) - 0.5) < 0.0001 && abs(test(1) - 0.5) < 0.0001 && abs(test(2) - 0.5) < 0.0001 && abs(test(3) - 0.5) < 0.0001 );
+    if (normalizationCorrect)
+    {
+        cout << "OK - normalize() correctly normalizing vector components." << endl;
+    } else
+    {
+        cout << "normalize() not correctly normalizing vector component. Vector: " << test(0) << " " << test(1) << " " << test(2) << " " << test(3) << endl;
+    }
+}
+
 void vec4Tests()
 {
     cout << "Running tests for Class Vec4" << endl << endl;
@@ -136,6 +166,8 @@ void vec4Tests()
     scalarMultTestVec4();
     equalsTestVec4();
     copyConstTestVec4();
+    operatorMinusTestVec4();
+    normalizeTestVec4();
     cout << "End of test results for Class Vec4" << endl << endl;
 }
 
