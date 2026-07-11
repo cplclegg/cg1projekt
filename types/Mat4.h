@@ -53,7 +53,7 @@ public:
     Mat4 lookAtCopy(const Vec3&, const Vec3&, const Vec3&); // params: eye, center, up
 
     void perspective(const GLfloat, const GLfloat, const GLfloat, const GLfloat); //     params: fovy, aspect, near, far
-    void perspectiveCopy(const GLfloat, const GLfloat, const GLfloat, const GLfloat); // params: fovy, aspect, near, far
+    Mat4 perspectiveCopy(const GLfloat, const GLfloat, const GLfloat, const GLfloat); // params: fovy, aspect, near, far
 
     // Testing helpers
     void directPrint();
