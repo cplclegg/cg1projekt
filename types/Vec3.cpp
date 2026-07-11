@@ -75,6 +75,16 @@ bool operator==(const Vec3& lhs, const Vec3& rhs)
     return (lhs(0) == rhs(0) && lhs(1) == rhs(1) && lhs(2) == rhs(2));
 }
 
+bool operator!=(const Vec3& lhs, const Vec3& rhs)
+{
+    return !(lhs==rhs);
+}
+
+Vec3 Vec3::operator-() const
+{
+    return Vec3 { -m_vector[0], -m_vector[1], -m_vector[2]};
+}
+
 // Constructors
 
 Vec3::Vec3()
@@ -106,6 +116,14 @@ GLfloat Vec3::getLength()
 GLfloat Vec3::scalarProduct(const Vec3& rhs)
 {
     return ( m_vector[0]*rhs(0) + m_vector[1]*rhs(1) + m_vector[2]*rhs(2) );
+}
+
+void Vec3::normalize()
+{
+    GLfloat length = getLength();
+    m_vector[0] = m_vector[0]/length;
+    m_vector[1] = m_vector[1]/length;
+    m_vector[2] = m_vector[2]/length;
 }
 
 

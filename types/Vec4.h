@@ -21,13 +21,16 @@ public:
     friend Vec4 operator-(const Vec4&, const Vec4&);
     Vec4 operator*(const GLfloat rhs) const;
     Vec4 operator=(const Vec4& rhs);
+    Vec4 operator-() const;
     friend bool operator==(const Vec4&, const Vec4&);
+    friend bool operator!=(const Vec4&, const Vec4&);
     // Object mgmt
     Vec4();
     Vec4(const GLfloat, const GLfloat, const GLfloat, const GLfloat);
     Vec4(const Vec4&);
     // Methods
     GLfloat getLength();
+    void normalize();
 };
 
 

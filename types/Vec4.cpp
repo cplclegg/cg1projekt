@@ -81,6 +81,11 @@ Vec4 Vec4::operator=(const Vec4& rhs)
     };
 }
 
+Vec4 Vec4::operator-() const
+{
+    return Vec4 { -m_vector[0], -m_vector[1], -m_vector[2], -m_vector[3]};
+}
+
 bool operator==(const Vec4& lhs, const Vec4& rhs)
 {
     assert (rhs.m_dimension == 4 && lhs.m_dimension == 4);
@@ -90,6 +95,11 @@ bool operator==(const Vec4& lhs, const Vec4& rhs)
         equal = equal && (lhs(i) == rhs(i));
     }
     return equal;
+}
+
+bool operator!=(const Vec4& lhs, const Vec4& rhs)
+{
+    return !(lhs==rhs);
 }
 
 // Constructors
@@ -123,5 +133,14 @@ GLfloat Vec4::getLength()
         squareSum += m_vector[i]*m_vector[i];
     }
     return sqrt(squareSum);
+}
+
+void Vec4::normalize()
+{
+    GLfloat length = getLength();
+    m_vector[0] = m_vector[0]/length;
+    m_vector[1] = m_vector[1]/length;
+    m_vector[2] = m_vector[2]/length;
+    m_vector[3] = m_vector[3]/length;
 }
 
