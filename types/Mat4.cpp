@@ -30,11 +30,6 @@ Mat4::Mat4(const Mat4& other)
     }
 }
 
-size_t Mat4::index(const size_t col, const size_t row)
-{
-    return (4*row + col);
-}
-
 // Operators
 
 GLfloat& Mat4::operator() (const size_t col, const size_t row)

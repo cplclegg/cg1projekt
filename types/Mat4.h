@@ -17,7 +17,6 @@ private:
     //GLfloat m_matrix[4][4];
 	GLfloat m_matrix[16];
     size_t m_dimension = 4;
-    size_t index(const size_t, const size_t);
 public:
     // Constructors and object maangement
     Mat4();
@@ -57,7 +56,6 @@ public:
 
     // Testing helpers
     void directPrint();
-	friend void accessorTest();
 };
 
 
