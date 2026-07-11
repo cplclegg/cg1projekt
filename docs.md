@@ -6,13 +6,12 @@
 ### Vec3
 Vec3 represents a vector with 3 components indexed 0 through 2.    
 
-Constructors:
-
+#### Constructors:
 Vec3() initializes the Vec3 object with 0 at all components.  
 Vec3(const GLfloat, const GLfloat, const GLfloat) initializes the vector with the provided values.
 Vec3(const Vec3&) initialized the vector with a deep copy of the provided Vec3&.
 
-Operator overloads:  
+#### Operators:
 () provides array-like component access. Parantheses are used over brackets for congruency with matrix component access operator.  
 \* provides component wise multiplication with a scalar if GLfloat is on lhs or rhs of the operator.  
 \* provides cross product/vector product (not dot/inner/scalar product!) if lhs and rhs are both of type Vec3.  
@@ -23,7 +22,7 @@ Operator overloads:
 \== compares the lhs Vec3 to the rhs Vec3 checking for component wise equality (true if lhs(i)==rhs(i) for i={0,1,2}).  
 \=! compares the lhs Vec3 to the rhs Vec3 checking for component wise inequality (true if lhs(i)!=rhs(i) for any of i={0,1,2}). 
 
-Methods:
+#### Methods:
 GLfloat getLength() returns the length of the vector.  
 GLfloat scalarProduct(const Vec3&) returns the dot product/inner product/scalar product of this and the provided Vec3&.  
 void normalize() normalizes the Vec3 it is called on, dividing each component by the vector's length.  
@@ -31,13 +30,12 @@ void normalize() normalizes the Vec3 it is called on, dividing each component by
 ## Vec4
 Vec4 represents a vector with 4 components indexes 0 through 3.
 
-Constructors:
-
+#### Constructors:
 Vec4() initializes the Vec3 object with 0 at all components.  
 Vec4(const GLfloat, const GLfloat, const GLfloat) initializes the vector with the provided values.
 Vec4(const Vec4&) initialized the vector with a deep copy of the provided Vec3&.
 
-Operator overloads:  
+#### Operator overloads:  
 () provides array-like component access. Parantheses are used over brackets for congruency with matrix component access operator.  
 \* provides component wise multiplication with a scalar if GLfloat is on lhs or rhs of the operator.  
 \* provides dot/inner/scalar product (**differing from Vec3 behaviour!**) if lhs and rhs are both of type Vec4.  
@@ -48,7 +46,7 @@ Operator overloads:
 \== compares the lhs Vec4 to the rhs Vec4 checking for component wise equality (true if lhs(i)==rhs(i) for all i={0,1,2,3}).  
 \=! compares the lhs Vec4 to the rhs Vec4 checking for component wise inequality (true if lhs(i)!=rhs(i) for any i={0,1,2,3}).
 
-Methods:
+#### Methods:
 GLfloat getLength() returns the length of the vector.  
 void normalize() normalizes the Vec4 it is called on, dividing each component by the vector's length.
 
@@ -57,11 +55,11 @@ void normalize() normalizes the Vec4 it is called on, dividing each component by
 Mat4 represents a 4x4 matrix by storing the components in a 1-dimensional array and indexing in column major order by 
 provided access operators and indexing methods.
 
-Constructors:  
+#### Constructors:  
 Mat() initializes the matrix to a unity matrix.  
 Mat4(const Mat4&) initializes the matrix to a deep copy of the provided Mat4&.
 
-Operator overloads:  
+#### Operator:  
 () provides component access with 2 size_t parameters corresponding to column, row (access in column major order).  
 \* provides the matrix product of lhs and rhs with lhs being the left matrix, rhs the right.  
 \* provides component wise multiplication with a scalar if rhs or lhs are of type GLfloat.  
@@ -70,7 +68,7 @@ Operator overloads:
 != compares the lhs Mat4 to the rhs Mat4 checking for component wise inequality (true if lhs(i)==rhs(i) for any (0 <= i < 16).  
 \<< provides printing of the rhs matrix to an ostream on the lhs of the operator.
 
-Methods:  
+#### Methods:  
 
 translate(Vec3&) multiplies the matrix it is called, from the rhs, with a translation matrix made from the provided Vec3 on the lhs.  
 translateCopy(Vec3&) returns a copy of the matrix it is called on, that has been translated with translate(Vec3&).   
