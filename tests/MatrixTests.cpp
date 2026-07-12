@@ -124,11 +124,45 @@ void rotationTests()
 
 }
 
+void lookAtTest ()
+{
+    Mat4 test {};
+    Vec3 eye {2,1,3};
+    Vec3 center {1,2,3};
+    Vec3 up {1,1,1};
+    Vec3 n {eye-center};
+    Vec3 u {up*n};
+    Vec3 v {n*u};
+    n.normalize();
+    u.normalize();
+    v.normalize();
+    Mat4 mrt {test.lookAtCopy(eye, center, up)};
+    bool rotationOK = true;
+    for (int i = 0; i < 3; ++i)
+    {
+        rotationOK = rotationOK && mrt(i,0) - u(i) < 0.001;
+        rotationOK = rotationOK && mrt(i,1) - v(i) < 0.001;
+        rotationOK = rotationOK && mrt(i,2) - n(i) < 0.001;
+    }
+    bool translationOK = u.scalarProduct(-eye) - 1.224 < 0.001;
+    translationOK = translationOK && v.scalarProduct(-eye) - 3.462 < 0.001;
+    translationOK = translationOK && n.scalarProduct(-eye) - 0.707 < 0.001;
+    if (translationOK && rotationOK)
+    {
+        cout << "OK - lookAt() erstellt korrekte view-matrix." << endl;
+    } else
+    {
+        cout << "lookAt() erzeugt falsche view-matrix. Matrix: " << endl;
+        mrt.directPrint();
+        cout << endl;
+    }
+}
 void mat4Tests()
 {
     cout << "Running tests for class Mat4" << endl << endl;
 	translationTest();
     scaleTest();
     rotationTests();
+    lookAtTest();
     cout << endl << "End of test results for class Mat4" << endl;
 }
