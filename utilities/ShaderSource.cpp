@@ -8,6 +8,7 @@
 
 #include "ShaderSource.h"
 #include <fstream>
+#include <iostream>
 using namespace std;
 ShaderSource::ShaderSource()
     : buffer {nullptr}
@@ -39,18 +40,19 @@ void ShaderSource::loadSourceFile(const string& path)
 
 char* ShaderSource::readSourceFile(const string& path)
 {
-    ifstream fs;
-    fs.open(path);
-    fs.seekg(0,ios::end);
+    ifstream fs {path, ifstream::in};
+    fs.seekg(0,ifstream::end);
     int length = fs.tellg();
-    fs.seekg(0,ios::beg);
-    char* buf = new char[length];
+    fs.seekg(0,ifstream::beg);
+    printf("%d\n", length);
+    char* buf = (char*)malloc(sizeof(char)*length);
     fs.read(buf, length);
     fs.close();
     return buf;
 }
 
-const char* ShaderSource::getSourceString() const
+char* ShaderSource::getSourceString() const
 {
+    printf("%s\n\n", buffer);
     return buffer;
 }

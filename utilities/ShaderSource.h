@@ -19,7 +19,7 @@ public:
     ~ShaderSource();
 
     void loadSourceFile(const std::string&);
-    const char* getSourceString() const;
+    char* getSourceString() const;
 };
 
 
