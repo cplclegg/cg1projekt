@@ -7,4 +7,5 @@
 extern void vec3Tests();
 extern void vec4Tests();
 extern void mat4Tests();
+extern void shaderTests();
 #endif //CG1PROJEKT_TESTS_H
