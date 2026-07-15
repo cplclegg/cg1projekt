@@ -7,6 +7,7 @@
  */
 
 #include "ShaderSource.h"
+#include <cassert>
 #include <fstream>
 #include <iostream>
 using namespace std;
@@ -29,7 +30,7 @@ ShaderSource::ShaderSource(const ShaderSource& other)
 
 ShaderSource::~ShaderSource()
 {
-    delete(buffer);
+    delete[](buffer);
 }
 
 void ShaderSource::loadSourceFile(const string& path)
@@ -40,13 +41,18 @@ void ShaderSource::loadSourceFile(const string& path)
 
 char* ShaderSource::readSourceFile(const string& path)
 {
+    assert(!path.empty());
+
     ifstream fs {path, ifstream::in};
+    if (!fs.is_open()) throw runtime_error("Error opening shader file: " + path);
+
     fs.seekg(0,ifstream::end);
-    int length = fs.tellg();
+    const auto length {fs.tellg()};
+    if (length == streampos(-1)) throw runtime_error("Error determining shader file size: " + path);
     fs.seekg(0,ifstream::beg);
-    printf("%d\n", length);
-    char* buf = (char*)malloc(sizeof(char)*length);
-    fs.read(buf, length);
+
+    const auto buf = static_cast<char*>(malloc(sizeof(char)*length));
+    if(!fs.read(buf, length)) throw runtime_error("Error reading shader source code from: " + path);
     fs.close();
     return buf;
 }
