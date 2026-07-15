@@ -12,17 +12,18 @@ using namespace std;
 
 GLfloat& Vec4::operator() (const size_t component)
 {
+    assert(component <= 3);
     return m_vector[component];
 }
 
 const GLfloat& Vec4::operator() (const size_t component) const
 {
+    assert(component <= 3);
     return m_vector[component];
 }
 
 GLfloat operator*(const Vec4& rhs, const Vec4& lhs)
 {
-    assert (rhs.m_dimension == 4 && lhs.m_dimension == 4);
     GLfloat result = 0.0f;
     for (int i = 0; i<lhs.m_dimension; ++i)
     {
@@ -71,14 +72,14 @@ Vec4 operator-(const Vec4& lhs, const Vec4& rhs)
     };
 }
 
-Vec4 Vec4::operator=(const Vec4& rhs)
+Vec4& Vec4::operator=(const Vec4& rhs)
 {
-    return Vec4 {
-        rhs(0),
-        rhs(1),
-        rhs(2),
-        rhs(3)
-    };
+    if (this == &rhs) return *this;
+    for (size_t i = 0; i < m_dimension; ++i)
+    {
+        m_vector[i] = rhs.m_vector[i];
+    }
+    return *this;
 }
 
 Vec4 Vec4::operator-() const
@@ -88,7 +89,7 @@ Vec4 Vec4::operator-() const
 
 bool operator==(const Vec4& lhs, const Vec4& rhs)
 {
-    assert (rhs.m_dimension == 4 && lhs.m_dimension == 4);
+    if (&lhs == &rhs) return true;
     bool equal = true;
     for (int i = 0; i < lhs.m_dimension; ++i)
     {
@@ -115,17 +116,14 @@ Vec4::Vec4(const GLfloat firstComponent, const GLfloat secondComponent, const GL
 }
 
 Vec4::Vec4(const Vec4& other)
-    : m_vector {0.0f, 0.0f, 0.0f, 0.0f}
+    : m_vector {}
 {
-    for (int i = 0; i < m_dimension; ++i)
-    {
-        m_vector[i] = other(i);
-    }
+    *this = other;
 }
 
 // Methods
 
-GLfloat Vec4::getLength()
+GLfloat Vec4::getLength() const
 {
     GLfloat squareSum = 0;
     for (int i = 0; i < m_dimension; ++i)
@@ -135,9 +133,22 @@ GLfloat Vec4::getLength()
     return sqrt(squareSum);
 }
 
+bool Vec4::isParallelTo(const Vec4& other) const
+{
+    const GLfloat absDotProduct = abs((*this)*other);
+    const GLfloat lengthProduct = getLength() *  other.getLength();
+    return absDotProduct == lengthProduct;
+}
+
+bool Vec4::isZeroVector() const
+{
+    return (m_vector[0] != 0 && m_vector[1] != 0 && m_vector[2] != 0 && m_vector[3] != 0);
+}
+
 void Vec4::normalize()
 {
-    GLfloat length = getLength();
+    assert(!isZeroVector());
+    const GLfloat length = getLength();
     m_vector[0] = m_vector[0]/length;
     m_vector[1] = m_vector[1]/length;
     m_vector[2] = m_vector[2]/length;

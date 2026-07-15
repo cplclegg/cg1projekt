@@ -15,12 +15,12 @@ public:
         // Operators
         GLfloat& operator() (const size_t);
         const GLfloat& operator() (const size_t) const;
-        friend Vec3 operator*(const Vec3&, const Vec3&);
+        friend GLfloat operator*(const Vec3&, const Vec3&);
         friend Vec3 operator*(const GLfloat, const Vec3&);
         friend Vec3 operator+(const Vec3&, const Vec3&);
         friend Vec3 operator-(const Vec3&, const Vec3&);
         Vec3 operator*(const GLfloat rhs) const;
-        Vec3 operator=(const Vec3& rhs);
+        Vec3& operator=(const Vec3& rhs);
         Vec3 operator-() const;
         friend bool operator==(const Vec3&, const Vec3&);
         friend bool operator!=(const Vec3&, const Vec3&);
@@ -29,8 +29,10 @@ public:
         Vec3(const GLfloat, const GLfloat, const GLfloat);
         Vec3(const Vec3&);
         // Methods
-        GLfloat getLength();
-        GLfloat scalarProduct(const Vec3&);
+        GLfloat getLength() const;
+        Vec3 crossProduct(const Vec3&) const;
+        bool isParallelTo(const Vec3& other) const;
+        bool isZeroVector() const;
         void normalize();
 };
 #endif //CG1PROJEKT_VEC3_H
