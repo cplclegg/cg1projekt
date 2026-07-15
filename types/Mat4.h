@@ -14,7 +14,6 @@
 class Mat4
 {
 private:
-    //GLfloat m_matrix[4][4];
 	GLfloat m_matrix[16];
     size_t m_dimension = 4;
 public:
@@ -24,38 +23,38 @@ public:
 
     // Operators
     friend Mat4 operator* (const Mat4&, const Mat4&);
-    Mat4 operator* (const GLfloat rhs);
+    Mat4 operator* (const GLfloat rhs) const;
     friend Mat4 operator* (const GLfloat, const Mat4&);
     GLfloat& operator() (const size_t, const size_t);
     const GLfloat& operator() (const size_t, const size_t) const;
     friend bool operator==(const Mat4&, const Mat4&);
-    Mat4 operator=(const Mat4&);
+    friend bool operator!=(const Mat4&, const Mat4&);
+    Mat4& operator=(const Mat4&);
     friend std::ostream& operator<<(std::ostream&, const Mat4&);
 
     // Methods
-
     void translate (const Vec3&);
-    Mat4 translateCopy (const Vec3&);
+    Mat4 translateCopy (const Vec3&) const;
     static size_t mIndex(size_t col, size_t row);
 
     void scale (const Vec3&);
-    Mat4 scaleCopy(const Vec3&);
+    Mat4 scaleCopy(const Vec3&) const;
 
     void rotateX(const GLfloat&);
     void rotateY(const GLfloat&);
     void rotateZ(const GLfloat&);
-    Mat4 rotateCopyX(const GLfloat&);
-    Mat4 rotateCopyY(const GLfloat&);
-    Mat4 rotateCopyZ(const GLfloat&);
+    Mat4 rotateCopyX(const GLfloat&) const;
+    Mat4 rotateCopyY(const GLfloat&) const;
+    Mat4 rotateCopyZ(const GLfloat&) const;
 
     void lookAt(const Vec3&, const Vec3&, const Vec3&); //     params: eye, center, up
-    Mat4 lookAtCopy(const Vec3&, const Vec3&, const Vec3&); // params: eye, center, up
+    Mat4 lookAtCopy(const Vec3&, const Vec3&, const Vec3&) const; // params: eye, center, up
 
     void perspective(const GLfloat, const GLfloat, const GLfloat, const GLfloat); //     params: fovy, aspect, near, far
-    Mat4 perspectiveCopy(const GLfloat, const GLfloat, const GLfloat, const GLfloat); // params: fovy, aspect, near, far
+    Mat4 perspectiveCopy(const GLfloat, const GLfloat, const GLfloat, const GLfloat) const; // params: fovy, aspect, near, far
 
     // Testing helpers
-    void directPrint();
+    void directPrint() const;
 };
 
 

@@ -22,25 +22,21 @@ Mat4::Mat4()
 Mat4::Mat4(const Mat4& other)
     : m_matrix {}
 {
-    for (size_t col = 0; col < m_dimension; ++col)
-    {
-        for (size_t row = 0; row < m_dimension; ++row)
-        {
-            m_matrix[Mat4::mIndex(col, row)] = other(col, row);
-        }
-    }
+    *this = other;
 }
 
 // ------------- Operators -------------- //
 
 GLfloat& Mat4::operator() (const size_t col, const size_t row)
 {
-    return m_matrix[Mat4::mIndex(col, row)];
+    assert(col <= 3 && row <= 3);
+    return m_matrix[mIndex(col, row)];
 }
 
 const GLfloat& Mat4::operator() (const size_t col, const size_t row) const
 {
-    return m_matrix[Mat4::mIndex(col, row)];
+    assert(col <= 3 && row <= 3);
+    return m_matrix[mIndex(col, row)];
 }
 
 Mat4 operator*(const Mat4& lhs, const Mat4& rhs)
@@ -59,14 +55,14 @@ Mat4 operator*(const Mat4& lhs, const Mat4& rhs)
     return result;
 }
 
-Mat4 Mat4::operator* (const GLfloat rhs)
+Mat4 Mat4::operator* (const GLfloat rhs)  const
 {
     Mat4 result {};
     for (size_t col = 0; col < m_dimension; ++col)
     {
         for (size_t row = 0; row < m_dimension; ++row)
         {
-            result(col, row) = m_matrix[Mat4::mIndex(col, row)] * rhs;
+            result(col, row) = m_matrix[mIndex(col, row)] * rhs;
         }
     }
     return result;
@@ -75,9 +71,9 @@ Mat4 Mat4::operator* (const GLfloat rhs)
 Mat4 operator*(const GLfloat lhs, const Mat4& rhs)
 {
     Mat4 result {};
-    for (size_t col; col < rhs.m_dimension; ++col)
+    for (size_t col = 0; col < rhs.m_dimension; ++col)
     {
-        for (size_t row; row < rhs.m_dimension; ++row)
+        for (size_t row = 0; row < rhs.m_dimension; ++row)
         {
             result(col, row) = rhs(col, row)*lhs;
         }
@@ -87,6 +83,7 @@ Mat4 operator*(const GLfloat lhs, const Mat4& rhs)
 
 bool operator==(const Mat4& lhs, const Mat4& rhs)
 {
+    if (&rhs == &lhs) return true;
     bool equal = true;
     for (size_t col = 0; col < lhs.m_dimension; ++col)
     {
@@ -98,9 +95,22 @@ bool operator==(const Mat4& lhs, const Mat4& rhs)
     return equal;
 }
 
-Mat4 Mat4::operator=(const Mat4& rhs)
+bool operator!=(const Mat4& lhs, const Mat4& rhs)
 {
-    return Mat4 {rhs};
+    return !(lhs==rhs);
+}
+
+Mat4& Mat4::operator=(const Mat4& rhs)
+{
+    if (this == &rhs) return *this;
+    for (size_t col = 0; col < m_dimension; ++col)
+    {
+        for (size_t row = 0; row < m_dimension; ++row)
+        {
+            m_matrix[Mat4::mIndex(col, row)] = rhs.m_matrix[mIndex(col, row)];
+        }
+    }
+    return *this;
 }
 
 ostream& operator<<(ostream& os, const Mat4& matrix)
@@ -133,7 +143,7 @@ void Mat4::translate(const Vec3& vector)
     }
 }
 
-Mat4 Mat4::translateCopy(const Vec3& vector)
+Mat4 Mat4::translateCopy(const Vec3& vector) const
 {
     Mat4 temp {*this};
     temp.translate(vector);
@@ -144,6 +154,7 @@ Mat4 Mat4::translateCopy(const Vec3& vector)
 
 void Mat4::scale(const Vec3& vector)
 {
+    assert(!vector.isZeroVector());
     Mat4 scaleMatrix {};
     Mat4 oldMatrix {*this};
     for (size_t i = 0; i < 3; ++i)
@@ -157,7 +168,7 @@ void Mat4::scale(const Vec3& vector)
     }
 }
 
-Mat4 Mat4::scaleCopy(const Vec3& vector)
+Mat4 Mat4::scaleCopy(const Vec3& vector) const
 {
     Mat4 temp {*this};
     temp.scale(vector);
@@ -211,21 +222,21 @@ void Mat4::rotateZ(const GLfloat& angle)
     }
 }
 
-Mat4 Mat4::rotateCopyX(const GLfloat& angle)
+Mat4 Mat4::rotateCopyX(const GLfloat& angle) const
 {
     Mat4 result {*this};
     result.rotateX(angle);
     return result;
 }
 
-Mat4 Mat4::rotateCopyY(const GLfloat& angle)
+Mat4 Mat4::rotateCopyY(const GLfloat& angle) const
 {
     Mat4 result {*this};
     result.rotateY(angle);
     return result;
 }
 
-Mat4 Mat4::rotateCopyZ(const GLfloat& angle)
+Mat4 Mat4::rotateCopyZ(const GLfloat& angle) const
 {
     Mat4 result {*this};
     result.rotateZ(angle);
@@ -240,8 +251,9 @@ void Mat4::lookAt(const Vec3& eye, const Vec3& center, const Vec3& up)
     Mat4 translationMatrix {};
     translationMatrix.translate(-eye);
     Vec3 n {eye-center};
-    Vec3 u {up*n};
-    Vec3 v {n*u};
+    assert (!up.isParallelTo(n));
+    Vec3 u {up.crossProduct(n)};
+    Vec3 v {n.crossProduct(u)};
     n.normalize();
     u.normalize();
     v.normalize();
@@ -259,7 +271,7 @@ void Mat4::lookAt(const Vec3& eye, const Vec3& center, const Vec3& up)
     }
 }
 
-Mat4 Mat4::lookAtCopy(const Vec3& eye, const Vec3& center, const Vec3& up)
+Mat4 Mat4::lookAtCopy(const Vec3& eye, const Vec3& center, const Vec3& up) const
 {
     Mat4 result {*this};
     result.lookAt(eye, center, up);
@@ -269,6 +281,7 @@ Mat4 Mat4::lookAtCopy(const Vec3& eye, const Vec3& center, const Vec3& up)
 void Mat4::perspective(const GLfloat fovy, const GLfloat aspect, const GLfloat near, const GLfloat far)
 {
     assert(fovy >= 0 && fovy <= M_PI);
+    assert(far > near);
     const GLfloat& alpha {fovy};
     GLfloat beta = aspect*alpha;
     const GLfloat& n {near};
@@ -292,7 +305,7 @@ void Mat4::perspective(const GLfloat fovy, const GLfloat aspect, const GLfloat n
     }
 }
 
-Mat4 Mat4::perspectiveCopy(const GLfloat fovy, const GLfloat aspect, const GLfloat near, const GLfloat far)
+Mat4 Mat4::perspectiveCopy(const GLfloat fovy, const GLfloat aspect, const GLfloat near, const GLfloat far) const
 {
     Mat4 result {*this};
     result.perspective(fovy, aspect, near, far);
@@ -301,7 +314,7 @@ Mat4 Mat4::perspectiveCopy(const GLfloat fovy, const GLfloat aspect, const GLflo
 
 // ------------- Utility -------------- //
 
-void Mat4::directPrint()
+void Mat4::directPrint() const
 {
 	for (size_t i = 0; i < 16; ++i)
 	{
@@ -311,8 +324,9 @@ void Mat4::directPrint()
 	cout << endl;
 }
 
-size_t Mat4::mIndex(size_t col, size_t row)
+size_t Mat4::mIndex(const size_t col, const size_t row)
 {
-    size_t index = row*4+col;
+    assert(col <= 3 && row <= 3);
+    const size_t index = row*4+col;
     return index;
 }
