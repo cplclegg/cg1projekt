@@ -30,12 +30,14 @@ public:
     Mat3& operator=(const Mat3&);
 
     // Methods
+    static size_t mIndex(size_t col, size_t row);
+    GLfloat determinant() const;
     bool isInvertible() const;
     void invert();
     Mat3 invertCopy() const;
     void transpose();
     Mat3 transposeCopy() const;
-
+    void directPrint() const;
 };
 
 

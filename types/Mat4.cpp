@@ -112,7 +112,7 @@ Mat4& Mat4::operator=(const Mat4& rhs)
     {
         for (size_t row = 0; row < m_dimension; ++row)
         {
-            m_matrix[Mat4::mIndex(col, row)] = rhs.m_matrix[mIndex(col, row)];
+            m_matrix[mIndex(col, row)] = rhs.m_matrix[mIndex(col, row)];
         }
     }
     return *this;
