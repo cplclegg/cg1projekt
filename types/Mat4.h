@@ -9,7 +9,6 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include "Vec3.h"
-#include "Vec4.h"
 
 class Mat4
 {
@@ -17,9 +16,10 @@ private:
 	GLfloat m_matrix[16];
     size_t m_dimension = 4;
 public:
-    // Constructors and object maangement
+    // Constructors and object management
     Mat4();
     Mat4(const Mat4&);
+    ~Mat4();
 
     // Operators
     friend Mat4 operator* (const Mat4&, const Mat4&);

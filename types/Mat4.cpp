@@ -25,6 +25,11 @@ Mat4::Mat4(const Mat4& other)
     *this = other;
 }
 
+Mat4::~Mat4()
+{
+
+}
+
 // ------------- Operators -------------- //
 
 GLfloat& Mat4::operator() (const size_t col, const size_t row)
