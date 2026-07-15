@@ -14,9 +14,9 @@ Vec3(const Vec3&) initialized the vector with a deep copy of the provided Vec3&.
 #### Operators
 () provides array-like component access. Parantheses are used over brackets for congruency with matrix component access operator.  
 \* provides component wise multiplication with a scalar if GLfloat is on lhs or rhs of the operator.  
-\* provides cross product/vector product (not dot/inner/scalar product!) if lhs and rhs are both of type Vec3.  
+\* provides cross dot/inner/scalar product if lhs and rhs are both of type Vec3.  
 \+ provides component wise addition of 2 Vec3 objects.  
-\- provices component wise subtraction of 2 Vec3 objects.  
+\- provides component wise subtraction of 2 Vec3 objects.  
 \- (unary) returns a negated copy of the vector by component wise negation.  
 \= assigns a deep copy of the rhs Vec3 object to the lhs Vec3 object.  
 \== compares the lhs Vec3 to the rhs Vec3 checking for component wise equality (true if lhs(i)==rhs(i) for i={0,1,2}).  
@@ -24,7 +24,7 @@ Vec3(const Vec3&) initialized the vector with a deep copy of the provided Vec3&.
 
 #### Methods
 GLfloat getLength() returns the length of the vector.  
-GLfloat scalarProduct(const Vec3&) returns the dot product/inner product/scalar product of this and the provided Vec3&.  
+Vec3 vectorProduct(const Vec3&) returns the vector/outer product of this and the provided Vec3&.  
 void normalize() normalizes the Vec3 it is called on, dividing each component by the vector's length.  
 
 ## Vec4
@@ -38,9 +38,9 @@ Vec4(const Vec4&) initialized the vector with a deep copy of the provided Vec3&.
 #### Operator  
 () provides array-like component access. Parantheses are used over brackets for congruency with matrix component access operator.  
 \* provides component wise multiplication with a scalar if GLfloat is on lhs or rhs of the operator.  
-\* provides dot/inner/scalar product (**differing from Vec3 behaviour!**) if lhs and rhs are both of type Vec4.  
+\* provides dot/inner/scalar product if lhs and rhs are both of type Vec4.  
 \+ provides component wise addition of 2 Vec4 objects.  
-\- provices component wise subtraction of 2 Vec4 objects.  
+\- provides component wise subtraction of 2 Vec4 objects.  
 \- (unary) returns a negated copy of the vector by component wise negation.  
 \= assigns a deep copy of the rhs Vec4 object to the lhs Vec4 object.  
 \== compares the lhs Vec4 to the rhs Vec4 checking for component wise equality (true if lhs(i)==rhs(i) for all i={0,1,2,3}).  
@@ -90,6 +90,23 @@ perspective() creates a projection matrix with the provided parameters and multi
 
 directPrint() prints the matrix it is called on to cout.
 mIndex(col, row) can be used to translate a column major 2-value index to the 1-dimensional linear array index used internally.  
-# Helpers
+
+# Utilities
+
+## ShaderSource
+ShaderSource abstracts loading and storing the source code for shaders in an object of type Shadersource.
+
+### Constructors
+- ShaderSource() constructs an empty ShaderSource object
+- ShaderSource(const string& path) constructs a ShaderSource object and loads the source code located at provided file  
+path into the object
+- ShaderSource(const ShaderSource& other) constructs a deep copy of other
+- ~ShaderSource() does NOT call delete[] on the memory allocated for storage of the shader source code.  
+Client is responsible for freeing of the memory!
+
+### Methods
+- loadSourceFile() loads a shader source code file and sets its path. Old data will be overwritten!
+- readSourceFile() reads the content of a file into a newly allocated buffer pointed to in the object
+- getSourceString() returns a pointer to the heap memory in which the shader source code is stored
 
 # Tests
