@@ -1,9 +1,9 @@
 //
 // Created by tomnir on 09.07.26.
 //
-#include "tests/tests.h"
+#include "tests.h"
 
-int main(void)
+int main()
 {
     vec3Tests();
     vec4Tests();
