@@ -30,7 +30,6 @@ ShaderSource::ShaderSource(const ShaderSource& other)
 
 ShaderSource::~ShaderSource()
 {
-    delete[](buffer);
 }
 
 void ShaderSource::loadSourceFile(const string& path)
@@ -59,6 +58,5 @@ char* ShaderSource::readSourceFile(const string& path)
 
 char* ShaderSource::getSourceString() const
 {
-    printf("%s\n\n", buffer);
     return buffer;
 }
