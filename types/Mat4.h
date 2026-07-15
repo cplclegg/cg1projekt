@@ -9,6 +9,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include "Vec3.h"
+#include "Mat3.h"
 
 class Mat4
 {
@@ -52,6 +53,8 @@ public:
 
     void perspective(const GLfloat, const GLfloat, const GLfloat, const GLfloat); //     params: fovy, aspect, near, far
     Mat4 perspectiveCopy(const GLfloat, const GLfloat, const GLfloat, const GLfloat) const; // params: fovy, aspect, near, far
+
+    Mat3 getNormalMatrix();
 
     // Testing helpers
     void directPrint() const;

@@ -317,6 +317,21 @@ Mat4 Mat4::perspectiveCopy(const GLfloat fovy, const GLfloat aspect, const GLflo
     return result;
 }
 
+Mat3 Mat4::getNormalMatrix()
+{
+    Mat3 result {};
+    for (size_t col = 0; col < 3; ++col)
+    {
+        for (size_t row = 0; row < 3; ++row)
+        {
+            result(col, row) = (*this)(col, row);
+        }
+    }
+    result.invert();
+    result.transpose();
+    return result;
+}
+
 // ------------- Utility -------------- //
 
 void Mat4::directPrint() const
