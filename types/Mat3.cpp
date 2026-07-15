@@ -9,9 +9,9 @@ using namespace std;
 // ------------- Constructors -------------- //
 
 Mat3::Mat3()
-    : m_matrix{0.0f, 0.0f, 0.0f,
-               0.0f, 0.0f, 0.0f,
-               0.0f, 0.0f, 0.0f}
+    : m_matrix{1.0f, 0.0f, 0.0f,
+               0.0f, 1.0f, 0.0f,
+               0.0f, 0.0f, 1.0f}
 {
 }
 
