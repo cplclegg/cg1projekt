@@ -51,17 +51,46 @@ GLfloat getLength() returns the length of the vector.
 void normalize() normalizes the Vec4 it is called on, dividing each component by the vector's length.
 
 ## Matrix types
+
+### Mat3
+Mat4 represents a 3x3 matrix by storing the components in a 1-dimensional array and indexing in column major order by 
+provided access operators and indexing methods.
+
+#### Constructors
+Mat3() initializes the matrix to a unity matrix.  
+Mat3(const Mat3&) initializes the matrix to a deep copy of the provided Mat4&.
+~Mat3() *does not* call delete[] on the arrays memory, as it is not heap-allocated
+
+#### Operator
+() provides component access with 2 size_t parameters corresponding to column, row (access in column major order).  
+\* provides the matrix product of lhs and rhs.
+\* provides component wise multiplication with a scalar if rhs or lhs are of type GLfloat.  
+\= assigns a deep copy of the rhs Mat4 to the lhs Mat4.  
+== compares the lhs Mat4 to the rhs Mat4 checking for component wise equality (true if lhs(i)==rhs(i) for all (0 <= i < 16).  
+!= compares the lhs Mat4 to the rhs Mat4 checking for component wise inequality (true if lhs(i)==rhs(i) for any (0 <= i < 16). 
+
+#### Methods
+determinant() calculates the determinant of the matrix.
+isInvertible() checks if the matrix is invertible (determinant != 0) and returns true if it is, false if it isnt.
+invert() calculates the inverse of the matrix it is called on and sets it to the result.
+invertCopy() calculates the inverse of a copy of the matrix it is called on and returns the inverted copy.
+transpose() sets the matrix it is called up to its transposed form.
+transposeCopy() copies and transposes the matrix it is called on, returning the transposed copy.
+directPrint() prints the matrix it is called on to cout.
+mIndex(col, row) can be used to translate a column major 2-value index to the 1-dimensional linear array index used internally.  
+
 ### Mat4
 Mat4 represents a 4x4 matrix by storing the components in a 1-dimensional array and indexing in column major order by 
 provided access operators and indexing methods.
 
 #### Constructors
-Mat() initializes the matrix to a unity matrix.  
+Mat4() initializes the matrix to a unity matrix.  
 Mat4(const Mat4&) initializes the matrix to a deep copy of the provided Mat4&.
+~Mat4() *does not* call delete[] on the arrays memory, as it is not heap-allocated
 
 #### Operator
 () provides component access with 2 size_t parameters corresponding to column, row (access in column major order).  
-\* provides the matrix product of lhs and rhs with lhs being the left matrix, rhs the right.  
+\* provides the matrix product of lhs and rhs.  
 \* provides component wise multiplication with a scalar if rhs or lhs are of type GLfloat.  
 \= assigns a deep copy of the rhs Mat4 to the lhs Mat4.  
 == compares the lhs Mat4 to the rhs Mat4 checking for component wise equality (true if lhs(i)==rhs(i) for all (0 <= i < 16).  
@@ -87,6 +116,8 @@ lookAt() creates a view matrix from provided parameters and multiplies this with
 lookAtCopy() returns a copy of this that was multiplied with a viewMatrix created from the parameters.
 
 perspective() creates a projection matrix with the provided parameters and multiplies this with it from the rhs (projection matrix is lhs).
+
+getNormalMatrix() extracts the top left 3x3 matrix from the matrix it is called on, and computes its inverse transpose to get a normal matrix corresponding to a modelview matrix which is returned by the method
 
 directPrint() prints the matrix it is called on to cout.
 mIndex(col, row) can be used to translate a column major 2-value index to the 1-dimensional linear array index used internally.  
