@@ -10,7 +10,7 @@ The meson build system is available in most package managers, their website, and
 https://github.com/mesonbuild/meson  
 https://mesonbuild.com/index.html
 
-> [!NOTE] Installation with common package managers
+> [!NOTE]
 > **Installing via apt (Debian, Ubuntu, etc.)**  
 > ``sudo apt install meson ninja-build``
 > 
