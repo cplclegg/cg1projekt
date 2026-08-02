@@ -168,10 +168,10 @@ int lookAtTest ()
 int mat4Tests()
 {
     cout << "Running tests for class Mat4" << endl << endl;
-	int translationOK = translationTest();
-    int scaleOK = scaleTest();
-    int rotationOK = rotationTests();
-    int lookAtOK = lookAtTest();
+	int result = translationTest();
+    result += scaleTest();
+    result += rotationTests();
+    result += lookAtTest();
     cout << endl << "End of test results for class Mat4" << endl;
-    return translationOK+scaleOK+rotationOK+lookAtOK;
+    return result;
 }
