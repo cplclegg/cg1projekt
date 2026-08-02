@@ -124,7 +124,7 @@ bool Vec3::isParallelTo(const Vec3& other) const
 
 bool Vec3::isZeroVector() const
 {
-    return (m_vector[0] != 0 && m_vector[1] != 0 && m_vector[2] != 0);
+    return (fabs(m_vector[0]) < 0.0001f && fabs(m_vector[1]) < 0.0001f && fabs(m_vector[2]) < 0.0001f);
 }
 
 Vec3 Vec3::crossProduct(const Vec3& rhs) const
