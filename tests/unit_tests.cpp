@@ -1,7 +1,7 @@
 //
 // Created by tomnir on 09.07.26.
 //
-#include "../../include/tests.h"
+#include "../include/tests.h"
 
 int main()
 {

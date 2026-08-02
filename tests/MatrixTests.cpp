@@ -3,7 +3,7 @@
 //
 #include <iostream>
 #include <cmath>
-#include "../../include/types.h"
+#include "../include/types.h"
 using namespace std;
 
 void accessorTest()
