@@ -39,7 +39,7 @@ To run unit tests for project first build the project with the comment specified
 
 > [!NOTE]
 > Console output of the unit tests is written to /buildDir/meson-logs/testlog.txt.
-> In case of failed tests this file will contain debug information printed by the test functions.
+> In case of failed tests testlog.txt will contain debug information printed by the test functions.
 
 # Quickstart guide
 
