@@ -39,7 +39,7 @@ tba
 
 ## Running unit tests
 
-To run unit tests for project first build the project with the comment specified above and then use command  
+To run unit tests for project first build the project with the comment specified [above](#Building-the-project) and then use command  
 ``meson test -C buildDir``
 
 > [!NOTE]
