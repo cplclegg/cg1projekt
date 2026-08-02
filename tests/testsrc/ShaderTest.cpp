@@ -1,7 +1,7 @@
 //
 // Created by tomnir on 12.07.26.
 //
-#include "../include/utilities.h"
+#include "../../include/utilities.h"
 #include <cstring>
 #include <iostream>
 using namespace std;
