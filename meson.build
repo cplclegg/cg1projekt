@@ -3,7 +3,7 @@ project(
     'cpp',
     default_options : [
         'cpp_std=c++14',
-        'warning_level=everything',
+        'warning_level=3',
         ]
 )
 
@@ -13,7 +13,7 @@ core_sources = files(
     'src/types/Mat3.cpp',
     'src/types/Mat4.cpp',
     'src/types/Vec3.cpp',
-    'src.types/Vec4.cpp',
+    'src/types/Vec4.cpp',
     'src/utilities/ShaderSource.cpp'
 )
 
@@ -33,6 +33,12 @@ core_lib = static_library(
 test_exe = executable(
     'unit_tests',
     'tests/unit_tests.cpp',
+    test_sources,
     include_directories : inc,
     link_with : core_lib
+)
+
+test(
+    'unit_tests',
+    test_exe
 )
