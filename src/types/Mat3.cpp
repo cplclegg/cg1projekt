@@ -4,6 +4,7 @@
 
 #include "../../include/Mat3.h"
 #include <cassert>
+#include <cmath>
 #include <iostream>
 using namespace std;
 // ------------- Constructors -------------- //
@@ -88,7 +89,7 @@ bool operator==(const Mat3& lhs, const Mat3& rhs)
     {
         for (size_t row = 0; row < lhs.m_dimension; ++row)
         {
-            equal = equal && (lhs(col, row) == rhs(col, row));
+            equal = equal && fabs(lhs(col, row) - rhs(col, row)) < 0.00001;
         }
     }
     return equal;
@@ -129,7 +130,8 @@ GLfloat Mat3::determinant() const
 
 bool Mat3::isInvertible() const
 {
-    return determinant() != 0;
+    auto determinant {(*this).determinant()};
+    return !(fabs(determinant) < 0.00001);
 }
 
 void Mat3::invert()
@@ -177,15 +179,15 @@ Mat3 Mat3::invertCopy() const
 
 void Mat3::transpose()
 {
-    Vec3 col1 {m_matrix[mIndex(0,0)], m_matrix[mIndex(0,1)], m_matrix[mIndex(0,2)]};
-    Vec3 col2 {m_matrix[mIndex(1,0)], m_matrix[mIndex(1,1)], m_matrix[mIndex(1,2)]};
-    Vec3 col3 {m_matrix[mIndex(2,0)], m_matrix[mIndex(2,1)], m_matrix[mIndex(2,2)]};
-
-    for (size_t i = 0; i < 3; ++i)
+    for (size_t row = 0; row < 3; ++row)
     {
-        m_matrix[mIndex(i, 0)] = col1(i);
-        m_matrix[mIndex(i, 1)] = col2(i);
-        m_matrix[mIndex(i, 2)] = col3(i);
+        for (size_t col = row + 1; col < 3; ++col)
+        {
+            swap(
+                m_matrix[mIndex(row, col)],
+                m_matrix[mIndex(col, row)]
+            );
+        }
     }
 }
 
@@ -200,7 +202,7 @@ Mat3 Mat3::transposeCopy() const
 
 void Mat3::directPrint() const
 {
-    for (size_t i = 0; i < 16; ++i)
+    for (size_t i = 0; i < 9; ++i)
     {
         if (i%3==0) cout << endl;
         cout << m_matrix[i] << " ";

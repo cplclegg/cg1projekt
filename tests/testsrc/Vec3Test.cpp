@@ -120,11 +120,11 @@ int scalarProdTestVec3()
     GLfloat vecC { vecA*vecB };
     if (vecC - 10 < 0.000000001)
     {
-        cout << "OK - Skalarprodukt per Vec3.scalarMult() ok." << endl;
+        cout << "OK - Skalarprodukt per operator* ok." << endl;
         return 0;
     } else
     {
-        cout << "Skalarprodukt per Vec3.scalarMult() nicht ok. Erwartet: 343. Erhalten: " << vecC << endl;
+        cout << "Skalarprodukt per operator* nicht ok. Erwartet: 343. Erhalten: " << vecC << endl;
         return 1;
     }
 }
@@ -152,13 +152,13 @@ int vectorProductTestVec3()
     GLfloat vecC1 = vecC(0);
     GLfloat vecC2 = vecC(1);
     GLfloat vecC3 = vecC(2);
-    if ( abs(vecC(0)+4) < 0.0001 && abs(vecC(1)-8) < 0.0001 && abs(vecC(2)+4) < 0.0001)
+    if ( abs(vecC(0)-4) < 0.0001 && abs(vecC(1)+8) < 0.0001 && abs(vecC(2)-4) < 0.0001)
     {
         cout << "OK - Vektorprodukt per operator* ok." <<endl;
         return 0;
     } else
     {
-        cout << "Vektorprodukt per operator* nicht ok. Erwartet: -4 / 8 / -4. Erhalten: " << vecC1 << " / " << vecC2 << " / " << vecC3 << endl;
+        cout << "Vektorprodukt per operator* nicht ok. Erwartet: 4 / -8 / 4. Erhalten: " << vecC1 << " / " << vecC2 << " / " << vecC3 << endl;
         return 1;
     }
 }

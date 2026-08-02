@@ -94,7 +94,7 @@ bool operator==(const Mat4& lhs, const Mat4& rhs)
     {
         for (size_t row = 0; row < lhs.m_dimension; ++row)
         {
-            equal = equal && (lhs(col, row) == rhs(col, row));
+            equal = equal && (lhs(col, row) - rhs(col, row) < 0.00001);
         }
     }
     return equal;
