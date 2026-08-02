@@ -5,7 +5,11 @@ Justin-Kevin vanWanrooij
 
 # Build information
 
-This project uses the meson build system. 
+This project uses the meson build system.  
+The meson build system is available in most package managers, their website, and on GitHub:  
+https://github.com/mesonbuild/meson
+https://mesonbuild.com/index.html
+
 
 ## Building the project
 
