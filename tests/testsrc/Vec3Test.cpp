@@ -6,7 +6,7 @@
 #include <cmath>
 using namespace std;
 
-void copyConstTestVec3()
+int copyConstTestVec3()
 {
     Vec3 vecA {1,1,1};
     Vec3 vecB {vecA};
@@ -19,13 +19,15 @@ void copyConstTestVec3()
     if (afterConstructionEqual && !afterAlterationEqual)
     {
         cout << "OK - Copy-Constructor ok." << endl;
+        return 0;
     } else
     {
         cout << "Copy-Constructor nicht ok." << endl;
+        return 1;
     }
 }
 
-void equalsTestVec3()
+int equalsTestVec3()
 {
     Vec3 vecA {1,1,1};
     Vec3 vecB {2,2,2};
@@ -36,13 +38,15 @@ void equalsTestVec3()
     if (equal && !nequal && !equal2 && nequal2)
     {
         cout << "OK - Gleichheitsvergleich mit operator== ok." << endl;
+        return 0;
     } else
     {
         cout << "Gleichheitsvergleich mit operator== nicht ok." << endl;
+        return 1;
     }
 }
 
-void scalarMultTestVec3()
+int scalarMultTestVec3()
 {
     Vec3 vecA {1,1,1};
     Vec3 vecB { vecA * 2 };
@@ -52,16 +56,18 @@ void scalarMultTestVec3()
     if (scalarRightOK && scalarLeftOK)
     {
         cout << "OK - Vektor-Skalar-Multiplikation ok." << endl;
+        return 0;
     } else
     {
         cout << "Vektor-Skalar-Multiplikation nicht ok. Erwartet: 2 2 2. Erhalten: "
 			 << vecB(0) << " " << vecB(1) << " " << vecB(2) << endl
 			 << "Vektor-Skalar-Multiplikation nicht ok. Erwartet: 3 3 3. Erhalten: "
 			 << vecC(0) << " " << vecC(1) << " " << vecC(2) << endl;
+        return 1;
     }
 }
 
-void assignmentTestVec3()
+int assignmentTestVec3()
 {
     Vec3 vecA {1,2,3};
     Vec3 vecB = vecA;
@@ -72,24 +78,28 @@ void assignmentTestVec3()
     if (vecB(0) == 1 && vecB(1) == 2 && vecB(2) == 3)
     {
         cout << "OK - Tiefe Kopie bei Zuweisung mit operator= ok." << endl;
+        return 0;
     } else
     {
         cout << "Tiefe Kopie bei Zuweisung mit operator= nicht ok. Erwartet: 1 2 3. Erhalten: " << vecB(0) << " " << vecB(1) << " " << vecB(2) << endl;
+        return 1;
     }
 
 }
 
-void addSubtractTestVec3()
+int addSubtractTestVec3()
 {
     Vec3 vecA {3,2,1};
     Vec3 vecB {1,2,3};
     Vec3 vecC { vecA+vecB };
+    int result = 0;
     if ( (vecC(0) - 4 < 0.001) && (vecC(1)-4<0.0001) && (vecC(2) - 4 < 0.0001) )
     {
         cout << "OK - Addition per operator+ ok." << endl;
     } else
     {
         cout << "Addition per operator+ nicht ok. Erwartet: 4 4 4. Erhalten: " << vecC(0) << " " << vecC(1) << " " << vecC(2) << endl;
+        ++result;
     }
     Vec3 vecD = vecA - vecB;
     if ( (vecD(0) - 2 < 0.0001) && (vecD(1) < 0.0001) && (vecD(2) + 2 < 0.0001) )
@@ -98,10 +108,12 @@ void addSubtractTestVec3()
     } else
     {
         cout << "Subtraktion per operator- nicht ok. Erwartet: 2 0 -2. Erhalten: " << vecD(0) << " " << vecD(1) << " " << vecD(2) << endl;
+        ++result;
     }
+    return result;
 }
 
-void scalarProdTestVec3()
+int scalarProdTestVec3()
 {
     Vec3 vecA {3,2,1};
     Vec3 vecB {1,2,3};
@@ -109,26 +121,30 @@ void scalarProdTestVec3()
     if (vecC - 10 < 0.000000001)
     {
         cout << "OK - Skalarprodukt per Vec3.scalarMult() ok." << endl;
+        return 0;
     } else
     {
         cout << "Skalarprodukt per Vec3.scalarMult() nicht ok. Erwartet: 343. Erhalten: " << vecC << endl;
+        return 1;
     }
 }
 
-void lenTestVec3()
+int lenTestVec3()
 {
     Vec3 vecA {3,2,1}; // len: sqrt( 9+4+1=14 )
     GLfloat deviation = abs(vecA.getLength() - sqrt(14));
     if (deviation < 0.0001)
     {
         cout << "OK - Vec3.getLength() ok." << endl;
+        return 0;
     } else
     {
         cout << "Vec3.getLength() nicht ok. Abweichung: " << deviation << endl;
+        return 1;
     }
 }
 
-void vectorProductTestVec3()
+int vectorProductTestVec3()
 {
     Vec3 vecA {3,2,1};
     Vec3 vecB {1,2,3};
@@ -139,13 +155,15 @@ void vectorProductTestVec3()
     if ( abs(vecC(0)+4) < 0.0001 && abs(vecC(1)-8) < 0.0001 && abs(vecC(2)+4) < 0.0001)
     {
         cout << "OK - Vektorprodukt per operator* ok." <<endl;
+        return 0;
     } else
     {
         cout << "Vektorprodukt per operator* nicht ok. Erwartet: -4 / 8 / -4. Erhalten: " << vecC1 << " / " << vecC2 << " / " << vecC3 << endl;
+        return 1;
     }
 }
 
-void operatorMinusTestVec3()
+int operatorMinusTestVec3()
 {
     Vec3 test { 1, 2, 3};
     Vec3 negative = -test;
@@ -153,13 +171,15 @@ void operatorMinusTestVec3()
     if (correctResult)
     {
         cout << "OK - operator- returns correct negative vector." << endl;
+        return 0;
     } else
     {
         cout << "Negation with operator- not returning correct result. Vector: " << negative(0) << " " << negative(1) << " " << negative(2) << endl;
+        return 1;
     }
 }
 
-void normalizeTestVec3()
+int normalizeTestVec3()
 {
     Vec3 test {2, 2, 1};
     test.normalize();
@@ -167,25 +187,29 @@ void normalizeTestVec3()
     if (normalizationCorrect)
     {
         cout << "OK - normalize() correctly normalizing vector components." << endl;
+        return 0;
     } else
     {
         cout << "normalize() not correctly normalizing vector component. Vector: " << test(0) << " " << test(1) << " " << test(2) << endl;
+        return 1;
     }
 }
 
-void vec3Tests()
+int vec3Tests()
 {
     cout << "Running tests for Class Vec3" << endl << endl;
-    scalarProdTestVec3();
-    lenTestVec3();
-    vectorProductTestVec3();
-    addSubtractTestVec3();
-    assignmentTestVec3();
-    scalarMultTestVec3();
-    equalsTestVec3();
-    copyConstTestVec3();
-    operatorMinusTestVec3();
-    normalizeTestVec3();
+    int result = 0;
+    result += scalarProdTestVec3();
+    result += lenTestVec3();
+    result += vectorProductTestVec3();
+    result += addSubtractTestVec3();
+    result += assignmentTestVec3();
+    result += scalarMultTestVec3();
+    result += equalsTestVec3();
+    result += copyConstTestVec3();
+    result += operatorMinusTestVec3();
+    result += normalizeTestVec3();
     cout << endl << "End of test results for Class Vec3" << endl << endl;
+    return result;
 }
 
