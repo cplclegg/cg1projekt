@@ -37,6 +37,10 @@ To build the project navigate to project root directory in terminal emulator of 
 To run unit tests for project first build the project with the comment specified above and then use command  
 ``meson test -C builddir``
 
+> [!NOTE]
+> Console output of the unit tests is written to /builddir/meson-logs/testlog.txt.
+> In case of failed tests this file will contain debug information printed by the test functions.
+
 # Quickstart guide
 
 ## Starting the program
