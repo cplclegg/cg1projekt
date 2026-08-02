@@ -131,8 +131,8 @@ void lookAtTest ()
     Vec3 center {1,2,3};
     Vec3 up {1,1,1};
     Vec3 n {eye-center};
-    Vec3 u {up*n};
-    Vec3 v {n*u};
+    Vec3 u {up.crossProduct(n)};
+    Vec3 v {n.crossProduct(u)};
     n.normalize();
     u.normalize();
     v.normalize();
@@ -144,9 +144,9 @@ void lookAtTest ()
         rotationOK = rotationOK && mrt(i,1) - v(i) < 0.001;
         rotationOK = rotationOK && mrt(i,2) - n(i) < 0.001;
     }
-    bool translationOK = u.scalarProduct(-eye) - 1.224 < 0.001;
-    translationOK = translationOK && v.scalarProduct(-eye) - 3.462 < 0.001;
-    translationOK = translationOK && n.scalarProduct(-eye) - 0.707 < 0.001;
+    bool translationOK = u*(-eye) - 1.224 < 0.001;
+    translationOK = translationOK && v*(-eye) - 3.462 < 0.001;
+    translationOK = translationOK && n*(-eye) - 0.707 < 0.001;
     if (translationOK && rotationOK)
     {
         cout << "OK - lookAt() erstellt korrekte view-matrix." << endl;
