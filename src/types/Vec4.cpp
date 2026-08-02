@@ -1,7 +1,7 @@
 //
 // Created by tomnir on 08.07.26.
 //
-#include "Vec4.h"
+#include "../../include/Vec4.h"
 #include <cmath>
 #include <cassert>
 #include <GL/glew.h>
@@ -142,7 +142,7 @@ bool Vec4::isParallelTo(const Vec4& other) const
 
 bool Vec4::isZeroVector() const
 {
-    return (m_vector[0] != 0 && m_vector[1] != 0 && m_vector[2] != 0 && m_vector[3] != 0);
+    return (fabs(m_vector[0]) < 0.0001f && fabs(m_vector[1]) < 0.0001f && fabs(m_vector[2]) < 0.0001f && fabs(m_vector[3]) < 0.0001f);
 }
 
 void Vec4::normalize()

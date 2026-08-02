@@ -2,7 +2,7 @@
 // Created by tomnir on 08.07.26.
 //
 #include <iostream>
-#include "../types/Vec3.h"
+#include "../../include/Vec3.h"
 #include <cmath>
 using namespace std;
 
@@ -105,7 +105,7 @@ void scalarProdTestVec3()
 {
     Vec3 vecA {3,2,1};
     Vec3 vecB {1,2,3};
-    GLfloat vecC { vecA.scalarProduct(vecB) };
+    GLfloat vecC { vecA*vecB };
     if (vecC - 10 < 0.000000001)
     {
         cout << "OK - Skalarprodukt per Vec3.scalarMult() ok." << endl;
@@ -132,7 +132,7 @@ void vectorProductTestVec3()
 {
     Vec3 vecA {3,2,1};
     Vec3 vecB {1,2,3};
-    Vec3 vecC { vecA*vecB };
+    Vec3 vecC { vecA.crossProduct(vecB) };
     GLfloat vecC1 = vecC(0);
     GLfloat vecC2 = vecC(1);
     GLfloat vecC3 = vecC(2);

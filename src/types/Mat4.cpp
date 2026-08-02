@@ -2,7 +2,7 @@
 // Created by tomnir on 09.07.26.
 //
 
-#include "Mat4.h"
+#include "../../include/Mat4.h"
 #include <cmath>
 #include <cassert>
 #include <iostream>
