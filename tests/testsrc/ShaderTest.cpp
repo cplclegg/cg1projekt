@@ -5,7 +5,7 @@
 #include <cstring>
 #include <iostream>
 using namespace std;
-void shaderSourceTest()
+int shaderSourceTest()
 {
     ShaderSource s1 {"/home/tomnir/Documents/devel/hshbin/cg1projekt/tests/testShaderSource.glsl"};
     ShaderSource s2 {};
@@ -22,15 +22,18 @@ void shaderSourceTest()
     if (s1ok && s2ok)
     {
         cout << "OK - ShaderSource liest Datei korrekt ein." << endl;
+        return 0;
     } else
     {
         cout << "ShaderSource liest Datei nicht korrekt ein. Text:" << endl << s1text << endl << s2text;
+        return 1;
     }
 }
 
-void shaderTests()
+int shaderTests()
 {
     cout << "Running tests for Shader related classes" << endl << endl;
-    shaderSourceTest();
+    int ok = shaderSourceTest();
     cout << endl << "End of tests for Shader related classes" << endl;
+    return ok;
 }

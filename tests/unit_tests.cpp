@@ -5,8 +5,9 @@
 
 int main()
 {
-    vec3Tests();
-    vec4Tests();
-    mat4Tests();
-    shaderTests();
+    int result = vec3Tests();
+    result += vec4Tests();
+    result += mat4Tests();
+    result += shaderTests();
+    return result;
 }

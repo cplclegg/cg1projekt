@@ -4,8 +4,8 @@
 
 #ifndef CG1PROJEKT_TESTS_H
 #define CG1PROJEKT_TESTS_H
-extern void vec3Tests();
-extern void vec4Tests();
-extern void mat4Tests();
-extern void shaderTests();
+extern int vec3Tests();
+extern int vec4Tests();
+extern int mat4Tests();
+extern int shaderTests();
 #endif //CG1PROJEKT_TESTS_H

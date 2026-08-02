@@ -18,7 +18,7 @@ void accessorTest()
 	test.directPrint();
 }
 
-void translationTest()
+int translationTest()
 {
     Mat4 test {};
     Vec3 translator { 1,2,3 };
@@ -39,6 +39,7 @@ void translationTest()
     if (translateOK && translateCopyOK)
     {
         cout << "OK - Translation und Translation von Kopie ok." << endl;
+        return 0;
     } else
     {
         cout << "Translation nicht ok. Matrix:" << endl;
@@ -46,6 +47,7 @@ void translationTest()
         cout << "Kopiematrix: " << endl;
         translatedCopy.directPrint();
         cout << endl;
+        return 1;
     }
 }
 
@@ -58,7 +60,7 @@ void accessorParenthesesTest()
     cout << "Altered Matrix: " << endl << test << endl;
 }
 
-void scaleTest()
+int scaleTest()
 {
     Mat4 test {};
     Vec3 sVector {2,3,4};
@@ -76,16 +78,18 @@ void scaleTest()
     if (testOK && copyOK)
     {
         cout << "OK - scale und scaleCopy ok." << endl;
+        return 0;
     } else
     {
         cout << "scale und scaleCopy nicht ok. Matrix: " << endl;
         test.directPrint();
         cout << "Kopie: " << endl;
         copy.directPrint();
+        return 1;
     }
 }
 
-void rotationTests()
+int rotationTests()
 {
     Mat4 xtest {};
     Mat4 ytest {};
@@ -108,6 +112,7 @@ void rotationTests()
     if (xRotationOK && xRotCopyOK && yRotationOK && yRotCopyOK && zRotationOK &&zRotCopyOK)
     {
         cout << "OK - Rotationsmatrizen ok." << endl;
+        return 0;
     } else
     {
         cout << "Rotationsmatrizen nicht ok. x und xcopy: " << endl;
@@ -120,11 +125,12 @@ void rotationTests()
         ztest.directPrint();
         zcopy.directPrint();
         cout << endl;
+        return 1;
     }
 
 }
 
-void lookAtTest ()
+int lookAtTest ()
 {
     Mat4 test {};
     Vec3 eye {2,1,3};
@@ -150,19 +156,22 @@ void lookAtTest ()
     if (translationOK && rotationOK)
     {
         cout << "OK - lookAt() erstellt korrekte view-matrix." << endl;
+        return 0;
     } else
     {
         cout << "lookAt() erzeugt falsche view-matrix. Matrix: " << endl;
         mrt.directPrint();
         cout << endl;
+        return 1;
     }
 }
-void mat4Tests()
+int mat4Tests()
 {
     cout << "Running tests for class Mat4" << endl << endl;
-	translationTest();
-    scaleTest();
-    rotationTests();
-    lookAtTest();
+	int translationOK = translationTest();
+    int scaleOK = scaleTest();
+    int rotationOK = rotationTests();
+    int lookAtOK = lookAtTest();
     cout << endl << "End of test results for class Mat4" << endl;
+    return translationOK+scaleOK+rotationOK+lookAtOK;
 }
