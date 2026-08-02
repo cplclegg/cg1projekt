@@ -19,6 +19,7 @@ core_sources = files(
 
 test_sources = files(
     'tests/testsrc/Mat4Test.cpp',
+    'tests/testsrc/Mat3Test.cpp',
     'tests/testsrc/ShaderTest.cpp',
     'tests/testsrc/Vec3Test.cpp',
     'tests/testsrc/Vec4Test.cpp'
