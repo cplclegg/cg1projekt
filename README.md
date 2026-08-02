@@ -1,7 +1,10 @@
 # Computergrafik 1 - Team FireBrick - PROJECT NAME TBA
+
 Tom Nir  
 Boris Sokolovic  
 Justin-Kevin vanWanrooij  
+
+https://github.com/cplclegg/cg1projekt
 
 # Build information
 
