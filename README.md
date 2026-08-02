@@ -10,12 +10,17 @@ The meson build system is available in most package managers, their website, and
 https://github.com/mesonbuild/meson  
 https://mesonbuild.com/index.html
 
-**Installing via apt (Debian, Ubuntu, etc.)**  
-``sudo apt install meson ninja-build``  
-**Installing via dnf (Fedora, Centos, Red Hat Enterprise Linux, etc.)**  
-``sudo dnf install meson ninja-build``  
-**Installing via pacman (Arch)**  
-``sudo pacman -S meson``
+> [!info]- Installation with common package managers
+> #### Bivariate Daten
+> **Installing via apt (Debian, Ubuntu, etc.)**  
+> ``sudo apt install meson ninja-build``  
+> **Installing via dnf (Fedora, Centos, Red Hat Enterprise Linux, etc.)**  
+> ``sudo dnf install meson ninja-build``  
+> **Installing via pacman (Arch)**  
+> ``sudo pacman -S meson``
+
+
+
 
 
 ## Building the project
