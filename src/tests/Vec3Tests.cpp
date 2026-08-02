@@ -2,7 +2,7 @@
 // Created by tomnir on 08.07.26.
 //
 #include <iostream>
-#include "../types/Vec3.h"
+#include "../../include/Vec3.h"
 #include <cmath>
 using namespace std;
 

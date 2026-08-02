@@ -2,7 +2,7 @@
 // Created by tomnir on 15.07.26.
 //
 
-#include "Mat3.h"
+#include "../../include/Mat3.h"
 #include <cassert>
 #include <iostream>
 using namespace std;

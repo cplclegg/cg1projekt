@@ -1,7 +1,7 @@
 //
 // Created by tomnir on 08.07.26.
 //
-#include "Vec4.h"
+#include "../../include/Vec4.h"
 #include <cmath>
 #include <cassert>
 #include <GL/glew.h>

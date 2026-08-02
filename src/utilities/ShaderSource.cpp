@@ -6,7 +6,7 @@
  * THIS HAS NOT BEEN TESTED YET
  */
 
-#include "ShaderSource.h"
+#include "../../include/ShaderSource.h"
 #include <cassert>
 #include <fstream>
 #include <iostream>
