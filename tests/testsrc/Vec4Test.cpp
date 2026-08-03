@@ -6,6 +6,23 @@
 #include <cmath>
 using namespace std;
 
+int zeroVec4Test()
+{
+    Vec4 a {0,0,0,0};
+    Vec4 b {1,1,1,1};
+    bool zeroOK = a.isZeroVector();
+    bool notZeroOK = !b.isZeroVector();
+    if (zeroOK && notZeroOK)
+    {
+        cout << "OK - test for zero vector in Vec4 correct.";
+        return 0;
+    } else
+    {
+        cout << "Test for zero vector in Vec4 incorrect." << endl;
+        return 1;
+    }
+}
+
 int parallel4Test()
 {
     Vec4 a {1,2,3,4};
@@ -210,6 +227,7 @@ int vec4Tests()
     result += operatorMinusTestVec4();
     result += normalizeTestVec4();
     result += parallel4Test();
+    result += zeroVec4Test();
     cout << endl << "End of test results for Class Vec4" << endl << endl;
     return result;
 }
