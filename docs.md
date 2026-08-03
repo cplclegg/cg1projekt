@@ -146,6 +146,6 @@ Functional methods of each class are tested with equivalence class tests. Each c
 
 ## Signature for main testing function
 
-The main testing function of a class must ``return 0`` if all the tests called from it have passed, and a non-zero integer if any of the tests have failed. To achieve this, it is recommended to have each unit test ``return 0`` on pass and ``return 1`` on fail. The main testing function can then add up all the return values and return the sum as is. If all tests have passed, the main testing function will return 0, otherwise it will return an integer corresponding to the number of failed tests. 
+The main testing function of a class must ``return 0`` if all the tests called from it have passed, and a non-zero integer if any of the tests have failed. To achieve this, it is recommended to have each unit test ``return 0`` on pass and ``return 1`` on fail. The main testing function can then add up all the return values and return the sum as is. If all tests have passed, the main testing function will ``return 0``, otherwise it will return an integer corresponding to the number of failed tests. 
 
 The same strategy is used in the the main function of ``/tests/unit_tests.cpp``. The exit code returned from this main function is thus the number of total failed tests.
