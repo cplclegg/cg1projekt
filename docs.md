@@ -53,7 +53,7 @@ Vec4 represents a vector with 4 components indexes 0 through 3.
 ## Matrix types
 
 ### Mat3
-Mat4 represents a 3x3 matrix by storing the components in a 1-dimensional array and indexing in column major order by 
+Mat3 represents a 3x3 matrix by storing the components in a 1-dimensional array and indexing in column major order by 
 provided access operators and indexing methods.
 
 #### Constructors
