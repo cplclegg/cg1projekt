@@ -28,7 +28,7 @@ Vec3 represents a vector with 3 components indexed 0 through 2.
 - void normalize() normalizes the Vec3 it is called on, dividing each component by the vector's length.  
 
 ## Vec4
-- Vec4 represents a vector with 4 components indexes 0 through 3.
+Vec4 represents a vector with 4 components indexes 0 through 3.
 
 #### Constructors
 - Vec4() initializes the Vec3 object with 0 at all components.  
@@ -53,8 +53,8 @@ Vec3 represents a vector with 3 components indexed 0 through 2.
 ## Matrix types
 
 ### Mat3
-- Mat4 represents a 3x3 matrix by storing the components in a 1-dimensional array and indexing in column major order by 
-- provided access operators and indexing methods.
+Mat4 represents a 3x3 matrix by storing the components in a 1-dimensional array and indexing in column major order by 
+provided access operators and indexing methods.
 
 #### Constructors
 - Mat3() initializes the matrix to a unity matrix.  
@@ -125,7 +125,7 @@ provided access operators and indexing methods.
 # Utilities
 
 ## ShaderSource
-- ShaderSource abstracts loading and storing the source code for shaders in an object of type Shadersource.
+ShaderSource abstracts loading and storing the source code for shaders in an object of type Shadersource.
 
 ### Constructors
 - ShaderSource() constructs an empty ShaderSource object
