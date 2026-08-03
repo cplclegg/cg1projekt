@@ -6,6 +6,44 @@
 #include <cmath>
 using namespace std;
 
+int zeroVec3Test()
+{
+    Vec3 a {0,0,0};
+    Vec3 b {1,1,1};
+    bool zeroOK = a.isZeroVector();
+    bool notZeroOK = !b.isZeroVector();
+    if (zeroOK && notZeroOK)
+    {
+        cout << "OK - test for zero vector in Vec3 correct.";
+        return 0;
+    } else
+    {
+        cout << "Test for zero vector in Vec3 incorrect." << endl;
+        return 1;
+    }
+}
+
+int parallel3Test()
+{
+    Vec3 a {1,2,3};
+    Vec3 b {2,4,6};
+    Vec3 c {1,3,2};
+    bool parallelOK = a.isParallelTo(b);
+    parallelOK = parallelOK && b.isParallelTo(a);
+    bool notParallelOK = !(a.isParallelTo(c));
+    notParallelOK = notParallelOK && !(c.isParallelTo(a));
+    if (parallelOK && notParallelOK)
+    {
+        cout << "OK - isParallelTo() working correctly" << endl;
+        return 0;
+    } else
+    {
+        cout << "isParallelTo() not returning correct results" << endl;
+        cout << "Parallel OK: " << parallelOK << " Not parallel OK: " << notParallelOK << endl;
+        return 1;
+    }
+}
+
 int copyConstTestVec3()
 {
     Vec3 vecA {1,1,1};
@@ -209,6 +247,8 @@ int vec3Tests()
     result += copyConstTestVec3();
     result += operatorMinusTestVec3();
     result += normalizeTestVec3();
+    result += parallel3Test();
+    result += zeroVec3Test();
     cout << endl << "End of test results for Class Vec3" << endl << endl;
     return result;
 }

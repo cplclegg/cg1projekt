@@ -137,7 +137,7 @@ bool Vec4::isParallelTo(const Vec4& other) const
 {
     const GLfloat absDotProduct = abs((*this)*other);
     const GLfloat lengthProduct = getLength() *  other.getLength();
-    return absDotProduct == lengthProduct;
+    return fabs(absDotProduct - lengthProduct) < 0.00001;
 }
 
 bool Vec4::isZeroVector() const
