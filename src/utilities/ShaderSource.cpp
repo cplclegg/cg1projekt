@@ -18,7 +18,7 @@ ShaderSource::ShaderSource()
 
 ShaderSource::ShaderSource(const string& path)
     : sourcePath{path}
-    , buffer {readSourceFile(path)}
+    , buffer {readSourceFile(sourcePath)}
 {
 }
 
