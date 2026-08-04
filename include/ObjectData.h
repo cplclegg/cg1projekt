@@ -14,8 +14,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <string>
-typedef float Vector2[2];
-typedef float Vector3[3];
+typedef GLfloat Vector2[2];
+typedef GLfloat Vector3[3];
 
 typedef struct Vertex {
     Vector3 v;
