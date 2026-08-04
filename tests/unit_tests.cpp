@@ -10,5 +10,6 @@ int main()
     result += mat4Tests();
     result += shaderTests();
     result += mat3Tests();
+    result += objImportTests();
     return result;
 }
