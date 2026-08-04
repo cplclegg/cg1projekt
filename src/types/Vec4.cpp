@@ -25,7 +25,7 @@ const GLfloat& Vec4::operator() (const size_t component) const
 GLfloat operator*(const Vec4& rhs, const Vec4& lhs)
 {
     GLfloat result = 0.0f;
-    for (int i = 0; i<lhs.m_dimension; ++i)
+    for (size_t i = 0; i<lhs.m_dimension; ++i)
     {
         result += rhs.m_vector[i]*lhs.m_vector[i];
     }
@@ -91,7 +91,7 @@ bool operator==(const Vec4& lhs, const Vec4& rhs)
 {
     if (&lhs == &rhs) return true;
     bool equal = true;
-    for (int i = 0; i < lhs.m_dimension; ++i)
+    for (size_t i = 0; i < lhs.m_dimension; ++i)
     {
         equal = equal && (lhs(i) == rhs(i));
     }
@@ -126,7 +126,7 @@ Vec4::Vec4(const Vec4& other)
 GLfloat Vec4::getLength() const
 {
     GLfloat squareSum = 0;
-    for (int i = 0; i < m_dimension; ++i)
+    for (size_t i = 0; i < m_dimension; ++i)
     {
         squareSum += m_vector[i]*m_vector[i];
     }
