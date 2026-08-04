@@ -3,9 +3,19 @@ project(
     'cpp',
     default_options : [
         'cpp_std=c++14',
-        'warning_level=3',
+        'warning_level=3'
         ]
 )
+
+glew_dep = dependency('glew')
+glfw_dep = dependency('glfw3')
+opengl_dep = dependency('opengl')
+
+graphics_deps = [
+    glew_dep,
+    glfw_dep,
+    opengl_dep
+]
 
 inc = include_directories('include')
 
@@ -23,13 +33,15 @@ test_sources = files(
     'tests/testsrc/Mat3Test.cpp',
     'tests/testsrc/ShaderTest.cpp',
     'tests/testsrc/Vec3Test.cpp',
-    'tests/testsrc/Vec4Test.cpp'
+    'tests/testsrc/Vec4Test.cpp',
+    'tests/testsrc/ObjectDataTest.cpp'
 )
 
 core_lib = static_library(
     'core',
     core_sources,
-    include_directories : inc
+    include_directories : inc,
+    dependencies : graphics_deps
 )
 
 test_exe = executable(
@@ -37,7 +49,8 @@ test_exe = executable(
     'tests/unit_tests.cpp',
     test_sources,
     include_directories : inc,
-    link_with : core_lib
+    link_with : core_lib,
+    dependencies : graphics_deps
 )
 
 test(
