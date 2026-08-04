@@ -8,7 +8,7 @@
 #include <cstring>
 #include <cassert>
 #include <stdexcept>
-
+#include <iostream>
 #include <bits/error_constants.h>
 using namespace std;
 
@@ -27,6 +27,15 @@ ObjectData::ObjectData(const ObjectData& other)
 {
 }
 
+void ObjectData::printBuffer() const
+{
+    for (size_t i = 0; i < m_bufferSize; ++i)
+    {
+        cout << m_buffer[i] << " ";
+    }
+    cout << endl;
+}
+
 ObjectData::ObjectData(const std::string& path)
     : m_buffer {loadObj(path.c_str())}
 {
@@ -36,18 +45,32 @@ ObjectData::~ObjectData() // do NOT delete or free m_buffer, its heap allocated
 {
 }
 
+void ObjectData::importObjectData(const std::string& path)
+{
+    m_buffer = loadObj(path.c_str());
+}
+
 GLfloat* ObjectData::getBuffer() const
 {
     return m_buffer;
 }
 
-void ObjectData::makeVBO(GLuint& vbo) const
+GLuint ObjectData::makeVBO() const
 {
     assert(m_buffer != nullptr);
+    cout << "makeVBO entered\n";
+    GLuint vbo {};
+
     glGenBuffers(1, &vbo);
+    cout << "vbo generated\n";
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    cout << "vbo bound\n";
     glBufferData(GL_ARRAY_BUFFER, m_bufferSize, m_buffer, GL_STATIC_DRAW);
+    cout << "vbo data written\n";
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+    cout << "vbo unbound\n";
+
+    return vbo;
 }
 
 GLfloat* ObjectData::loadObj(const char* location)

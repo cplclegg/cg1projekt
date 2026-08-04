@@ -36,15 +36,19 @@ private:
     size_t m_lineLength = 1024;
     size_t m_bufferSize = 0;
     GLfloat* m_buffer = nullptr;
+    GLfloat* loadObj(const char* location);
 public:
     ObjectData();
     explicit ObjectData(const std::string& path);
     ObjectData(const ObjectData& other);
     ~ObjectData();
 
-    GLfloat* loadObj(const char* location);
+    void importObjectData(const std::string& path);
+
+    void printBuffer() const;
+
     GLfloat* getBuffer() const;
-    void makeVBO(GLuint& vbo) const;
+    GLuint makeVBO() const;
 };
 
 #endif //CG1PROJEKT_OBJECTDATA_H
