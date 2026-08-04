@@ -8,5 +8,4 @@
 #include "Vec4.h"
 #include "Mat4.h"
 #include "Mat3.h"
-#include "Vertex.h"
 #endif //CG1PROJEKT_TYPES_H
