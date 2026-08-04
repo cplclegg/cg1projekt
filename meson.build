@@ -14,7 +14,8 @@ core_sources = files(
     'src/types/Mat4.cpp',
     'src/types/Vec3.cpp',
     'src/types/Vec4.cpp',
-    'src/utilities/ShaderSource.cpp'
+    'src/utilities/ShaderSource.cpp',
+    'src/utilities/ObjectData.cpp'
 )
 
 test_sources = files(
