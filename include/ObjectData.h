@@ -14,8 +14,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <string>
-typedef float Vector2[2];
-typedef float Vector3[3];
+typedef GLfloat Vector2[2];
+typedef GLfloat Vector3[3];
 
 typedef struct Vertex {
     Vector3 v;
@@ -36,15 +36,19 @@ private:
     size_t m_lineLength = 1024;
     size_t m_bufferSize = 0;
     GLfloat* m_buffer = nullptr;
+    GLfloat* loadObj(const char* location);
 public:
     ObjectData();
     explicit ObjectData(const std::string& path);
     ObjectData(const ObjectData& other);
     ~ObjectData();
 
-    GLfloat* loadObj(const char* location);
+    void importObjectData(const std::string& path);
+
+    void printBuffer() const;
+
     GLfloat* getBuffer() const;
-    void makeVBO(GLuint& vbo) const;
+    GLuint makeVBO() const;
 };
 
 #endif //CG1PROJEKT_OBJECTDATA_H
