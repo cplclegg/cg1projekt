@@ -36,7 +36,7 @@ Vec4 represents a vector with 4 components indexes 0 through 3.
 - ``Vec4(const Vec4&)`` initialized the vector with a deep copy of the provided Vec3&.
 
 #### Operator  
-- `()`` provides array-like component access. Parantheses are used over brackets for congruency with matrix component access operator.  
+- ``()`` provides array-like component access. Parantheses are used over brackets for congruency with matrix component access operator.  
 - ``*`` provides component wise multiplication with a scalar if GLfloat is on lhs or rhs of the operator.  
 - ``*`` provides dot/inner/scalar product if lhs and rhs are both of type Vec4.  
 - ``+`` provides component wise addition of 2 Vec4 objects.  
@@ -154,7 +154,6 @@ Client is responsible for freeing of the memory!
 - ``void ObjectData::importObjectData(const std::string& path)`` provides a public wrapper for ``loadObj``, allowing loading of an .obj file into an existing (empty or non-empty) ObjectData
 - ``GLfloat* ObjectData::getBuffer() const`` returns a pointer to the data buffer of the object
 - ``GLuint ObjectData::makeVBO() const`` abstracts creation of a VBO and data transfer to the VBO. The identifier of the VBO is returned from the function.
-- 
 
 # Tests
 
