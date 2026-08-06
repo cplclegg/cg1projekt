@@ -5,4 +5,6 @@
 #ifndef CG1PROJEKT_UTILITIES_H
 #define CG1PROJEKT_UTILITIES_H
 #include "ShaderSource.h"
+#include "ObjectData.h"
+#include "ShaderProgram.h"
 #endif //CG1PROJEKT_UTILITIES_H
