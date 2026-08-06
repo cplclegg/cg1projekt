@@ -55,6 +55,9 @@ tba
 ## Exiting the program
 tba
 
-# Texture/geometry sources
+# Third party resources
+
+- ``GLfloat* ObjectData::loadObj(const char* location)`` is heavily based on the source code of [loadObj.c](https://moodle.hs-hannover.de/pluginfile.php/1256047/mod_folder/content/0/Code/loadObj.c?forcedownload=1) provided in the lecture for future use.
+Slight adaptions have been made to the code in order to fit it into the class ObjectData.
 
 tba
