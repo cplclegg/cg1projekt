@@ -11,6 +11,7 @@
 
 #ifndef CG1PROJEKT_OBJECTDATA_H
 #define CG1PROJEKT_OBJECTDATA_H
+#include <filesystem>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <string>
@@ -39,11 +40,11 @@ private:
     GLfloat* loadObj(const char* location);
 public:
     ObjectData();
-    explicit ObjectData(const std::string& path);
+    explicit ObjectData(const std::string& relativePath);
     ObjectData(const ObjectData& other);
     ~ObjectData();
 
-    void importObjectData(const std::string& path);
+    void importObjectData(const std::filesystem::path& path);
 
     void printBuffer() const;
 
