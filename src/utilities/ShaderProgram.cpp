@@ -75,6 +75,10 @@ bool ShaderProgram::checkSuccessfulCreation() const
 
 void ShaderProgram::createProgram()
 {
+    if (&m_vertexShader == nullptr || &m_fragmentShader == nullptr)
+    {
+        return;
+    }
     // create+compile vertex shader
     const char* vertexText = m_vertexShader.getSourceString();
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
