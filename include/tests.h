@@ -10,4 +10,5 @@ extern int mat4Tests();
 extern int mat3Tests();
 extern int shaderTests();
 extern int objImportTests();
+extern int resourceLocatorTest();
 #endif //CG1PROJEKT_TESTS_H

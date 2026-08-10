@@ -11,5 +11,6 @@ int main()
     result += shaderTests();
     result += mat3Tests();
     result += objImportTests();
+    result +=  resourceLocatorTest();
     return result;
 }
