@@ -1,8 +1,8 @@
 project(
-    'CG1 Projektarbeit Team FireBrick',
+    'CG12026 Projektarbeit Team FireBrick',
     'cpp',
     default_options : [
-        'cpp_std=c++14',
+        'cpp_std=c++17',
         'warning_level=3'
         ]
 )
@@ -17,6 +17,18 @@ graphics_deps = [
     opengl_dep
 ]
 
+conf = configuration_data()
+
+conf.set_quoted(
+    'PROJECT_SOURCE_ROOT',
+    meson.project_source_root()
+)
+
+configure_file(
+    output : 'config.h',
+    configuration : conf
+)
+
 inc = include_directories('include')
 
 core_sources = files(
@@ -25,7 +37,8 @@ core_sources = files(
     'src/types/Vec3.cpp',
     'src/types/Vec4.cpp',
     'src/utilities/ShaderSource.cpp',
-    'src/utilities/ObjectData.cpp'
+    'src/utilities/ObjectData.cpp',
+    'src/utilities/ResourceLocator.cpp'
 )
 
 test_sources = files(
@@ -34,7 +47,8 @@ test_sources = files(
     'tests/testsrc/ShaderTest.cpp',
     'tests/testsrc/Vec3Test.cpp',
     'tests/testsrc/Vec4Test.cpp',
-    'tests/testsrc/ObjectDataTest.cpp'
+    'tests/testsrc/ObjectDataTest.cpp',
+    'tests/testsrc/ResourceLocatorTest.cpp'
 )
 
 core_lib = static_library(
