@@ -7,9 +7,9 @@
 using namespace std;
 int shaderSourceTest()
 {
-    ShaderSource s1 {"/home/tomnir/Documents/devel/hshbin/cg1projekt/tests/testShaderSource.glsl"};
+    ShaderSource s1 {"tests/testShaderSource.glsl"};
     ShaderSource s2 {};
-    s2.loadSourceFile("/home/tomnir/Documents/devel/hshbin/cg1projekt/tests/testShaderSource.glsl");
+    s2.loadSourceFile("tests/testShaderSource.glsl");
     char* s1text {s1.getSourceString()};
     char* s2text {s2.getSourceString()};
     const char* text =
