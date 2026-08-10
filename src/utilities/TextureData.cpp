@@ -39,8 +39,8 @@ GLuint TextureData::createTexture()
     case GL_TEXTURE_2D:
         glTexImage2D(
             m_target,
-        0,
-        GL_RGB,
+            0,
+            GL_RGB,
             m_width,
             m_height,
             0,
