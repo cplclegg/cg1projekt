@@ -38,7 +38,8 @@ core_sources = files(
     'src/types/Vec4.cpp',
     'src/utilities/ShaderSource.cpp',
     'src/utilities/ObjectData.cpp',
-    'src/utilities/ResourceLocator.cpp'
+    'src/utilities/ResourceLocator.cpp',
+    'src/utilities/TextureData.cpp'
 )
 
 test_sources = files(
