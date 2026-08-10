@@ -12,6 +12,7 @@ private:
     std::string sourcePath;
     char* buffer;
     static char* readSourceFile(const std::string&);
+    bool loadSuccess = false;
 public:
     ShaderSource();
     ShaderSource(const std::string&);
@@ -20,6 +21,7 @@ public:
 
     void loadSourceFile(const std::string&);
     char* getSourceString() const;
+    bool isValid() const;
 };
 
 
