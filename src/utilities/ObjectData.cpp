@@ -7,9 +7,13 @@
 #include <cstdlib>
 #include <cstring>
 #include <cassert>
+#include <filesystem>
 #include <stdexcept>
 #include <iostream>
+#include <string>
 #include <bits/error_constants.h>
+
+#include "ResourceLocator.h"
 using namespace std;
 
 ObjectData::ObjectData()
@@ -45,9 +49,9 @@ ObjectData::~ObjectData() // do NOT delete or free m_buffer, its heap allocated
 {
 }
 
-void ObjectData::importObjectData(const std::string& path)
+void ObjectData::importObjectData(const std::filesystem::path& relativePath)
 {
-    m_buffer = loadObj(path.c_str());
+    m_buffer = loadObj(ResourceLocator::getResourcePath(relativePath).c_str());
 }
 
 GLfloat* ObjectData::getBuffer() const
@@ -58,17 +62,12 @@ GLfloat* ObjectData::getBuffer() const
 GLuint ObjectData::makeVBO() const
 {
     assert(m_buffer != nullptr);
-    cout << "makeVBO entered\n";
     GLuint vbo {};
 
     glGenBuffers(1, &vbo);
-    cout << "vbo generated\n";
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    cout << "vbo bound\n";
     glBufferData(GL_ARRAY_BUFFER, m_bufferSize, m_buffer, GL_STATIC_DRAW);
-    cout << "vbo data written\n";
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    cout << "vbo unbound\n";
 
     return vbo;
 }
@@ -96,13 +95,13 @@ GLfloat* ObjectData::loadObj(const char* location)
     }
 
     // allocate temporary buffers
-    Vector3* v  = static_cast<Vector3*>(malloc(m_vCount * sizeof(Vector3)));
-    Vector2* vt = static_cast<Vector2*>(malloc(m_vtCount * sizeof(Vector2)));
-    Vector3* vn = static_cast<Vector3*>(malloc(m_vnCount * sizeof(Vector3)));
+    auto v  = static_cast<Vector3*>(malloc(m_vCount * sizeof(Vector3)));
+    auto vt = static_cast<Vector2*>(malloc(m_vtCount * sizeof(Vector2)));
+    auto vn = static_cast<Vector3*>(malloc(m_vnCount * sizeof(Vector3)));
 
     // allocate output buffer
     m_bufferSize = m_fCount * sizeof(Triangle);
-    Triangle* buffer = static_cast<Triangle*>(malloc(m_bufferSize));
+    auto buffer = static_cast<Triangle*>(malloc(m_bufferSize));
 
     // reset counters
     m_vCount = 0;

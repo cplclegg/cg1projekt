@@ -5,14 +5,14 @@
 #ifndef CG1PROJEKT_SHADERSOURCE_H
 #define CG1PROJEKT_SHADERSOURCE_H
 #include <string>
-
+#include <filesystem>
 class ShaderSource
 {
 private:
     std::string sourcePath;
     char* buffer;
-    static char* readSourceFile(const std::string&);
     bool loadSuccess = false;
+    static char* readSourceFile(const std::filesystem::path&);
 public:
     ShaderSource();
     ShaderSource(const std::string&);
