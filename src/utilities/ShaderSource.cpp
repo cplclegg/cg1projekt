@@ -37,6 +37,7 @@ void ShaderSource::loadSourceFile(const string& path)
 {
     sourcePath = sourcePath;
     buffer = readSourceFile(path);
+    loadSuccess = true;
 }
 /*
 char* ShaderSource::readSourceFile(const string& path)
@@ -78,4 +79,9 @@ char* ShaderSource::readSourceFile(const std::filesystem::path& relativePath)
 char* ShaderSource::getSourceString() const
 {
     return buffer;
+}
+
+bool ShaderSource::isValid() const
+{
+    return loadSuccess;
 }

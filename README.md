@@ -29,7 +29,10 @@ https://mesonbuild.com/index.html
 
 ## Building the project
 
-To build the project navigate to project root directory in terminal emulator of your choice and use command  
+First set up the meson build directory by navigating to project root directory in terminal emulator of your choice and running the command
+``meson setup buildDir``
+
+To build the project run command  
 ``meson compile -C buildDir``  
 
 # Quickstart guide

@@ -2,3 +2,4 @@ uebungsblaetter/
 CMakeLists.txt
 cmake-build-debug/
 .idea
+buildDir/
