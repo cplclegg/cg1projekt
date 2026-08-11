@@ -32,6 +32,10 @@ void TextureData::loadImageData()
 
 GLuint TextureData::createTexture()
 {
+    if (m_created)
+    {
+        return m_textureName;
+    }
     glGenTextures(1, &m_textureName);
     glBindTexture(m_target, m_textureName);
     switch (m_target) // in case of future use of 1d/3d texture expand cases to adjust
