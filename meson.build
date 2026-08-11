@@ -49,7 +49,8 @@ test_sources = files(
     'tests/testsrc/Vec3Test.cpp',
     'tests/testsrc/Vec4Test.cpp',
     'tests/testsrc/ObjectDataTest.cpp',
-    'tests/testsrc/ResourceLocatorTest.cpp'
+    'tests/testsrc/ResourceLocatorTest.cpp',
+    'tests/testsrc/TextureDataTest.cpp'
 )
 
 core_lib = static_library(
