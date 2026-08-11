@@ -11,10 +11,10 @@ ShaderProgram::ShaderProgram()
 {
 }
 
-ShaderProgram::ShaderProgram(const std::string& vertexShaderLocation, const std::string& fragmentShaderLocation, GLuint program)
+ShaderProgram::ShaderProgram(const std::string& vertexShaderLocation, const std::string& fragmentShaderLocation)
     : m_vertexShader {vertexShaderLocation}
     , m_fragmentShader {fragmentShaderLocation}
-    , m_programID {program}
+    , m_programID {0}
 {
     createProgram();
 }
@@ -95,7 +95,7 @@ void ShaderProgram::createProgram()
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &m_fragmentStatus);
     if (!m_fragmentStatus)
     {
-        glGetShaderInfoLog(fragmentShader, 1024, NULL, infoLog);
+        glGetShaderInfoLog(fragmentShader, 1024, NULL, m_fragmentInfoLog);
     }
 
     // create and link shader program
@@ -118,4 +118,9 @@ void ShaderProgram::createProgram()
     }
 
     m_exists = checkSuccessfulCreation();
+}
+
+GLuint ShaderProgram::getID() const
+{
+    return m_programID;
 }

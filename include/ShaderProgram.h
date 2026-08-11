@@ -31,12 +31,13 @@ private:
     GLchar m_validationInfoLog[1024];
 public:
     ShaderProgram();
-    ShaderProgram(const std::string& vertexShaderLocation, const std::string& fragmentShaderLocation, GLuint program);
+    ShaderProgram(const std::string& vertexShaderLocation, const std::string& fragmentShaderLocation);
     ShaderProgram(const ShaderProgram& other); // deep copy
     void addVertexShaderSource(const std::string& path);
     void addFragmentShaderSource(const std::string& path);
     void assignProgramID(GLuint program);
     void createProgram(); // needs to check m_exists and also set m_exists=true after successfully completing
+    GLuint getID() const;
     bool checkSuccessfulCreation() const;
 };
 
