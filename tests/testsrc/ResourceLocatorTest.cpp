@@ -10,7 +10,8 @@ int resourceLocatorTest()
     cout << "Running tests for ResourceLocator" << endl;
     string path {"tests/testShaderSource.glsl"};
     string absPath {ResourceLocator::getResourcePath(path)};
-    string referencePath {"/home/tomnir/Documents/devel/hshbin/cg1projekt/tests/testShaderSource.glsl"};
+    string sourcePath {PROJECT_SOURCE_ROOT};
+    string referencePath {sourcePath+"/"+path};
     if (absPath == referencePath)
     {
         cout << "OK - Completion of absolute resource path successful." << endl;
