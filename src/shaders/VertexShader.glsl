@@ -1,0 +1,8 @@
+#version 330 core
+layout (location = 0) in vec3 vertPosition;
+layout (location = 1) in vec3 vertNorm;
+out vec3 fragNorm;
+void main() {
+    fragNorm = vertNorm;
+    gl_Position = vec4(vertPosition*0.5, 1.0);
+}

@@ -48,6 +48,7 @@ public:
 
     void printBuffer() const;
 
+    size_t getVertexCount() const;
     GLfloat* getBuffer() const;
     GLuint makeVBO() const;
 };

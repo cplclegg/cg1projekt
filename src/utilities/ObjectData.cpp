@@ -59,6 +59,11 @@ GLfloat* ObjectData::getBuffer() const
     return m_buffer;
 }
 
+size_t ObjectData::getVertexCount() const
+{
+    return m_vCount;
+}
+
 GLuint ObjectData::makeVBO() const
 {
     assert(m_buffer != nullptr);
