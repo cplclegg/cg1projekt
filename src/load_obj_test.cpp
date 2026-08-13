@@ -1,6 +1,7 @@
 #include "../include/ObjectData.h"
 #include "../include/ShaderSource.h"
 #include "../include/ShaderProgram.h"
+#include "../include/Mat4.h"
 
 
 /*Struct notwendig um sowohl Programm-ID, Vertex-Anzahl als auch VAO
@@ -8,13 +9,13 @@
 */
 struct RenderData {
     GLuint programmID;
-    unsigned int vertexCount;
+    size_t vertexCount;
     GLuint vao;
 };
 
 RenderData init(void) {
     ShaderProgram shader{"src/shaders/VertexShader.glsl", "src/shaders/FragmentShader.glsl"};
-    ObjectData testObject{"../tests/teapot.obj"};
+    ObjectData testObject{"tests/teapot.obj"};
     GLuint vbo = testObject.makeVBO();
     GLuint vao;
     
@@ -28,7 +29,7 @@ RenderData init(void) {
         3,        //Dimensionen
         GL_FLOAT, //Typ der Daten
         GL_FALSE, //Normalisieren
-        8,        //Abstand in Bytes zwischen zwei Vertices
+        8 * sizeof(GLfloat),        //Abstand in Bytes zwischen zwei Vertices
         0         //Offset in Bytes
     );
     glEnableVertexAttribArray(0);
@@ -39,7 +40,7 @@ RenderData init(void) {
         1,        
         GL_FLOAT, 
         GL_FALSE, 
-        8,        
+        8 * sizeof(GLfloat),        
         (GLvoid*) (5 * sizeof(GLfloat))         
     );
     glEnableVertexAttribArray(1);
@@ -62,6 +63,23 @@ void draw(RenderData& data) {
     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(data.programmID);
     glBindVertexArray(data.vao);
+
+    //Transformation berechnen
+
+    Vec3 scaleVector{0.2f, 0.2f, 0.2f};
+    Mat4 scaleMatrix{};
+    scaleMatrix.scale(scaleVector);
+
+    Mat4 rotateMatrix{};
+    rotateMatrix.rotateY(45.0f);
+
+    Mat4 transformM = rotateMatrix * scaleMatrix;
+
+    //Matrix an Shader schicken
+    GLint transformLoc = glGetUniformLocation(data.programmID, "transform");
+    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, transformM.getMatrix());
+
+
     glDrawArrays(GL_TRIANGLES, 0, data.vertexCount);
 }
 

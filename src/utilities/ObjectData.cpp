@@ -61,7 +61,7 @@ GLfloat* ObjectData::getBuffer() const
 
 size_t ObjectData::getVertexCount() const
 {
-    return m_vCount;
+    return m_vertexCount;
 }
 
 GLuint ObjectData::makeVBO() const
