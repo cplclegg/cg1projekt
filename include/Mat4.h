@@ -55,7 +55,7 @@ public:
     Mat4 perspectiveCopy(const GLfloat, const GLfloat, const GLfloat, const GLfloat) const; // params: fovy, aspect, near, far
 
     Mat3 getNormalMatrix();
-
+    const GLfloat* getMatrix() const;
     // Testing helpers
     void directPrint() const;
 };

@@ -344,6 +344,10 @@ void Mat4::directPrint() const
 	cout << endl;
 }
 
+const GLfloat* Mat4::getMatrix() const {
+    return m_matrix;
+}
+
 size_t Mat4::mIndex(const size_t col, const size_t row)
 {
     assert(col <= 3 && row <= 3);
