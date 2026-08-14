@@ -37,7 +37,7 @@ RenderData init(void) {
     //Jetzt für die Normalen
     glVertexAttribPointer(
         1,        
-        1,        
+        3,        
         GL_FLOAT, 
         GL_FALSE, 
         8 * sizeof(GLfloat),        
@@ -47,6 +47,7 @@ RenderData init(void) {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
+    glEnable(GL_DEPTH_TEST);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f); //Initiale Hintergrundfarbe der Szene
     glViewport(0, 0, 800, 600);
 
@@ -60,7 +61,7 @@ RenderData init(void) {
 }
 
 void draw(RenderData& data) {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(data.programmID);
     glBindVertexArray(data.vao);
 
@@ -72,6 +73,7 @@ void draw(RenderData& data) {
 
     Mat4 rotateMatrix{};
     rotateMatrix.rotateY(45.0f);
+    rotateMatrix.rotateX(70.0f);
 
     Mat4 transformM = rotateMatrix * scaleMatrix;
 
