@@ -61,6 +61,49 @@ Material::Material(const Material& other)
 {
 }
 
+void Material::bind() const
+{
+    if (m_shader == 0) throw std::runtime_error("Missing shader program");
+
+    glUseProgram(m_shader);
+
+    glActiveTexture(GL_TEXTURE0);
+    if (m_diffuseMap)
+    {
+        glBindTexture(GL_TEXTURE_2D, m_diffuseMap);
+    } else
+    {
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    glActiveTexture(GL_TEXTURE1);
+    if (m_normalMap)
+    {
+        glBindTexture(GL_TEXTURE_2D, m_normalMap);
+    } else
+    {
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    glActiveTexture(GL_TEXTURE2);
+    if (m_specularMap)
+    {
+        glBindTexture(GL_TEXTURE_2D, m_specularMap);
+    } else
+    {
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    glActiveTexture(GL_TEXTURE3);
+    if (m_emissiveMap)
+    {
+        glBindTexture(GL_TEXTURE_2D, m_emissiveMap);
+    } else
+    {
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+}
+
 void Material::addDiffuseMap(const GLuint dm)
 {
     m_diffuseMap = dm;

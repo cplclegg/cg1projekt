@@ -64,6 +64,8 @@ public:
     GLuint getSpecular() const;
     GLuint getEmissive() const;
     GLuint getShader() const;
+
+    void bind() const;
 };
 
 
