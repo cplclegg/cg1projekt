@@ -37,6 +37,8 @@ private:
     size_t m_lineLength = 1024;
     size_t m_bufferSize = 0;
     GLfloat* m_buffer = nullptr;
+    GLuint m_vbo = 0;
+    GLuint m_vao = 0;
     GLfloat* loadObj(const char* location);
 public:
     ObjectData();
@@ -50,7 +52,8 @@ public:
 
     size_t getVertexCount() const;
     GLfloat* getBuffer() const;
-    GLuint makeVBO() const;
+    GLuint makeVBO();
+    GLuint makeVAO();
 };
 
 #endif //CG1PROJEKT_OBJECTDATA_H
