@@ -59,7 +59,6 @@ char* ShaderSource::readSourceFile(const std::filesystem::path& relativePath)
 
     const auto buf = static_cast<char*>(malloc(sizeof(char)*length + 1));
     if(!fs.read(buf, length)) throw runtime_error("Error reading shader source code from: " + path.string());
-
     buf[length] = '\0';
     fs.close();
     return buf;
