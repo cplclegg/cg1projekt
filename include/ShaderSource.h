@@ -12,7 +12,7 @@ private:
     std::string sourcePath;
     char* buffer;
     bool loadSuccess = false;
-    static char* readSourceFile(const std::filesystem::path&);
+    char* readSourceFile(const std::filesystem::path&);
 public:
     ShaderSource();
     ShaderSource(const std::string&);
