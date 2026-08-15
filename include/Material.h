@@ -43,6 +43,8 @@ public:
         const Vec3& diffuseColor
         );
 
+    Material(const Material& other);
+
     void addDiffuseMap(GLuint dm);
     void addNormalMap(GLuint nm);
     void addSpecularMap(GLuint sm);

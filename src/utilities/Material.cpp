@@ -49,6 +49,18 @@ Material::Material(
 {
 }
 
+Material::Material(const Material& other)
+    : m_shader {other.m_shader}
+    , m_diffuseMap {other.m_diffuseMap}
+    , m_normalMap {other.m_normalMap}
+    , m_specularMap {other.m_specularMap}
+    , m_emissiveMap {other.m_emissiveMap}
+    , m_shininess {other.m_shininess}
+    , m_specularColor {other.m_specularColor}
+    , m_diffuseColor {other.m_diffuseColor}
+{
+}
+
 void Material::addDiffuseMap(const GLuint dm)
 {
     m_diffuseMap = dm;
