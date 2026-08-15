@@ -20,14 +20,12 @@ ShaderSource::ShaderSource()
 ShaderSource::ShaderSource(const string& path)
     : sourcePath{path}
     , buffer {readSourceFile(sourcePath)}
-    , loadSuccess{true}
 {
 }
 
 ShaderSource::ShaderSource(const ShaderSource& other)
     : sourcePath {other.sourcePath}
     , buffer {readSourceFile(sourcePath)}
-    , loadSuccess{true}
 {
 }
 
@@ -43,7 +41,6 @@ void ShaderSource::loadSourceFile(const string& path)
 {
     sourcePath = sourcePath;
     buffer = readSourceFile(path);
-    loadSuccess = true;
 }
 
 char* ShaderSource::readSourceFile(const std::filesystem::path& relativePath)
@@ -61,6 +58,7 @@ char* ShaderSource::readSourceFile(const std::filesystem::path& relativePath)
     if(!fs.read(buf, length)) throw runtime_error("Error reading shader source code from: " + path.string());
     buf[length] = '\0';
     fs.close();
+    loadSuccess = true;
     return buf;
 }
 
