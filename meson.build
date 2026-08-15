@@ -40,7 +40,8 @@ core_sources = files(
     'src/utilities/ShaderProgram.cpp',
     'src/utilities/ObjectData.cpp',
     'src/utilities/ResourceLocator.cpp',
-    'src/utilities/TextureData.cpp'
+    'src/utilities/TextureData.cpp',
+    'src/utilities/Material.cpp'
 )
 
 test_sources = files(
