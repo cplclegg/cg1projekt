@@ -74,6 +74,5 @@ GLuint TextureData::getTextureName()
         createTexture();
         return m_textureName;
     }
-
 }
 
