@@ -37,6 +37,7 @@ core_sources = files(
     'src/types/Vec3.cpp',
     'src/types/Vec4.cpp',
     'src/utilities/ShaderSource.cpp',
+    'src/utilities/ShaderProgram.cpp',
     'src/utilities/ObjectData.cpp',
     'src/utilities/ResourceLocator.cpp',
     'src/utilities/TextureData.cpp'
@@ -53,12 +54,6 @@ test_sources = files(
     'tests/testsrc/TextureDataTest.cpp'
 )
 
-test_loadOBJ = files(
-    'src/utilities/ObjectData.cpp',
-    'src/utilities/ShaderProgram.cpp',
-    'src/utilities/ShaderSource.cpp',
-)
-
 core_lib = static_library(
     'core',
     core_sources,
@@ -68,8 +63,7 @@ core_lib = static_library(
 
 teapot_exe = executable(
     'teapot_demo',
-    'src/load_obj_test.cpp',
-    test_loadOBJ,
+    'tests/load_obj_test.cpp',
     include_directories : inc,
     link_with : core_lib,
     dependencies : graphics_deps
