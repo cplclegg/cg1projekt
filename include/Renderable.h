@@ -16,6 +16,11 @@ private:
     Material m_material;
 public:
     Renderable(ObjectData& object, const Material& material);
+
+    GLuint getVbo() const;
+    GLuint getVao() const;
+    size_t getVertexCount() const;
+    const Material& getMaterial() const;
 };
 
 

@@ -13,3 +13,22 @@ Renderable::Renderable(ObjectData& object, const Material& material)
 {
 }
 
+GLuint Renderable::getVbo() const
+{
+    return m_vbo;
+}
+
+GLuint Renderable::getVao() const
+{
+    return m_vao;
+}
+
+size_t Renderable::getVertexCount() const
+{
+    return m_vertexCount;
+}
+
+const Material& Renderable::getMaterial() const
+{
+    return m_material;
+}
