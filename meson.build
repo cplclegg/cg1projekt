@@ -41,7 +41,9 @@ core_sources = files(
     'src/utilities/ObjectData.cpp',
     'src/utilities/ResourceLocator.cpp',
     'src/utilities/TextureData.cpp',
-    'src/utilities/Material.cpp'
+    'src/utilities/Material.cpp',
+    'src/utilities/Renderable.cpp',
+    'src/utilities/SceneNode.cpp'
 )
 
 test_sources = files(
