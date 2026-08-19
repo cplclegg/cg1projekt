@@ -54,50 +54,76 @@ the second for the fragment shader source.
 
 ## TextureData
 
-TextureData abstracts loading of image data and creation of an opengl texture object from that texture data.
+TextureData abstracts loading of image data and creation of an opengl texture object from that texture data. This class can only process 2D textures for now, but provisions have been made to later implement 3D texture handling should it prove necessary.
 
 ### Constructors
-- tba
+- ``TextureData(const std::filesystem::path& relativePath)`` constructs a 2D-default TextureData loading the texture at ``location``
+- ``TextureData(const std::filesystem::path& relativePath, GLenum target)`` constructs a TextureData with a target differing from ``GL_TEXTURE_2D`` as a provision for later implementation of 3D or 1D textures
 
 ### Member functions
-- tba
-
+- ``void loadImageData()`` loads the image data at the location provided at object construction
+- ``GLuint createTexture()`` creates an opengl texture object with the image data (image data must have been loaded prior to calling this method) and returns its name (ID) as GLuint
+- ``GLuint getTextureName()`` returns the name of the texture (ID). Will return 0 if no opengl texture object has been created. This can be used to check successful creation of an opengl texture object.
+ 
 ## Material
 
 Material combines a shader program, and up to four TextureData (diffuse, normal, specular, emissive) into a Material.
 
 ## Constructors
-- tba
+- ``Material(
+        GLuint shader,
+        GLuint diffuse,
+        GLuint normal,
+        GLuint specular,
+        GLuint emissive
+        );`` constructs a Material storing the texture names (ID) provided, the shader name (ID) provided, and using default shininess values (32.0f) and colors (white).
+- ``Material(
+        GLuint shader,
+        GLuint diffuse,
+        GLuint normal,
+        GLuint specular,
+        GLuint emissive,
+        GLfloat shininess,
+        const Vec3& specularColor,
+        const Vec3& diffuseColor
+        );`` constructs a Material storing the texture names (ID) provided, the shader name (ID) provided, and using the provided shininess and colors.
+- ``Material(const Material& other)`` constructs a copy where the shader and texture names (IDs) and shininess as well as color are copied. In the case of the color vectors deep copies are made using the copy constructor of class Vec3.
 
 ### Member functions
-- tba
+- ``void bind() const`` binds all texture objects in the order diffuse-normal-specular-emissive to texture units 0,1,2,3 respectively. If the texture ID is nonzero in the Material object, the texture object is bound to the texture unit. If it is 0, the corresponding texture unit is unbound. The shader ID in the material object is activated with ``glUseProgram()``
 
 ## Renderable
 
-Renderable combine all the data needed for a draw call (except any planned interactions like setting of uniforms) into a single object. This includes vbo, vao, Material, and vertex count.
+Renderable combines all the data needed for a draw call (except any planned interactions like setting of uniforms) into a single object. This includes vbo, vao, Material, and vertex count.
 
 ### Constructors
-- tba
+- ``Renderable(ObjectData& object, const Material& material)`` constructs a renderable with the provided ObjectData and Material
 
 ### Member functions
-- tba
+- ``GLuint getVbo() const`` returns the ID of the VBO associated with this Renderable
+- ``GLuint getVao() const`` returns the ID of the VAO associated with this Renderable
+- ``GLuint getVertexCount() const`` returns the vertex count of this Renderable's geometry
+- ``GLuint getMaterial() const`` returns the Material associated with this Renderable
 
 ## SceneNode
 
 A scene node is a composite implementation of a scenegraph. It stores a Renderable, its corresponding local transform matrix, and a ``std::vector`` of ``SceneNode`` children. It also provides a member function ``draw()``, which takes parent world transform matrix and a camera transform matrix, and combines them with the localtransform to get the final transform which is to be sent to the shaders corresponding uniform. A call of ``draw()`` is first forwarded to all children (handing through the world transform matrix *calculated from the parent world transform and the local transform* - the root SceneNode object must be given a unity matrix as parent world transform for the draw call - and the camera matrix) and then executed on the SceneNode itself. As a result, a call of ``draw()`` on the root of a scene should draw the whole scene.
 
 ### Constructors
-- tba
+- ``SceneNode(Renderable& object)`` constructs a SceneNode with the provided Renderable and an empty vector of children
+- ``SceneNode()`` constructs a SceneNode with no Renderable (which could be useful as a root node that has no visual component associated with it) and an empty vector of children ==not yet implemented==
 
 ### Member functions
-- tba
+- ``void addChild(SceneNode& child)`` adds a SceneNode to the vector of children
+- ``draw(Mat4& parentWorldTransform, Mat4& cameraTransform)`` draws all children of the SceneNode if the vector of children is not empty by calling their ``draw()``, and afterwards binds the Material and VAO associated with its Renderable, calculates its final transform matrix, sends it to the shader at the uniform location ``'transform'`` ==(might need to expand this for more transforms later on)==, and executes a draw call with ``GL_TRIANGLES``
+- ``void setLocalTransform(Mat4& transform)`` sets the given transform matrix for the local transform of this SceneNode ==(not yet implemented)==
 
 ## ResourceLocator
 
 ResourseLocator provides a single static function that takes a ``std::filesystem::path`` representing a relative path to a resource (e.g. shader source file, .obj file, etc.) originating from the project root and uses a constant set by meson on building the project, which represents the absolute path to the content root on the system where meson built the project, to construct the absolute path to the resource and return it as ``std::filesystem::path``
 
 ### Member functions
-- ``std::filesystem::path ResourceLocator::getResourcePath(const std::filesystem::path& relativePath)`` implements completion of relative path to user-system specific absolute path
+- ``std::filesystem::path getResourcePath(const std::filesystem::path& relativePath)`` implements completion of relative path to user-system specific absolute path
 
 # Types
 
