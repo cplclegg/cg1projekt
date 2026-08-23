@@ -59,6 +59,13 @@ test_loadOBJ = files(
     'src/utilities/ShaderSource.cpp',
 )
 
+test_loadTexture = files(
+    'src/utilities/ObjectData.cpp',
+    'src/utilities/ShaderProgram.cpp',
+    'src/utilities/ShaderSource.cpp',
+    'src/utilities/TextureData.cpp'
+)
+
 core_lib = static_library(
     'core',
     core_sources,
@@ -70,6 +77,15 @@ teapot_exe = executable(
     'teapot_demo',
     'src/load_obj_test.cpp',
     test_loadOBJ,
+    include_directories : inc,
+    link_with : core_lib,
+    dependencies : graphics_deps
+)
+
+textureTest_exe = executable(
+    'texture_demo',
+    'src/load_texture_test.cpp',
+    test_loadTexture,
     include_directories : inc,
     link_with : core_lib,
     dependencies : graphics_deps
