@@ -1,5 +1,6 @@
 #version 330 core
-in vec3 fragNorm;
+in vec2 text;
+uniform sampler2D boxTexture;
 void main() {
-    gl_FragColor = vec4(fragNorm, 1.0);
+    gl_FragColor = texture2D(boxTexture, text);
 }
