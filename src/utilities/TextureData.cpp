@@ -28,6 +28,7 @@ void TextureData::loadImageData()
     if (m_imageData == nullptr)
     {
         cout << "Error loading image data from " << m_location << " " << endl;
+        throw std::runtime_error("Failed to load texture file!");
     }
 }
 
