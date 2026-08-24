@@ -16,7 +16,7 @@ private:
 public:
     SceneNode(Renderable& object);
     void addChild(SceneNode& child);
-    void draw(Mat4& parentWorldTransform, Mat4& cameraTransform);
+    void draw(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& projectionMatrix);
 };
 
 
