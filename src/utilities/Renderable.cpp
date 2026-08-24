@@ -28,7 +28,7 @@ size_t Renderable::getVertexCount() const
     return m_vertexCount;
 }
 
-const Material& Renderable::getMaterial() const
+Material& Renderable::getMaterial()
 {
     return m_material;
 }
