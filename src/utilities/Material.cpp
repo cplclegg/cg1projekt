@@ -4,21 +4,12 @@
 
 #include "../../include/Material.h"
 
-Material::Material()
-    : m_shader {0}
-    , m_diffuseMap {0}
-    , m_normalMap {0}
-    , m_specularMap {0}
-    , m_emissiveMap {0}
-{
-}
-
 Material::Material(
     const GLuint shader,
-    const GLuint diffuse,
-    const GLuint normal,
-    const GLuint specular,
-    const GLuint emissive,
+    const TextureData& diffuse,
+    const TextureData& normal,
+    const TextureData& specular,
+    const TextureData& emissive,
     const GLfloat shininess,
     const Vec3& specularColor,
     const Vec3& diffuseColor
@@ -36,10 +27,10 @@ Material::Material(
 
 Material::Material(
     const GLuint shader,
-    const GLuint diffuse,
-    const GLuint normal,
-    const GLuint specular,
-    const GLuint emissive
+    const TextureData& diffuse,
+    const TextureData& normal,
+    const TextureData& specular,
+    const TextureData& emissive
     )
     : m_shader {shader}
     , m_diffuseMap {diffuse}
@@ -49,64 +40,59 @@ Material::Material(
 {
 }
 
-Material::Material(const Material& other)
-    : m_shader {other.m_shader}
-    , m_diffuseMap {other.m_diffuseMap}
-    , m_normalMap {other.m_normalMap}
-    , m_specularMap {other.m_specularMap}
-    , m_emissiveMap {other.m_emissiveMap}
-    , m_shininess {other.m_shininess}
-    , m_specularColor {other.m_specularColor}
-    , m_diffuseColor {other.m_diffuseColor}
-{
-}
+Material::Material(const Material& other) = default;
 
-void Material::bind() const
+void Material::bind()
 {
     if (m_shader == 0) throw std::runtime_error("Missing shader program");
 
     glUseProgram(m_shader);
 
     glActiveTexture(GL_TEXTURE0);
-    if (m_diffuseMap)
+    if (m_diffuseMap.isUsable())
     {
-        glBindTexture(GL_TEXTURE_2D, m_diffuseMap);
+        glBindTexture(GL_TEXTURE_2D, m_diffuseMap.getTextureName());
+        m_diffuseMap.applyParameters();
+
     } else
     {
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     glActiveTexture(GL_TEXTURE1);
-    if (m_normalMap)
+    if (m_normalMap.isUsable())
     {
-        glBindTexture(GL_TEXTURE_2D, m_normalMap);
+        glBindTexture(GL_TEXTURE_2D, m_normalMap.getTextureName());
+        m_normalMap.applyParameters();
     } else
     {
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     glActiveTexture(GL_TEXTURE2);
-    if (m_specularMap)
+    if (m_specularMap.isUsable())
     {
-        glBindTexture(GL_TEXTURE_2D, m_specularMap);
+        glBindTexture(GL_TEXTURE_2D, m_specularMap.getTextureName());
+        m_specularMap.applyParameters();
     } else
     {
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     glActiveTexture(GL_TEXTURE3);
-    if (m_emissiveMap)
+    if (m_emissiveMap.isUsable())
     {
-        glBindTexture(GL_TEXTURE_2D, m_emissiveMap);
+        glBindTexture(GL_TEXTURE_2D, m_emissiveMap.getTextureName());
+        m_emissiveMap.applyParameters();
     } else
     {
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 }
-
+/*
 void Material::addDiffuseMap(const GLuint dm)
 {
-    m_diffuseMap = dm;
+    m_diffuseMap {dm};
 }
 
 void Material::addNormalMap(const GLuint nm)
@@ -128,7 +114,7 @@ void Material::addShaderProgram(const GLuint program)
 {
     m_shader = program;
 }
-
+*/
 void Material::changeShininess(const GLfloat shininess)
 {
     m_shininess = shininess;
@@ -154,24 +140,24 @@ void Material::changeDiffuseColor(const GLfloat red, const GLfloat green, const 
     m_diffuseColor = Vec3 {red, green, blue};
 }
 
-GLuint Material::getDiffuse() const
+GLuint Material::getDiffuse()
 {
-    return m_diffuseMap;
+    return m_diffuseMap.getTextureName();
 }
 
-GLuint Material::getNormal() const
+GLuint Material::getNormal()
 {
-    return m_normalMap;
+    return m_normalMap.getTextureName();
 }
 
-GLuint Material::getSpecular() const
+GLuint Material::getSpecular()
 {
-    return m_specularMap;
+    return m_specularMap.getTextureName();
 }
 
-GLuint Material::getEmissive() const
+GLuint Material::getEmissive()
 {
-    return m_emissiveMap;
+    return m_emissiveMap.getTextureName();
 }
 
 GLuint Material::getShader() const

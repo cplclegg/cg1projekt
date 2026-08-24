@@ -13,44 +13,43 @@ class Material
 {
 private:
     GLuint m_shader;
-    GLuint m_diffuseMap;
-    GLuint m_normalMap;
-    GLuint m_specularMap;
-    GLuint m_emissiveMap;
+    TextureData m_diffuseMap;
+    TextureData m_normalMap;
+    TextureData m_specularMap;
+    TextureData m_emissiveMap;
 
     GLfloat m_shininess {32.0f}; // change or remove standard value if necessary
     Vec3 m_specularColor {1.0f, 1.0f, 1.0f};
     Vec3 m_diffuseColor {1.0f, 1.0f, 1.0f};
 public:
-    Material();
 
     Material(
         GLuint shader,
-        GLuint diffuse,
-        GLuint normal,
-        GLuint specular,
-        GLuint emissive
+        const TextureData& diffuse,
+        const TextureData& normal,
+        const TextureData& specular,
+        const TextureData& emissive
         );
 
     Material(
         GLuint shader,
-        GLuint diffuse,
-        GLuint normal,
-        GLuint specular,
-        GLuint emissive,
+        const TextureData& diffuse,
+        const TextureData& normal,
+        const TextureData& specular,
+        const TextureData& emissive,
         GLfloat shininess,
         const Vec3& specularColor,
         const Vec3& diffuseColor
         );
 
     Material(const Material& other);
-
+    /*
     void addDiffuseMap(GLuint dm);
     void addNormalMap(GLuint nm);
     void addSpecularMap(GLuint sm);
     void addEmissiveMap(GLuint em);
     void addShaderProgram(GLuint program);
-
+    */
     void changeShininess(GLfloat shininess);
 
     void changeSpecularColor(const Vec3& specColor);
@@ -59,13 +58,13 @@ public:
     void changeDiffuseColor(const Vec3& diffColor);
     void changeDiffuseColor(GLfloat red, GLfloat green, GLfloat blue);
 
-    GLuint getDiffuse() const;
-    GLuint getNormal() const;
-    GLuint getSpecular() const;
-    GLuint getEmissive() const;
+    GLuint getDiffuse();
+    GLuint getNormal();
+    GLuint getSpecular();
+    GLuint getEmissive();
     GLuint getShader() const;
 
-    void bind() const;
+    void bind();
 };
 
 

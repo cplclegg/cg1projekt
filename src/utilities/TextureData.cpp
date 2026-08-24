@@ -7,6 +7,11 @@
 #include "stb_image.h"
 using namespace std;
 
+TextureData::TextureData()
+    : m_textureName {0}
+{
+}
+
 TextureData::TextureData(const std::filesystem::path& relativePath)
     : m_location { ResourceLocator::getResourcePath(relativePath) }
     , m_textureName {}
@@ -76,3 +81,25 @@ GLuint TextureData::getTextureName()
     }
 }
 
+void TextureData::setFiltering(const GLint filteringMethod)
+{
+    m_filtering = filteringMethod;
+}
+
+void TextureData::setWrapping(const GLint wrappingMethod)
+{
+    m_wrapping = wrappingMethod;
+}
+
+void TextureData::applyParameters() const
+{
+    glTexParameteri(m_target, GL_TEXTURE_WRAP_S, m_wrapping);
+    glTexParameteri(m_target, GL_TEXTURE_WRAP_T, m_wrapping);
+    glTexParameteri(m_target, GL_TEXTURE_MIN_FILTER, m_filtering);
+    glTexParameteri(m_target, GL_TEXTURE_MAG_FILTER, m_filtering);
+}
+
+bool TextureData::isUsable() const
+{
+    return m_created;
+}

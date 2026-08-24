@@ -22,9 +22,11 @@ private:
     bool m_created = false;
     GLenum m_target = GL_TEXTURE_2D;
     GLuint m_textureName;
+    GLint m_wrapping = GL_REPEAT;
+    GLint m_filtering = GL_NEAREST;
 
 public:
-
+    TextureData();
     explicit TextureData(const std::filesystem::path& relativePath);
     explicit TextureData(const std::filesystem::path& relativePath, GLenum target);
 
@@ -32,6 +34,13 @@ public:
 
     GLuint createTexture();
     GLuint getTextureName();
+
+    void setFiltering(GLint filteringMethod);
+    void setWrapping(GLint wrappingMethod);
+
+    void applyParameters() const;
+
+    bool isUsable() const;
 };
 
 
