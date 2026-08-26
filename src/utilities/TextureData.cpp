@@ -63,9 +63,9 @@ GLuint TextureData::createTexture()
         break;
     }
     glGenerateMipmap(m_target);
-    m_created = true;
     stbi_image_free(m_imageData);
     glBindTexture(m_target, 0);
+    m_created = true;
     return m_textureName;
 }
 
