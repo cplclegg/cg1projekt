@@ -53,6 +53,8 @@ void Material::bind()
     {
         glBindTexture(GL_TEXTURE_2D, m_diffuseMap.getTextureName());
         m_diffuseMap.applyParameters();
+        GLint diffuseMapUniformLoc = glGetUniformLocation(m_shader, "diffuseMap");
+        glUniform1i(diffuseMapUniformLoc, 0);
 
     } else
     {
@@ -64,6 +66,8 @@ void Material::bind()
     {
         glBindTexture(GL_TEXTURE_2D, m_normalMap.getTextureName());
         m_normalMap.applyParameters();
+        GLint normalMapUniformLoc = glGetUniformLocation(m_shader, "normalMap");
+        glUniform1i(normalMapUniformLoc, 1);
     } else
     {
         glBindTexture(GL_TEXTURE_2D, 0);
@@ -74,6 +78,8 @@ void Material::bind()
     {
         glBindTexture(GL_TEXTURE_2D, m_specularMap.getTextureName());
         m_specularMap.applyParameters();
+        GLint specularMapUniformLoc = glGetUniformLocation(m_shader, "specularMap");
+        glUniform1i(specularMapUniformLoc, 2);
     } else
     {
         glBindTexture(GL_TEXTURE_2D, 0);
@@ -84,10 +90,18 @@ void Material::bind()
     {
         glBindTexture(GL_TEXTURE_2D, m_emissiveMap.getTextureName());
         m_emissiveMap.applyParameters();
+        GLint emissiveMapUniformLoc = glGetUniformLocation(m_shader, "emissiveMap");
+        glUniform1i(emissiveMapUniformLoc, 3);
     } else
     {
         glBindTexture(GL_TEXTURE_2D, 0);
     }
+    GLint shininessUniformLocation = glGetUniformLocation(m_shader, "shininess");
+    GLint specularColorLocation = glGetUniformLocation(m_shader, "specularColor");
+    GLint diffuseColorLocation = glGetUniformLocation(m_shader, "diffuseColor");
+    glUniform1f(shininessUniformLocation, m_shininess);
+    glUniform3fv(specularColorLocation, 1, m_specularColor.getArray());
+    glUniform3fv(diffuseColorLocation, 1, m_diffuseColor.getArray());
 }
 /*
 void Material::addDiffuseMap(const GLuint dm)
