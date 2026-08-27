@@ -24,6 +24,7 @@ TextureData::TextureData(const std::filesystem::path& relativePath, GLenum targe
 
 void TextureData::loadImageData()
 {
+    stbi_set_flip_vertically_on_load(true);
     m_imageData = stbi_load(m_location.c_str(), &m_width, &m_height, &m_channels, 0);
     if (m_imageData == nullptr)
     {
@@ -40,17 +41,21 @@ GLuint TextureData::createTexture()
     }
     glGenTextures(1, &m_textureName);
     glBindTexture(m_target, m_textureName);
+
+    // Format auf RGBA evtl setzen
+    GLenum format = (m_channels == 4) ? GL_RGBA : GL_RGB;
+
     switch (m_target) // in case of future use of 1d/3d texture expand cases to adjust
     {
     case GL_TEXTURE_2D:
         glTexImage2D(
             m_target,
             0,
-            GL_RGB,
+            format,
             m_width,
             m_height,
             0,
-            GL_RGB,
+            format,
             GL_UNSIGNED_BYTE,
             m_imageData
         );
