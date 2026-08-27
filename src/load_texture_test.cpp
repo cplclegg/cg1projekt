@@ -70,7 +70,7 @@ RenderData init(void) {
 void draw(RenderData& data) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
-
+    glDisable(GL_CULL_FACE);
     glUseProgram(data.programmID);
     glBindVertexArray(data.vao);
 
@@ -78,21 +78,27 @@ void draw(RenderData& data) {
     glBindTexture(GL_TEXTURE_2D, data.textureID);
 
     //Transformation berechnen
-    Mat4 viewM{};
+    Mat4 modelM{};
+    modelM.translate(Vec3{-53.42f, -53.62f, 0.0f});
+
+    Mat4 ViewM{};
+    Vec3 eye{0.0f, 0.0f, 20.0f};
+    Vec3 center{0.0f, 0.0f, 0.0f};
+    Vec3 up{0.0f, 1.0f, 0.0f};
+    ViewM.lookAt(eye, center, up);
+
     Mat4 projM{};
-    // Vec3 eye{0.5f, 0.8f, 3.0f};
-    // Vec3 center{0.2f, 0.2f, -0.2f};
-    // Vec3 up{0.0f, 1.0f, 0.0f};
-    // viewM.lookAt(eye, center, up);
-    // projM.perspective(45.0f * (PI / 180.f), 800.0f/600.0f, 0.1f, 100.0f);
+    projM.perspective(45.0f * (PI / 180.f), 800.0f/600.0f, 0.1f, 100.0f);
 
 
     //Matrix an Shader schicken
-    GLuint modelViewLoc = glGetUniformLocation(data.programmID, "modelView");
+    GLuint modelLoc = glGetUniformLocation(data.programmID, "modelM");
+    GLuint viewLoc = glGetUniformLocation(data.programmID, "viewM");
     GLuint projMLoc = glGetUniformLocation(data.programmID, "projM");
     GLuint textLoc = glGetUniformLocation(data.programmID, "boxTexture");
-    glUniformMatrix4fv(modelViewLoc, 1, GL_FALSE, viewM.getMatrix());
-    glUniformMatrix4fv(projMLoc, 1, GL_FALSE, projM.getMatrix());
+    glUniformMatrix4fv(modelLoc, 1, GL_TRUE, modelM.getMatrix());
+    glUniformMatrix4fv(viewLoc, 1, GL_TRUE, ViewM.getMatrix());
+    glUniformMatrix4fv(projMLoc, 1, GL_TRUE, projM.getMatrix());
     glUniform1i(textLoc, 0);
     
 
@@ -112,7 +118,6 @@ int main(void) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
     GLFWwindow *window = glfwCreateWindow(800, 600, "Computergrafik 1", NULL, NULL);
 
     if(!window) {
