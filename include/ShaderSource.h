@@ -20,8 +20,8 @@ public:
     ~ShaderSource();
 
     void loadSourceFile(const std::string&);
-    char* getSourceString() const;
-    bool isValid() const;
+    [[nodiscard]] char* getSourceString() const;
+    [[nodiscard]] bool isValid() const;
 };
 
 
