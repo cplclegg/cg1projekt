@@ -7,4 +7,9 @@
 #include "ShaderSource.h"
 #include "ObjectData.h"
 #include "ShaderProgram.h"
+#include "Renderable.h"
+#include "SceneNode.h"
+#include "TextureData.h"
+#include "Material.h"
+#include "GLContext.h"
 #endif //CG1PROJEKT_UTILITIES_H
