@@ -43,7 +43,8 @@ core_sources = files(
     'src/utilities/TextureData.cpp',
     'src/utilities/Material.cpp',
     'src/utilities/Renderable.cpp',
-    'src/utilities/SceneNode.cpp'
+    'src/utilities/SceneNode.cpp',
+    'src/utilities/GLContext.cpp'
 )
 
 test_sources = files(
@@ -76,6 +77,14 @@ test_exe = executable(
     'unit_tests',
     'tests/unit_tests.cpp',
     test_sources,
+    include_directories : inc,
+    link_with : core_lib,
+    dependencies : graphics_deps
+)
+
+globe_exe = executable(
+    'globe_demo',
+    'uebungsblaetter/uebung7/earth.cpp',
     include_directories : inc,
     link_with : core_lib,
     dependencies : graphics_deps
