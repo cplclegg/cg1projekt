@@ -157,7 +157,6 @@ GLfloat* ObjectData::loadObj(const char* location)
     auto v  = static_cast<Vector3*>(malloc(m_vCount * sizeof(Vector3)));
     auto vt = static_cast<Vector2*>(malloc(m_vtCount * sizeof(Vector2)));
     auto vn = static_cast<Vector3*>(malloc(m_vnCount * sizeof(Vector3)));
-
     // allocate output buffer
     m_bufferSize = m_fCount * sizeof(Triangle);
     auto buffer = static_cast<Triangle*>(malloc(m_bufferSize));
