@@ -86,7 +86,7 @@ void draw(RenderData& data) {
     glDrawArrays(GL_TRIANGLES, 0, data.vertexCount);
 }
 
-void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
+void framebuffer_size_callback([[maybe_unused]]GLFWwindow *window, int width, int height) {
     glViewport(0, 0, width, height); 
 }
 
