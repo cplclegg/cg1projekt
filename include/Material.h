@@ -43,13 +43,7 @@ public:
         );
 
     Material(const Material& other);
-    /*
-    void addDiffuseMap(GLuint dm);
-    void addNormalMap(GLuint nm);
-    void addSpecularMap(GLuint sm);
-    void addEmissiveMap(GLuint em);
-    void addShaderProgram(GLuint program);
-    */
+
     void changeShininess(GLfloat shininess);
 
     void changeSpecularColor(const Vec3& specColor);
