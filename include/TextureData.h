@@ -14,16 +14,16 @@
 class TextureData
 {
 private:
-    int m_width = 0;
-    int m_height = 0;
-    int m_channels = 0;
-    unsigned char *m_imageData = nullptr;
+    int m_width {0};
+    int m_height {0};
+    int m_channels {0};
+    unsigned char *m_imageData {nullptr};
     std::filesystem::path m_location;
-    bool m_created = false;
-    GLenum m_target = GL_TEXTURE_2D;
-    GLuint m_textureName;
-    GLint m_wrapping = GL_REPEAT;
-    GLint m_filtering = GL_NEAREST;
+    bool m_created {false};
+    GLenum m_target {GL_TEXTURE_2D};
+    GLuint m_textureName {0};
+    GLint m_wrapping {GL_REPEAT};
+    GLint m_filtering {GL_NEAREST};
 
 public:
     TextureData();

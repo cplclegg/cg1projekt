@@ -7,14 +7,10 @@
 #include "stb_image.h"
 using namespace std;
 
-TextureData::TextureData()
-    : m_textureName {0}
-{
-}
+TextureData::TextureData() = default;
 
 TextureData::TextureData(const std::filesystem::path& relativePath)
     : m_location { ResourceLocator::getResourcePath(relativePath) }
-    , m_textureName {}
 {
     loadImageData();
 }
@@ -22,7 +18,6 @@ TextureData::TextureData(const std::filesystem::path& relativePath)
 TextureData::TextureData(const std::filesystem::path& relativePath, GLenum target)
     : m_location { ResourceLocator::getResourcePath(relativePath) }
     , m_target {target}
-    , m_textureName {}
 {
     loadImageData();
 }
@@ -38,6 +33,29 @@ void TextureData::loadImageData()
 
 GLuint TextureData::createTexture()
 {
+    assert(m_imageData != nullptr);
+    assert(m_width > 0);
+    assert(m_height > 0);
+    assert(m_target == GL_TEXTURE_2D);
+    GLenum format;
+    switch (m_channels)
+    {
+    case 1:
+        format = GL_RED;
+        break;
+    case 2:
+        format = GL_RG;
+        break;
+    case 3:
+        format = GL_RGB;
+        break;
+    case 4:
+        format = GL_RGBA;
+        break;
+    default:
+        throw std::runtime_error("Texture channel count not supported");
+    }
+
     if (m_created)
     {
         return m_textureName;
@@ -47,14 +65,15 @@ GLuint TextureData::createTexture()
     switch (m_target) // in case of future use of 1d/3d texture expand cases to adjust
     {
     case GL_TEXTURE_2D:
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         glTexImage2D(
             m_target,
             0,
-            GL_RGB,
+            format,
             m_width,
             m_height,
             0,
-            GL_RGB,
+            format,
             GL_UNSIGNED_BYTE,
             m_imageData
         );
@@ -64,8 +83,9 @@ GLuint TextureData::createTexture()
     }
     glGenerateMipmap(m_target);
     stbi_image_free(m_imageData);
-    glBindTexture(m_target, 0);
+    m_imageData = nullptr;
     m_created = true;
+    glBindTexture(m_target, 0);
     return m_textureName;
 }
 
