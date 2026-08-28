@@ -10,6 +10,12 @@ SceneNode::SceneNode(Renderable& object)
 {
 }
 
+SceneNode::SceneNode(ObjectData& geometry, Material& material)
+    : object { Renderable{geometry, material} }
+    , children {}
+{
+}
+
 void SceneNode::addChild(SceneNode& child)
 {
     children.push_back(child);
@@ -26,6 +32,7 @@ void SceneNode::draw(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& project
         }
     }
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
     object.getMaterial().bind();
     glBindVertexArray(object.getVao());
 

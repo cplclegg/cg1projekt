@@ -15,6 +15,7 @@ private:
     std::vector<SceneNode> children;
 public:
     SceneNode(Renderable& object);
+    SceneNode(ObjectData& geometry, Material& material);
     void addChild(SceneNode& child);
     void draw(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& projectionMatrix);
 };
