@@ -102,6 +102,7 @@ void Material::bind()
     glUniform1f(shininessUniformLocation, m_shininess);
     glUniform3fv(specularColorLocation, 1, m_specularColor.getArray());
     glUniform3fv(diffuseColorLocation, 1, m_diffuseColor.getArray());
+    glActiveTexture(0);
 }
 /*
 void Material::addDiffuseMap(const GLuint dm)
