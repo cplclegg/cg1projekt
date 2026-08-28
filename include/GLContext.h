@@ -10,7 +10,7 @@
 class GLContext
 {
 public:
-    [[nodiscard]] static GLFWwindow* initializeContext();
+    [[nodiscard]] static GLFWwindow* initializeContext(int width, int height);
     static void framebufferSizeCallback(GLFWwindow *window, int width, int height);
 };
 

@@ -12,7 +12,7 @@ void GLContext::framebufferSizeCallback([[maybe_unused]]GLFWwindow* window, int 
     glViewport(0, 0, width, height);
 }
 
-GLFWwindow* GLContext::initializeContext()
+GLFWwindow* GLContext::initializeContext(int width, int height)
 {
     glfwInit();
 
@@ -21,7 +21,7 @@ GLFWwindow* GLContext::initializeContext()
 
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow *window = glfwCreateWindow(800, 600, "Computergrafik 1 - Projektarbeit - Team FireBrick", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(width, height, "Computergrafik 1 - Projektarbeit - Team FireBrick", NULL, NULL);
 
     if(!window) {
         printf("Failed to crate window\n");
@@ -34,6 +34,6 @@ GLFWwindow* GLContext::initializeContext()
     glewInit();
 
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f); //Initiale Hintergrundfarbe der Szene
-    glViewport(0, 0, 800, 600);
+    glViewport(0, 0, width, height);
     return window;
 }
