@@ -32,8 +32,8 @@ GLFWwindow* GLContext::initializeContext(int width, int height)
     glfwSetFramebufferSizeCallback(window, GLContext::framebufferSizeCallback);
     glfwMakeContextCurrent(window);
     glewInit();
-
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f); //Initiale Hintergrundfarbe der Szene
+    glEnable(GL_DEPTH_TEST);
+    glClearColor(0.2f, 0.2f, 0.2f, 1.0f); //Initiale Hintergrundfarbe der Szene
     glViewport(0, 0, width, height);
     return window;
 }
