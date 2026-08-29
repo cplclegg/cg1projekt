@@ -3,11 +3,13 @@
 //
 
 #include "CubeMap.h"
-#define STB_IMAGE_IMPLEMENTATION
 #include "ResourceLocator.h"
+#include <cassert>
+#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 using namespace std;
 CubeMap::CubeMap(
+    ShaderProgram& shader,
     const std::filesystem::path& right,
     const std::filesystem::path& left,
     const std::filesystem::path& top,
@@ -24,8 +26,77 @@ CubeMap::CubeMap(
             ResourceLocator::getResourcePath(back),
             ResourceLocator::getResourcePath(front)
         }
+        , m_shader {shader}
 {
-    CubeMap::loadImageData();
+    loadImageData();
+    createVboAndVao();
+}
+
+void CubeMap::createVboAndVao()
+{
+    GLfloat skyboxVertices[] = {
+        // positions
+        -1.0f,  1.0f, -1.0f,
+        -1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+         1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+
+        -1.0f, -1.0f,  1.0f,
+        -1.0f, -1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f,  1.0f,
+        -1.0f, -1.0f,  1.0f,
+
+         1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+
+        -1.0f, -1.0f,  1.0f,
+        -1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f, -1.0f,  1.0f,
+        -1.0f, -1.0f,  1.0f,
+
+        -1.0f,  1.0f, -1.0f,
+         1.0f,  1.0f, -1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+        -1.0f,  1.0f,  1.0f,
+        -1.0f,  1.0f, -1.0f,
+
+        -1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f,  1.0f,
+         1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f,  1.0f,
+         1.0f, -1.0f,  1.0f
+    };
+    glGenBuffers(1, &m_vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    glBufferData(GL_ARRAY_BUFFER, 36, skyboxVertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glGenVertexArrays(1, &m_vao);
+    glBindVertexArray(m_vao);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    glVertexAttribPointer(
+        0,
+        3,
+        GL_FLOAT,
+        GL_FALSE,
+        3*sizeof(GLfloat),
+        0
+    );
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 }
 
 void CubeMap::loadImageData()
@@ -33,13 +104,13 @@ void CubeMap::loadImageData()
     bool success {true};
     for (size_t i = 0; i < 6; ++i)
     {
-        m_imageData[i] = stbi_load(
+        m_imageData.push_back(stbi_load(
             m_locations[i].c_str(),
             &m_width,
             &m_height,
             &m_channels,
             0
-            );
+            ));
         success = success && m_imageData[i];
     }
     if (!success)
@@ -137,4 +208,24 @@ void CubeMap::applyParameters() const
 bool CubeMap::isUsable() const
 {
     return m_created;
+}
+
+void CubeMap::draw(const Mat4& projection, const Mat4& view) const
+{
+    glDepthFunc(GL_LEQUAL);
+    glUseProgram(m_shader.getID());
+    glBindVertexArray(m_vao);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(m_target, m_textureName);
+    applyParameters();
+    const GLint cubeMapUniformLocation = glGetUniformLocation(m_shader.getID(), "skybox");
+    glUniform1i(cubeMapUniformLocation, 0);
+    const Mat4 cubeView {view.copyWithoutTranslation()};
+    const GLint viewLocation = glGetUniformLocation(m_shader.getID(), "mView");
+    const GLint projectionLocation = glGetUniformLocation(m_shader.getID(), "mProjection");
+    glUniformMatrix4fv(viewLocation, 1, GL_FALSE, cubeView.getMatrix());
+    glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, projection.getMatrix());
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glBindVertexArray(0);
+    glDepthFunc(GL_LESS);
 }

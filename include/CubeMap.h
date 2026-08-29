@@ -7,6 +7,7 @@
 #include <filesystem>
 #include <vector>
 #include <GL/glew.h>
+#include "ShaderProgram.h"
 
 class CubeMap
 {
@@ -24,8 +25,12 @@ private:
     bool m_created {false};
     std::vector<std::filesystem::path> m_locations;
     std::vector<unsigned char *>m_imageData;
+    ShaderProgram m_shader;
+    GLuint m_vbo {0};
+    GLuint m_vao {0};
 public:
     CubeMap(
+        ShaderProgram& shader,
         const std::filesystem::path& right,
         const std::filesystem::path& left,
         const std::filesystem::path& top,
@@ -40,9 +45,13 @@ public:
     void setFiltering(GLint minFiltering, GLint magFiltering);
     void setWrapping(GLint sWrapping, GLint tWrapping, GLint rWrapping);
 
+    void createVboAndVao();
+
     void applyParameters() const;
 
     bool isUsable() const;
+
+    void draw(const Mat4& projection, const Mat4& view) const;
 };
 
 
