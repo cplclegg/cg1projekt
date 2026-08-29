@@ -12,4 +12,5 @@
 #include "TextureData.h"
 #include "Material.h"
 #include "GLContext.h"
+#include "CubeMap.h"
 #endif //CG1PROJEKT_UTILITIES_H
