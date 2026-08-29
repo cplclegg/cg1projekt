@@ -88,6 +88,30 @@ int scaleTest()
         return 1;
     }
 }
+int getNormalMatrixTest()
+{
+    Mat4 test{};
+    test.scale(Vec3{2.0f, 3.0f, 4.0f});
+    test.translate(Vec3{5.0f, 6.0f, 7.0f});
+
+    Mat3 result = test.getNormalMatrix();
+
+    Mat3 expected{};
+    expected(0, 0) = 0.5f;
+    expected(1, 1) = 1.0f / 3.0f;
+    expected(2, 2) = 0.25f;
+
+    for (size_t col = 0; col < 3; ++col) {
+        for (size_t row = 0; row < 3; ++row) {
+            if (result(col, row) != expected(col, row)) {
+                cout << "getNormalMatrix erzeugt falsche Normalmatrix" << endl;
+                return 1;
+            }
+        }
+    }
+    cout << "OK - getNormalMatrix erzeugt korrekte Normalmatrix" << endl;
+    return 0;
+}
 
 int rotationTests()
 {
@@ -172,6 +196,7 @@ int mat4Tests()
     result += scaleTest();
     result += rotationTests();
     result += lookAtTest();
+    result += getNormalMatrixTest();
     cout << endl << "End of test results for class Mat4" << endl;
     return result;
 }

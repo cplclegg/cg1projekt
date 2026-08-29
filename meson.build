@@ -74,6 +74,14 @@ teapot_exe = executable(
     dependencies : graphics_deps
 )
 
+textureTest_exe = executable(
+    'texture_demo',
+    'src/load_texture_test.cpp',
+    include_directories : inc,
+    link_with : core_lib,
+    dependencies : graphics_deps
+)
+
 test_exe = executable(
     'unit_tests',
     'tests/unit_tests.cpp',
@@ -83,13 +91,13 @@ test_exe = executable(
     dependencies : graphics_deps
 )
 
-globe_exe = executable(
-    'globe_demo',
-    'uebungsblaetter/uebung7/earth.cpp',
-    include_directories : inc,
-    link_with : core_lib,
-    dependencies : graphics_deps
-)
+#globe_exe = executable(
+#    'globe_demo',
+#    'uebungsblaetter/uebung7/earth.cpp',
+#    include_directories : inc,
+#    link_with : core_lib,
+#    dependencies : graphics_deps
+#)
 
 test(
     'unit_tests',

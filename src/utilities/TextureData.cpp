@@ -24,10 +24,12 @@ TextureData::TextureData(const std::filesystem::path& relativePath, GLenum targe
 
 void TextureData::loadImageData()
 {
+    stbi_set_flip_vertically_on_load(true);
     m_imageData = stbi_load(m_location.c_str(), &m_width, &m_height, &m_channels, 0);
     if (m_imageData == nullptr)
     {
         cout << "Error loading image data from " << m_location << " " << endl;
+        throw std::runtime_error("Failed to load texture file!");
     }
 }
 
@@ -62,6 +64,7 @@ GLuint TextureData::createTexture()
 
     glGenTextures(1, &m_textureName);
     glBindTexture(m_target, m_textureName);
+
     switch (m_target) // in case of future use of 1d/3d texture expand cases to adjust
     {
     case GL_TEXTURE_2D:

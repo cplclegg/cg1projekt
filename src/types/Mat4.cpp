@@ -287,23 +287,30 @@ void Mat4::perspective(const GLfloat fovy, const GLfloat aspect, const GLfloat n
 {
     assert(fovy >= 0 && fovy <= M_PI);
     assert(far > near);
+    /* old
     const GLfloat& alpha {fovy};
-    GLfloat beta = aspect*alpha;
+    GLfloat beta = aspect*alpha; */
     const GLfloat& n {near};
     const GLfloat& f {far};
+    GLfloat t = tan(fovy/2.0f)*n;
+    GLfloat b = -t;
+    GLfloat r = aspect*t;
+    GLfloat l = -r;
+
+    /* old
     GLfloat l = -near*tan(beta/2);
     GLfloat r = near*tan(beta/2);
     GLfloat b = -near*tan(alpha/2);
-    GLfloat t = near*tan(alpha/2);
+    GLfloat t = near*tan(alpha/2); */
 
     Mat4 frustumMatrix {};
     frustumMatrix(0,0) = 2 / (r-l);
-    frustumMatrix(1,1) = 2 / (t-t);
+    frustumMatrix(1,1) = 2 / (t-b);
     frustumMatrix(2,0) = ((r+l) / (r-l)) / n;
     frustumMatrix(2,1) = ((t+b) / (t-b)) / n;
     frustumMatrix(2,2) = ((f+n) / (f-n)) / -n;
-    frustumMatrix(2,3) = -(1/n);
-    frustumMatrix(3,2) = -((2*f) / (f-n));
+    frustumMatrix(2,3) = -(1.0f/n);
+    frustumMatrix(3,2) = -((2.0f*f) / (f-n));
     for (size_t i=0; i<16; ++i)
     {
         m_matrix[i]=frustumMatrix.m_matrix[i];
