@@ -37,6 +37,10 @@ GLuint TextureData::createTexture()
     assert(m_width > 0);
     assert(m_height > 0);
     assert(m_target == GL_TEXTURE_2D);
+    if (m_created)
+    {
+        return m_textureName;
+    }
     GLenum format;
     switch (m_channels)
     {
@@ -56,10 +60,6 @@ GLuint TextureData::createTexture()
         throw std::runtime_error("Texture channel count not supported");
     }
 
-    if (m_created)
-    {
-        return m_textureName;
-    }
     glGenTextures(1, &m_textureName);
     glBindTexture(m_target, m_textureName);
     switch (m_target) // in case of future use of 1d/3d texture expand cases to adjust
