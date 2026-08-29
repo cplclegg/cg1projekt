@@ -22,8 +22,10 @@ private:
     bool m_created {false};
     GLenum m_target {GL_TEXTURE_2D};
     GLuint m_textureName {0};
-    GLint m_wrapping {GL_REPEAT};
-    GLint m_filtering {GL_NEAREST};
+    GLint m_wrappingS {GL_REPEAT};
+    GLint m_wrappingT {GL_REPEAT};
+    GLint m_filteringMIN {GL_NEAREST};
+    GLint m_filteringMAG {GL_NEAREST};
 
 public:
     TextureData();
@@ -35,8 +37,8 @@ public:
     GLuint createTexture();
     GLuint getTextureName();
 
-    void setFiltering(GLint filteringMethod);
-    void setWrapping(GLint wrappingMethod);
+    void setFiltering(GLint minFiltering, GLint magFiltering);
+    void setWrapping(GLint sWrapping, GLint tWrapping);
 
     void applyParameters() const;
 

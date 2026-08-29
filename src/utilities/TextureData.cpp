@@ -101,22 +101,24 @@ GLuint TextureData::getTextureName()
     }
 }
 
-void TextureData::setFiltering(const GLint filteringMethod)
+void TextureData::setFiltering(GLint minFiltering, GLint magFiltering)
 {
-    m_filtering = filteringMethod;
+    m_filteringMIN = minFiltering;
+    m_filteringMAG = magFiltering;
 }
 
-void TextureData::setWrapping(const GLint wrappingMethod)
+void TextureData::setWrapping(const GLint sWrapping, const GLint tWrapping)
 {
-    m_wrapping = wrappingMethod;
+    m_wrappingS = sWrapping;
+    m_wrappingT = tWrapping;
 }
 
 void TextureData::applyParameters() const
 {
-    glTexParameteri(m_target, GL_TEXTURE_WRAP_S, m_wrapping);
-    glTexParameteri(m_target, GL_TEXTURE_WRAP_T, m_wrapping);
-    glTexParameteri(m_target, GL_TEXTURE_MIN_FILTER, m_filtering);
-    glTexParameteri(m_target, GL_TEXTURE_MAG_FILTER, m_filtering);
+    glTexParameteri(m_target, GL_TEXTURE_WRAP_S, m_wrappingS);
+    glTexParameteri(m_target, GL_TEXTURE_WRAP_T, m_wrappingT);
+    glTexParameteri(m_target, GL_TEXTURE_MIN_FILTER, m_filteringMIN);
+    glTexParameteri(m_target, GL_TEXTURE_MAG_FILTER, m_filteringMAG);
 }
 
 bool TextureData::isUsable() const
