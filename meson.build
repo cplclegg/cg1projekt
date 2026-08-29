@@ -37,9 +37,15 @@ core_sources = files(
     'src/types/Vec3.cpp',
     'src/types/Vec4.cpp',
     'src/utilities/ShaderSource.cpp',
+    'src/utilities/ShaderProgram.cpp',
     'src/utilities/ObjectData.cpp',
     'src/utilities/ResourceLocator.cpp',
-    'src/utilities/TextureData.cpp'
+    'src/utilities/TextureData.cpp',
+    'src/utilities/CubeMap.cpp',
+    'src/utilities/Material.cpp',
+    'src/utilities/Renderable.cpp',
+    'src/utilities/SceneNode.cpp',
+    'src/utilities/GLContext.cpp'
 )
 
 test_sources = files(
@@ -53,12 +59,6 @@ test_sources = files(
     'tests/testsrc/TextureDataTest.cpp'
 )
 
-test_loadOBJ = files(
-    'src/utilities/ObjectData.cpp',
-    'src/utilities/ShaderProgram.cpp',
-    'src/utilities/ShaderSource.cpp',
-)
-
 core_lib = static_library(
     'core',
     core_sources,
@@ -68,8 +68,7 @@ core_lib = static_library(
 
 teapot_exe = executable(
     'teapot_demo',
-    'src/load_obj_test.cpp',
-    test_loadOBJ,
+    'tests/load_obj_test.cpp',
     include_directories : inc,
     link_with : core_lib,
     dependencies : graphics_deps
@@ -79,6 +78,14 @@ test_exe = executable(
     'unit_tests',
     'tests/unit_tests.cpp',
     test_sources,
+    include_directories : inc,
+    link_with : core_lib,
+    dependencies : graphics_deps
+)
+
+globe_exe = executable(
+    'globe_demo',
+    'uebungsblaetter/uebung7/earth.cpp',
     include_directories : inc,
     link_with : core_lib,
     dependencies : graphics_deps

@@ -50,25 +50,15 @@ void ShaderProgram::assignProgramID(GLuint program)
 bool ShaderProgram::checkSuccessfulCreation() const
 {
     const bool totalStatus {m_vertexStatus && m_fragmentStatus && m_linkerStatus && m_validationStatus};
-    if (!m_vertexStatus)
-    {
-        printf("Error compiling vertex shader:");
-        printf(m_vertexInfoLog);
-    }
-    if (!m_fragmentStatus)
-    {
-        printf("Error compiling fragment shader:");
-        printf(m_fragmentInfoLog);
-    }
     if (!m_linkerStatus)
     {
         printf("Error linking program:");
-        printf(m_linkerInfoLog);
+        printf("%s", m_linkerInfoLog);
     }
     if (!m_validationStatus)
     {
-        printf("Error alidating program:");
-        printf(m_validationInfoLog);
+        printf("Error validating program:");
+        printf("%s", m_validationInfoLog);
     }
     return totalStatus;
 }
@@ -78,17 +68,27 @@ void ShaderProgram::createProgram()
     assert(m_vertexShader.isValid() && m_fragmentShader.isValid());
     // create+compile vertex shader
     const char* vertexText = m_vertexShader.getSourceString();
+    std::cout << "===== VERTEX SOURCE =====\n"
+          << vertexText
+          << "\n=========================\n";
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexText, NULL);
     glCompileShader(vertexShader);
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &m_vertexStatus);
     if (!m_vertexStatus)
     {
-        glGetShaderInfoLog(vertexShader, 1024, NULL, m_vertexInfoLog);
+        glGetShaderInfoLog(vertexShader, 1024, nullptr, m_vertexInfoLog);
+        printf("Error compiling vertex shader:\n%s\n", m_vertexInfoLog);
+        glDeleteShader(vertexShader);
+        throw std::runtime_error("Vertex shader compilation failed");
     }
 
     // create+compile fragment shader
     const char* fragmentText = m_fragmentShader.getSourceString();
+
+    std::cout << "===== FRAGMENT SOURCE =====\n"
+              << fragmentText
+              << "\n===========================\n";
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &fragmentText, NULL);
     glCompileShader(fragmentShader);
@@ -96,17 +96,24 @@ void ShaderProgram::createProgram()
     if (!m_fragmentStatus)
     {
         glGetShaderInfoLog(fragmentShader, 1024, NULL, m_fragmentInfoLog);
+        printf("Error compiling fragment shader:\n%s\n", m_fragmentInfoLog);
+        glDeleteShader(fragmentShader);
+        throw std::runtime_error("Fragment shader compilation failed");
     }
 
     // create and link shader program
     m_programID = glCreateProgram();
     glAttachShader(m_programID, vertexShader);
     glAttachShader(m_programID, fragmentShader);
+    printf("Vertex shader status: %d\n", m_vertexStatus);
+    printf("Fragment shader status: %d\n", m_fragmentStatus);
+    printf("About to link program %u\n", m_programID);
     glLinkProgram(m_programID);
     glGetProgramiv(m_programID, GL_LINK_STATUS, &m_linkerStatus);
-    if (m_linkerStatus)
+    if (!m_linkerStatus)
     {
         glGetProgramInfoLog(m_programID, 1024, NULL, m_linkerInfoLog);
+        printf("Error linking program:\n%s\n", m_linkerInfoLog);
     }
 
     // validate shader program
@@ -114,7 +121,8 @@ void ShaderProgram::createProgram()
     glGetProgramiv(m_programID, GL_VALIDATE_STATUS, &m_validationStatus);
     if (!m_validationStatus)
     {
-        glGetProgramInfoLog(m_programID, 1024, NULL, m_vertexInfoLog);
+        glGetProgramInfoLog(m_programID, 1024, NULL, m_validationInfoLog);
+        printf("Error validating program:\n%s\n", m_validationInfoLog);
     }
 
     m_exists = checkSuccessfulCreation();

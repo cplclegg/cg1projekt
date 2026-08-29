@@ -20,14 +20,12 @@ ShaderSource::ShaderSource()
 ShaderSource::ShaderSource(const string& path)
     : sourcePath{path}
     , buffer {readSourceFile(sourcePath)}
-    , loadSuccess{true}
 {
 }
 
 ShaderSource::ShaderSource(const ShaderSource& other)
     : sourcePath {other.sourcePath}
     , buffer {readSourceFile(sourcePath)}
-    , loadSuccess{true}
 {
 }
 
@@ -43,30 +41,10 @@ void ShaderSource::loadSourceFile(const string& path)
 {
     sourcePath = sourcePath;
     buffer = readSourceFile(path);
-    loadSuccess = true;
 }
-/*
-char* ShaderSource::readSourceFile(const string& path)
-{
-    assert(!path.empty());
-
-    ifstream fs {path, ifstream::in};
-    if (!fs.is_open()) throw runtime_error("Error opening shader file: " + path);
-
-    fs.seekg(0,ifstream::end);
-    const auto length {fs.tellg()};
-    if (length == streampos(-1)) throw runtime_error("Error determining shader file size: " + path);
-    fs.seekg(0,ifstream::beg);
-
-    const auto buf = static_cast<char*>(malloc(sizeof(char)*length));
-    if(!fs.read(buf, length)) throw runtime_error("Error reading shader source code from: " + path);
-    fs.close();
-    return buf;
-}*/
 
 char* ShaderSource::readSourceFile(const std::filesystem::path& relativePath)
 {
-    //assert(!path.empty());
     std::filesystem::path path {ResourceLocator::getResourcePath(relativePath)};
     ifstream fs {path, ifstream::in};
     if (!fs.is_open()) throw runtime_error("Error opening shader file: " + path.string());
@@ -78,9 +56,9 @@ char* ShaderSource::readSourceFile(const std::filesystem::path& relativePath)
 
     const auto buf = static_cast<char*>(malloc(sizeof(char)*length + 1));
     if(!fs.read(buf, length)) throw runtime_error("Error reading shader source code from: " + path.string());
-
     buf[length] = '\0';
     fs.close();
+    loadSuccess = true;
     return buf;
 }
 

@@ -30,6 +30,7 @@ public:
         Vec3(const Vec3&);
         // Methods
         GLfloat getLength() const;
+        GLfloat* getArray();
         Vec3 crossProduct(const Vec3&) const;
         bool isParallelTo(const Vec3& other) const;
         bool isZeroVector() const;

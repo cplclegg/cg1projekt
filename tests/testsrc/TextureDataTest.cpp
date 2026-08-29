@@ -7,7 +7,7 @@
 #include <iostream>
 #include "../../include/TextureData.h"
 
-void framebuffer_size_callback_t(GLFWwindow *window, int width, int height)
+void framebuffer_size_callback_t([[maybe_unused]]GLFWwindow *window, int width, int height)
 {
     glViewport(0, 0, width, height);
 }

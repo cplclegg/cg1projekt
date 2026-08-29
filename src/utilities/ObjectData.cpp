@@ -16,9 +16,7 @@
 #include "ResourceLocator.h"
 using namespace std;
 
-ObjectData::ObjectData()
-{
-}
+ObjectData::ObjectData() = default;
 
 ObjectData::ObjectData(const ObjectData& other)
     : m_vertexCount {other.m_vertexCount}
@@ -64,17 +62,73 @@ size_t ObjectData::getVertexCount() const
     return m_vertexCount;
 }
 
-GLuint ObjectData::makeVBO() const
+GLuint ObjectData::makeVBO()
 {
     assert(m_buffer != nullptr);
+    if (m_vbo != 0)
+    {
+        return m_vbo;
+    }
     GLuint vbo {};
 
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, m_bufferSize, m_buffer, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+    m_vbo = vbo;
+    return m_vbo;
+}
 
-    return vbo;
+GLuint ObjectData::makeVAO()
+{
+    assert(m_vbo != 0);
+    if (m_vao != 0)
+    {
+        return m_vao;
+    }
+    GLuint vao;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
+    // Vertex position
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    glVertexAttribPointer(
+        0,                             // index
+        3,                             // size
+        GL_FLOAT,                      // type
+        GL_FALSE,                      // normalize
+        8 * sizeof(GLfloat),           // stride
+        (GLfloat*)(0*sizeof(GLfloat))  // offset
+    );
+    glEnableVertexAttribArray(0);
+
+    // Vertex texture coordinates
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    glVertexAttribPointer(
+        1,                             // index
+        2,                             // size
+        GL_FLOAT,                      // type
+        GL_FALSE,                      // normalize
+        8 * sizeof(GLfloat),           // stride
+        (GLfloat*)(3*sizeof(GLfloat))  // offset
+    );
+    glEnableVertexAttribArray(1);
+
+    // Vertex normal coordinates
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    glVertexAttribPointer(
+        2,                             // index
+        3,                             // size
+        GL_FLOAT,                      // type
+        GL_FALSE,                      // normalize
+        8 * sizeof(GLfloat),           // stride
+        (GLfloat*)(5*sizeof(GLfloat))  // offset
+    );
+    glEnableVertexAttribArray(2);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+    m_vao = vao;
+    return m_vao;
 }
 
 GLfloat* ObjectData::loadObj(const char* location)
@@ -103,7 +157,6 @@ GLfloat* ObjectData::loadObj(const char* location)
     auto v  = static_cast<Vector3*>(malloc(m_vCount * sizeof(Vector3)));
     auto vt = static_cast<Vector2*>(malloc(m_vtCount * sizeof(Vector2)));
     auto vn = static_cast<Vector3*>(malloc(m_vnCount * sizeof(Vector3)));
-
     // allocate output buffer
     m_bufferSize = m_fCount * sizeof(Triangle);
     auto buffer = static_cast<Triangle*>(malloc(m_bufferSize));

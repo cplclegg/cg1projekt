@@ -115,6 +115,11 @@ GLfloat Vec3::getLength() const
     return sqrt( m_vector[0]*m_vector[0] + m_vector[1]*m_vector[1] + m_vector[2]*m_vector[2] );
 }
 
+GLfloat* Vec3::getArray()
+{
+    return m_vector;
+}
+
 bool Vec3::isParallelTo(const Vec3& other) const
 {
     const GLfloat absDotProduct = abs((*this)*other);
