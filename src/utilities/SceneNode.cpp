@@ -45,3 +45,28 @@ void SceneNode::draw(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& project
 
     glDrawArrays(GL_TRIANGLES, 0, object.getVertexCount());
 }
+
+void SceneNode::translate(const Vec3& vector)
+{
+    localTransform.translate(vector);
+}
+
+void SceneNode::scale(const Vec3& vector)
+{
+    localTransform.scale(vector);
+}
+
+void SceneNode::rotateX(const GLfloat& vector)
+{
+    localTransform.rotateX(vector);
+}
+
+void SceneNode::rotateY(const GLfloat& vector)
+{
+    localTransform.rotateY(vector);
+}
+
+void SceneNode::rotateZ(const GLfloat& vector)
+{
+    localTransform.rotateZ(vector);
+}
