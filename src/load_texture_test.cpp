@@ -20,7 +20,7 @@ struct RenderData {
 
 RenderData init(void) {
     ShaderProgram shader{"src/shaders/shaderTests/testTexture/VertexShader.glsl", "src/shaders/shaderTests/testTexture/FragmentShader.glsl"};
-    ObjectData testObject{"tests/cube.obj"};
+    ObjectData testObject{"tests/cubefinish2.obj"};
     GLuint vbo = testObject.makeVBO();
     TextureData textureObject{"tests/crate.png", GL_TEXTURE_2D};
     GLuint texture = textureObject.createTexture();
@@ -70,7 +70,6 @@ RenderData init(void) {
 void draw(RenderData& data) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
-    glDisable(GL_CULL_FACE);
     glUseProgram(data.programmID);
     glBindVertexArray(data.vao);
 
@@ -80,6 +79,8 @@ void draw(RenderData& data) {
     //Transformation berechnen
     Mat4 modelM{};
     modelM.translate(Vec3{-53.42f, -53.62f, 0.0f});
+    modelM.rotateY(10.0f);
+    modelM.rotateX(10.0f);
 
     Mat4 ViewM{};
     Vec3 eye{0.0f, 0.0f, 20.0f};
