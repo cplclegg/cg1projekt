@@ -3,7 +3,7 @@
 //
 
 #include "../../include/TextureData.h"
-#define STB_IMAGE_IMPLEMENTATION
+#include <cassert>
 #include "stb_image.h"
 using namespace std;
 
