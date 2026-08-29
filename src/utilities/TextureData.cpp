@@ -65,9 +65,6 @@ GLuint TextureData::createTexture()
     glGenTextures(1, &m_textureName);
     glBindTexture(m_target, m_textureName);
 
-    // Format auf RGBA evtl setzen
-    GLenum format = (m_channels == 4) ? GL_RGBA : GL_RGB;
-
     switch (m_target) // in case of future use of 1d/3d texture expand cases to adjust
     {
     case GL_TEXTURE_2D:
