@@ -11,8 +11,8 @@ class ShaderSource
 private:
     std::string sourcePath;
     char* buffer;
-    bool loadSuccess = false;
-    static char* readSourceFile(const std::filesystem::path&);
+    bool loadSuccess;
+    char* readSourceFile(const std::filesystem::path&);
 public:
     ShaderSource();
     ShaderSource(const std::string&);
@@ -20,8 +20,8 @@ public:
     ~ShaderSource();
 
     void loadSourceFile(const std::string&);
-    char* getSourceString() const;
-    bool isValid() const;
+    [[nodiscard]] char* getSourceString() const;
+    [[nodiscard]] bool isValid() const;
 };
 
 

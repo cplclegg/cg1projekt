@@ -3,13 +3,14 @@
 //
 
 #include "../../include/TextureData.h"
-#define STB_IMAGE_IMPLEMENTATION
+#include <cassert>
 #include "stb_image.h"
 using namespace std;
 
+TextureData::TextureData() = default;
+
 TextureData::TextureData(const std::filesystem::path& relativePath)
     : m_location { ResourceLocator::getResourcePath(relativePath) }
-    , m_textureName {}
 {
     loadImageData();
 }
@@ -17,7 +18,6 @@ TextureData::TextureData(const std::filesystem::path& relativePath)
 TextureData::TextureData(const std::filesystem::path& relativePath, GLenum target)
     : m_location { ResourceLocator::getResourcePath(relativePath) }
     , m_target {target}
-    , m_textureName {}
 {
     loadImageData();
 }
@@ -35,10 +35,33 @@ void TextureData::loadImageData()
 
 GLuint TextureData::createTexture()
 {
+    assert(m_imageData != nullptr);
+    assert(m_width > 0);
+    assert(m_height > 0);
+    assert(m_target == GL_TEXTURE_2D);
     if (m_created)
     {
         return m_textureName;
     }
+    GLenum format;
+    switch (m_channels)
+    {
+    case 1:
+        format = GL_RED;
+        break;
+    case 2:
+        format = GL_RG;
+        break;
+    case 3:
+        format = GL_RGB;
+        break;
+    case 4:
+        format = GL_RGBA;
+        break;
+    default:
+        throw std::runtime_error("Texture channel count not supported");
+    }
+
     glGenTextures(1, &m_textureName);
     glBindTexture(m_target, m_textureName);
 
@@ -48,6 +71,7 @@ GLuint TextureData::createTexture()
     switch (m_target) // in case of future use of 1d/3d texture expand cases to adjust
     {
     case GL_TEXTURE_2D:
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         glTexImage2D(
             m_target,
             0,
@@ -64,8 +88,9 @@ GLuint TextureData::createTexture()
         break;
     }
     glGenerateMipmap(m_target);
-    m_created = true;
     stbi_image_free(m_imageData);
+    m_imageData = nullptr;
+    m_created = true;
     glBindTexture(m_target, 0);
     return m_textureName;
 }
@@ -80,6 +105,29 @@ GLuint TextureData::getTextureName()
         createTexture();
         return m_textureName;
     }
-
 }
 
+void TextureData::setFiltering(GLint minFiltering, GLint magFiltering)
+{
+    m_filteringMIN = minFiltering;
+    m_filteringMAG = magFiltering;
+}
+
+void TextureData::setWrapping(const GLint sWrapping, const GLint tWrapping)
+{
+    m_wrappingS = sWrapping;
+    m_wrappingT = tWrapping;
+}
+
+void TextureData::applyParameters() const
+{
+    glTexParameteri(m_target, GL_TEXTURE_WRAP_S, m_wrappingS);
+    glTexParameteri(m_target, GL_TEXTURE_WRAP_T, m_wrappingT);
+    glTexParameteri(m_target, GL_TEXTURE_MIN_FILTER, m_filteringMIN);
+    glTexParameteri(m_target, GL_TEXTURE_MAG_FILTER, m_filteringMAG);
+}
+
+bool TextureData::isUsable() const
+{
+    return m_created;
+}

@@ -1,5 +1,130 @@
 # Source code documentation PROJECT NAME TBA
 
+# Utilities
+
+## ShaderSource
+``ShaderSource`` abstracts loading and storing the source code for shaders in an object of type Shadersource.
+
+### Constructors
+- ``ShaderSource()`` constructs an empty ShaderSource object
+- ``ShaderSource(const string& path)`` constructs a ShaderSource object and loads the source code located at provided file  
+path into the object
+- ``ShaderSource(const ShaderSource& other)`` constructs a deep copy of other
+- ``~ShaderSource()`` does NOT call delete[] on the memory allocated for storage of the shader source code.  
+Client is responsible for freeing of the memory!
+
+### Methods
+- ``loadSourceFile()`` loads a shader source code file and sets its path. Old data will be overwritten!
+- ``readSourceFile()`` reads the content of a file into a newly allocated buffer pointed to in the object
+- ``getSourceString()`` returns a pointer to the heap memory in which the shader source code is stored
+
+## ShaderProgram
+
+ShaderProgram abstracts creation, compilation, and error handling of an OpenGL program. It is meant to be constructed from two shader locations, the first for the vertex shader source,  
+the second for the fragment shader source.
+
+### Constructors
+
+- ``ShaderProgram(const std::string& vertexLocation, const std::string& fragmentLocation)`` constructs a ShaderProgram, in the process constructing a ShaderSource for each shader, and immediately after member initialization creates a shader program with the steps shader compilation -> linking -> validation. The identifier GLuint of the created shader program is stored as a data member
+- ``ShaderProgram()`` constructs an empty object
+- ``ShaderProgram(const ShaderProgram& other)`` constructs a copy with deep copied ShaderSources, and copies the state (status codes and messages, program ID, exists-flag)
+
+### Member functions
+
+- ``void ShaderProgram::addVertexShaderSource(const std::string& path)`` adds a vertex shader source overwriting the old one, if one was already stored
+- ``void ShaderProgram::addFragmetShaderSource(const std::string& path)`` adds a fragment shader source overwriting the old one, if one was already stored
+- ``bool ShaderProgram::checkSuccessfulCreation() const`` returns true if all error checking flags signal positive outcome, prints limited debugging info and returns false otherwise
+- ``void ShaderProgram::createProgram()`` abstracts opengl code for shader creation, compilation, linking, and validation
+- ``GLuint ShaderProgram::getID() const`` returns the ID of the shaderprogram. Will return 0 is no shader proram was created.
+
+## ObjectData
+``ObjectData`` abstracts loading limited data from a .obj file. Full Wavefront .obj is not supported, only triangulated meshes may be used with this class.
+
+### Constructors
+- ``ObjectData()`` constructs an empty object
+- ``ObjectData(string& path)`` constructs an ObjectData object with the data from the .obj file at path
+- ``ObjectData(ObjectData& other)`` constructs a shallow copy of other
+- ``~ObjectData()`` does not free any memory in case shallow copies exist
+
+### Methods
+- ``private GLfloat* ObjectData::loadObj(const char* location)`` loads the data of the .obj file at ``location``
+- ``void ObjectData::importObjectData(const std::string& path)`` provides a public wrapper for ``loadObj``, allowing loading of an .obj file into an existing (empty or non-empty) ObjectData
+- ``GLfloat* ObjectData::getBuffer() const`` returns a pointer to the data buffer of the object
+- ``GLuint ObjectData::makeVBO() const`` abstracts creation of a VBO and data transfer to the VBO. The identifier of the VBO is returned from the function.
+
+## TextureData
+
+TextureData abstracts loading of image data and creation of an opengl texture object from that texture data. This class can only process 2D textures for now, but provisions have been made to later implement 3D texture handling should it prove necessary.
+
+### Constructors
+- ``TextureData(const std::filesystem::path& relativePath)`` constructs a 2D-default TextureData loading the texture at ``location``
+- ``TextureData(const std::filesystem::path& relativePath, GLenum target)`` constructs a TextureData with a target differing from ``GL_TEXTURE_2D`` as a provision for later implementation of 3D or 1D textures
+
+### Member functions
+- ``void loadImageData()`` loads the image data at the location provided at object construction
+- ``GLuint createTexture()`` creates an opengl texture object with the image data (image data must have been loaded prior to calling this method) and returns its name (ID) as GLuint
+- ``GLuint getTextureName()`` returns the name of the texture (ID). Will return 0 if no opengl texture object has been created. This can be used to check successful creation of an opengl texture object.
+ 
+## Material
+
+Material combines a shader program, and up to four TextureData (diffuse, normal, specular, emissive) into a Material.
+
+## Constructors
+- ``Material(
+        GLuint shader,
+        GLuint diffuse,
+        GLuint normal,
+        GLuint specular,
+        GLuint emissive
+        );`` constructs a Material storing the texture names (ID) provided, the shader name (ID) provided, and using default shininess values (32.0f) and colors (white).
+- ``Material(
+        GLuint shader,
+        GLuint diffuse,
+        GLuint normal,
+        GLuint specular,
+        GLuint emissive,
+        GLfloat shininess,
+        const Vec3& specularColor,
+        const Vec3& diffuseColor
+        );`` constructs a Material storing the texture names (ID) provided, the shader name (ID) provided, and using the provided shininess and colors.
+- ``Material(const Material& other)`` constructs a copy where the shader and texture names (IDs) and shininess as well as color are copied. In the case of the color vectors deep copies are made using the copy constructor of class Vec3.
+
+### Member functions
+- ``void bind() const`` binds all texture objects in the order diffuse-normal-specular-emissive to texture units 0,1,2,3 respectively. If the texture ID is nonzero in the Material object, the texture object is bound to the texture unit. If it is 0, the corresponding texture unit is unbound. The shader ID in the material object is activated with ``glUseProgram()``
+
+## Renderable
+
+Renderable combines all the data needed for a draw call (except any planned interactions like setting of uniforms) into a single object. This includes vbo, vao, Material, and vertex count.
+
+### Constructors
+- ``Renderable(ObjectData& object, const Material& material)`` constructs a renderable with the provided ObjectData and Material
+
+### Member functions
+- ``GLuint getVbo() const`` returns the ID of the VBO associated with this Renderable
+- ``GLuint getVao() const`` returns the ID of the VAO associated with this Renderable
+- ``GLuint getVertexCount() const`` returns the vertex count of this Renderable's geometry
+- ``GLuint getMaterial() const`` returns the Material associated with this Renderable
+
+## SceneNode
+
+A scene node is a composite implementation of a scenegraph. It stores a Renderable, its corresponding local transform matrix, and a ``std::vector`` of ``SceneNode`` children. It also provides a member function ``draw()``, which takes parent world transform matrix and a camera transform matrix, and combines them with the localtransform to get the final transform which is to be sent to the shaders corresponding uniform. A call of ``draw()`` is first forwarded to all children (handing through the world transform matrix *calculated from the parent world transform and the local transform* - the root SceneNode object must be given a unity matrix as parent world transform for the draw call - and the camera matrix) and then executed on the SceneNode itself. As a result, a call of ``draw()`` on the root of a scene should draw the whole scene.
+
+### Constructors
+- ``SceneNode(Renderable& object)`` constructs a SceneNode with the provided Renderable and an empty vector of children
+- ``SceneNode()`` constructs a SceneNode with no Renderable (which could be useful as a root node that has no visual component associated with it) and an empty vector of children ==not yet implemented==
+
+### Member functions
+- ``void addChild(SceneNode& child)`` adds a SceneNode to the vector of children
+- ``draw(Mat4& parentWorldTransform, Mat4& cameraTransform)`` draws all children of the SceneNode if the vector of children is not empty by calling their ``draw()``, and afterwards binds the Material and VAO associated with its Renderable, calculates its final transform matrix, sends it to the shader at the uniform location ``'transform'`` ==(might need to expand this for more transforms later on)==, and executes a draw call with ``GL_TRIANGLES``
+- ``void setLocalTransform(Mat4& transform)`` sets the given transform matrix for the local transform of this SceneNode ==(not yet implemented)==
+
+## ResourceLocator
+
+ResourseLocator provides a single static function that takes a ``std::filesystem::path`` representing a relative path to a resource (e.g. shader source file, .obj file, etc.) originating from the project root and uses a constant set by meson on building the project, which represents the absolute path to the content root on the system where meson built the project, to construct the absolute path to the resource and return it as ``std::filesystem::path``
+
+### Member functions
+- ``std::filesystem::path getResourcePath(const std::filesystem::path& relativePath)`` implements completion of relative path to user-system specific absolute path
+
 # Types
 
 ## Vector Types
@@ -120,40 +245,8 @@ provided access operators and indexing methods.
 - ``getNormalMatrix()`` extracts the top left 3x3 matrix from the matrix it is called on, and computes its inverse transpose to get a normal matrix corresponding to a modelview matrix which is returned by the method
 
 - ``directPrint()`` prints the matrix it is called on to cout.
-- ``mIndex(col, row)`` can be used to translate a column major 2-value index to the 1-dimensional linear array index used internally.  
+- ``mIndex(col, row)`` can be used to translate a column major 2-value index to the 1-dimensional linear array index used internally.
 
-# Utilities
-
-## ShaderSource
-``ShaderSource`` abstracts loading and storing the source code for shaders in an object of type Shadersource.
-
-### Constructors
-- ``ShaderSource()`` constructs an empty ShaderSource object
-- ``ShaderSource(const string& path)`` constructs a ShaderSource object and loads the source code located at provided file  
-path into the object
-- ``ShaderSource(const ShaderSource& other)`` constructs a deep copy of other
-- ``~ShaderSource()`` does NOT call delete[] on the memory allocated for storage of the shader source code.  
-Client is responsible for freeing of the memory!
-
-### Methods
-- ``loadSourceFile()`` loads a shader source code file and sets its path. Old data will be overwritten!
-- ``readSourceFile()`` reads the content of a file into a newly allocated buffer pointed to in the object
-- ``getSourceString()`` returns a pointer to the heap memory in which the shader source code is stored
-
-## ObjectData
-``ObjectData`` abstracts loading limited data from a .obj file. Full Wavefront .obj is not supported, only triangulated meshes may be used with this class.
-
-### Constructors
-- ``ObjectData()`` constructs an empty object
-- ``ObjectData(string& path)`` constructs an ObjectData object with the data from the .obj file at path
-- ``ObjectData(ObjectData& other)`` constructs a shallow copy of other
-- ``~ObjectData()`` does not free any memory in case shallow copies exist
-
-### Methods
-- ``private GLfloat* ObjectData::loadObj(const char* location)`` loads the data of the .obj file at ``location``
-- ``void ObjectData::importObjectData(const std::string& path)`` provides a public wrapper for ``loadObj``, allowing loading of an .obj file into an existing (empty or non-empty) ObjectData
-- ``GLfloat* ObjectData::getBuffer() const`` returns a pointer to the data buffer of the object
-- ``GLuint ObjectData::makeVBO() const`` abstracts creation of a VBO and data transfer to the VBO. The identifier of the VBO is returned from the function.
 
 # Tests
 
@@ -164,3 +257,4 @@ Functional methods of each class are tested with equivalence class tests. Each c
 The main testing function of a class must ``return 0`` if all the tests called from it have passed, and a non-zero integer if any of the tests have failed. To achieve this, it is recommended to have each unit test ``return 0`` on pass and ``return 1`` on fail. The main testing function can then add up all the return values and return the sum as is. If all tests have passed, the main testing function will ``return 0``, otherwise it will return an integer corresponding to the number of failed tests. 
 
 The same strategy is used in the the main function of ``/tests/unit_tests.cpp``. The exit code returned from this main function is thus the number of total failed tests.
+

@@ -1,7 +1,7 @@
-#include "../include/ObjectData.h"
-#include "../include/ShaderSource.h"
-#include "../include/ShaderProgram.h"
-#include "../include/Mat4.h"
+#include "../../include/ObjectData.h"
+#include "../../include/ShaderSource.h"
+#include "../../include/ShaderProgram.h"
+#include "../../include/Mat4.h"
 
 
 /*Struct notwendig um sowohl Programm-ID, Vertex-Anzahl als auch VAO
@@ -14,11 +14,12 @@ struct RenderData {
 };
 
 RenderData init(void) {
-    ShaderProgram shader{"src/shaders/shaderTests/testOBJ/VertexShader.glsl", "src/shaders/shaderTests/testOBJ/FragmentShader.glsl"};
+    ShaderProgram shader{"src/shaders/testshaders/VertexShader.glsl", "src/shaders/testshaders/FragmentShader.glsl"};
     ObjectData testObject{"tests/teapot.obj"};
     GLuint vbo = testObject.makeVBO();
     GLuint vao;
-    
+
+
     //VAO erzeugen und Attribpointer setzen
     //Zuerst für die Position
     glGenVertexArrays(1, &vao);
@@ -85,7 +86,7 @@ void draw(RenderData& data) {
     glDrawArrays(GL_TRIANGLES, 0, data.vertexCount);
 }
 
-void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
+void framebuffer_size_callback([[maybe_unused]]GLFWwindow *window, int width, int height) {
     glViewport(0, 0, width, height); 
 }
 

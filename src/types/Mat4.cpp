@@ -332,6 +332,19 @@ Mat3 Mat4::getNormalMatrix()
 
 // ------------- Utility -------------- //
 
+Mat4 Mat4::copyWithoutTranslation() const
+{
+    Mat4 result;
+    for (size_t row = 0; row < 3; ++row)
+    {
+        for (size_t col = 0; col < 3; ++col)
+        {
+            result.m_matrix[mIndex(col, row)] = m_matrix[mIndex(col, row)];
+        }
+    }
+    return result;
+}
+
 void Mat4::directPrint() const
 {
 	for (size_t i = 0; i < 16; ++i)
