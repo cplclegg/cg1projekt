@@ -14,7 +14,7 @@ struct RenderData {
 };
 
 RenderData init(void) {
-    ShaderProgram shader{"src/shaders/testshaders/VertexShader.glsl", "src/shaders/testshaders/FragmentShader.glsl"};
+    ShaderProgram shader{"src/shaders/shaderTests/testOBJ/VertexShader.glsl", "src/shaders/shaderTests/testOBJ/FragmentShader.glsl"};
     ObjectData testObject{"tests/teapot.obj"};
     GLuint vbo = testObject.makeVBO();
     GLuint vao;

@@ -1,8 +1,8 @@
-#include "../include/ObjectData.h"
-#include "../include/ShaderSource.h"
-#include "../include/ShaderProgram.h"
-#include "../include/Mat4.h"
-#include "../include/TextureData.h"
+#include "../../include/ObjectData.h"
+#include "../../include/ShaderSource.h"
+#include "../../include/ShaderProgram.h"
+#include "../../include/Mat4.h"
+#include "../../include/TextureData.h"
 
 
 #define PI 3.14159265358979323846

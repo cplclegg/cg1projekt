@@ -76,7 +76,7 @@ teapot_exe = executable(
 
 textureTest_exe = executable(
     'texture_demo',
-    'src/load_texture_test.cpp',
+    'tests/load_texture_test.cpp',
     include_directories : inc,
     link_with : core_lib,
     dependencies : graphics_deps
