@@ -35,8 +35,8 @@ public:
         const std::filesystem::path& left,
         const std::filesystem::path& top,
         const std::filesystem::path& bot,
-        const std::filesystem::path& back,
-        const std::filesystem::path& front
+        const std::filesystem::path& front,
+        const std::filesystem::path& back
     );
     void loadImageData();
     GLuint createTexture();
