@@ -311,6 +311,7 @@ void Mat4::perspective(const GLfloat fovy, const GLfloat aspect, const GLfloat n
     frustumMatrix(2,2) = ((f+n) / (f-n)) / -n;
     frustumMatrix(2,3) = -(1.0f/n);
     frustumMatrix(3,2) = -((2.0f*f) / (f-n));
+    frustumMatrix(3,3) = 0.0f;
     for (size_t i=0; i<16; ++i)
     {
         m_matrix[i]=frustumMatrix.m_matrix[i];
@@ -356,12 +357,14 @@ Mat4 Mat4::copyWithoutTranslation() const
 
 void Mat4::directPrint() const
 {
-	for (size_t i = 0; i < 16; ++i)
-	{
-		if (i%4==0) cout << endl;
-		cout << m_matrix[i] << " ";
-	}
-	cout << endl;
+    for (size_t row = 0; row < 4; ++row)
+    {
+        for (size_t col = 0; col < 4; ++col)
+        {
+            cout << (*this)(col, row) << " ";
+        }
+        cout << endl;
+    }
 }
 
 const GLfloat* Mat4::getMatrix() const {
@@ -371,6 +374,7 @@ const GLfloat* Mat4::getMatrix() const {
 size_t Mat4::mIndex(const size_t col, const size_t row)
 {
     assert(col <= 3 && row <= 3);
-    const size_t index = row*4+col;
+    //const size_t index = row*4+col;
+    const size_t index = col*4 + row;
     return index;
 }
