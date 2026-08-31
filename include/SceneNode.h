@@ -17,7 +17,7 @@ public:
     SceneNode(Renderable& object);
     SceneNode(ObjectData& geometry, Material& material);
     void addChild(SceneNode& child);
-    void draw(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& projectionMatrix);
+    void draw(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& projectionMatrix, GLuint skyboxTextureID);
     void translate(const Vec3& vector);
     void scale(const Vec3&);
     void rotateX(const GLfloat&);
