@@ -13,6 +13,18 @@
 
 #include "Vec3.h"
 
+/* Idea/Concept
+ *
+ * make the structs below into classes. Same member attributes, but acces via getters/setters.
+ * add member attributes: bool dirty (false when changed after or not uploaded, true when current state uploaded)
+ * add member function: upload(GLuint shader, size_t i). If dirty, uploads the current state and sets dirty=false.
+ * Dirty only ever set to false after state was uploaded.
+ *
+ * The aggregate class LightSources just delegates the upload of all numOfPoint/SpotLights to the objects.
+ * They only upload themselves if dirty.
+ *
+ */
+
 struct PointLight
 {
     Vec3 position, color;
@@ -38,7 +50,7 @@ public:
     void addSpotLight(const SpotLight& spotLight);
     void addPointLight(const PointLight& pointLight);
     void clearAllLights();
-    void uploadLights();
+    void uploadLights(GLuint shader);
 };
 
 
