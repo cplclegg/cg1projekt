@@ -10,7 +10,8 @@
 #include <vector>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-
+#include "SpotLight.h"
+#include "PointLight.h"
 #include "Vec3.h"
 
 /* Idea/Concept
@@ -24,19 +25,6 @@
  * They only upload themselves if dirty.
  *
  */
-
-struct PointLight
-{
-    Vec3 position, color;
-    GLfloat attenuation;
-    GLfloat intensity;
-};
-
-struct SpotLight
-{
-    Vec3 position, color, direction;
-    GLfloat intensity;
-};
 
 class LightSources
 {
