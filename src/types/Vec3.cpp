@@ -120,6 +120,12 @@ GLfloat* Vec3::getArray()
     return m_vector;
 }
 
+const GLfloat* Vec3::getArray() const
+{
+    return m_vector;
+}
+
+
 bool Vec3::isParallelTo(const Vec3& other) const
 {
     const GLfloat absDotProduct = abs((*this)*other);
