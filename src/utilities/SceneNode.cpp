@@ -24,15 +24,17 @@ void SceneNode::addChild(SceneNode& child)
 void SceneNode::draw(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& projectionMatrix, GLuint skyboxTextureID, LightSources& lights)
 {
     Mat4 worldTransform {parentWorldTransform*localTransform};
+    //Mat4 worldTransform {};
     if (!children.empty())
     {
+        std::cout << "entered if case for child scene nodes" << std::endl;
         for (auto& child : children)
         {
+            std::cout << "drawing child" << std::endl;
             child.draw(worldTransform, viewMatrix, projectionMatrix, skyboxTextureID, lights);
         }
     }
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
+
     object.getMaterial().bind();
     lights.uploadLights(object.getMaterial().getShader());
     glBindVertexArray(object.getVao());
@@ -52,7 +54,9 @@ void SceneNode::draw(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& project
     glUniformMatrix4fv(viewLocation, 1, GL_FALSE, viewMatrix.getMatrix());
     GLint projLocation = glGetUniformLocation(object.getMaterial().getShader(), "mProj");
     glUniformMatrix4fv(projLocation, 1, GL_FALSE, projectionMatrix.getMatrix());
-
+    std::cout << "world transform:\n";
+    worldTransform.directPrint();
+    std::cout << std::endl;
     glDrawArrays(GL_TRIANGLES, 0, object.getVertexCount());
 }
 
