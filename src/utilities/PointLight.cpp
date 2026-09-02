@@ -42,7 +42,7 @@ void PointLight::setDirty()
 
 void PointLight::upload(const GLuint shader, const size_t i)
 {
-    if (!m_dirty) return;
+    //if (!m_dirty) return;
 
     const std::string posUniformName {"pointLights[" + std::to_string(i) + "].pl_pos"};
     const std::string colorUniformName {"pointLights[" + std::to_string(i) + "].pl_color"};
