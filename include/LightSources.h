@@ -29,8 +29,6 @@
 class LightSources
 {
 private:
-    int m_numberOfPointLights;
-    int m_numberOfSpotlights;
     std::vector<std::shared_ptr<PointLight>> m_pointLights;
     std::vector<std::shared_ptr<SpotLight>> m_spotLights;
 public:
@@ -38,7 +36,7 @@ public:
     void addSpotLight(const SpotLight& spotLight);
     void addPointLight(const PointLight& pointLight);
     void clearAllLights();
-    void uploadLights(GLuint shader);
+    void uploadLights(const GLuint& shader) const;
 };
 
 
