@@ -20,7 +20,8 @@ public:
     void setColor(Vec3& color);
     void setIntensity(GLfloat intensity);
     void setCone(GLfloat innerAngle, GLfloat outerAngle);
-    void upload(GLuint shader, size_t i);
+    void setDirty();
+    void upload(const GLuint shader, size_t i) const;
 };
 
 

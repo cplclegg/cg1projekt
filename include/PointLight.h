@@ -18,7 +18,8 @@ public:
     void setPosition(Vec3& pos);
     void setColor(Vec3& color);
     void setAttenuationFactors(GLfloat constant, GLfloat linear, GLfloat quadratic);
-    void upload(GLuint shader, size_t i);
+    void setDirty();
+    void upload(const GLuint shader, const size_t i);
 };
 
 
