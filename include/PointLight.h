@@ -14,7 +14,7 @@ class PointLight
     GLfloat m_constant, m_linear, m_quadratic;
     bool m_dirty {true};
 public:
-    PointLight(Vec3& pos, Vec3& color, GLfloat constant, GLfloat linear, GLfloat quadratic);
+    PointLight(const Vec3& pos, const Vec3& color, GLfloat constant, GLfloat linear, GLfloat quadratic);
     void setPosition(Vec3& pos);
     void setColor(Vec3& color);
     void setAttenuationFactors(GLfloat constant, GLfloat linear, GLfloat quadratic);

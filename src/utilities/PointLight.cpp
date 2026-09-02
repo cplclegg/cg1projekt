@@ -6,7 +6,7 @@
 
 #include <string>
 
-PointLight::PointLight(Vec3& pos, Vec3& color, GLfloat constant, GLfloat linear, GLfloat quadratic)
+PointLight::PointLight(const Vec3& pos, const Vec3& color, const GLfloat constant, const GLfloat linear, const GLfloat quadratic)
     : m_position{pos}
     , m_color{color}
     , m_constant {constant}
