@@ -55,6 +55,7 @@ void SpotLight::setDirty()
 void SpotLight::upload(const GLuint shader, const size_t i)
 {
     if (!m_dirty) return;
+
     const std::string posUniformName {"spotLights[" + std::to_string(i) + "].sl_pos"};
     const std::string colorUniformName {"spotLights[" + std::to_string(i) + "].sl_color"};
     const std::string directionUniformName {"spotLights[" + std::to_string(i) + "].sl_direction"};
