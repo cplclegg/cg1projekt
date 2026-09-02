@@ -6,6 +6,7 @@
 #define CG1PROJEKT_SCENENODE_H
 #include "Material.h"
 #include "Renderable.h"
+#include "LightSources.h"
 #include <vector>
 class SceneNode
 {
@@ -17,7 +18,7 @@ public:
     SceneNode(Renderable& object);
     SceneNode(ObjectData& geometry, Material& material);
     void addChild(SceneNode& child);
-    void draw(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& projectionMatrix, GLuint skyboxTextureID);
+    void draw(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& projectionMatrix, GLuint skyboxTextureID, LightSources& lights);
     void translate(const Vec3& vector);
     void scale(const Vec3&);
     void rotateX(const GLfloat&);

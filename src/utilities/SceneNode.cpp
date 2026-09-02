@@ -21,19 +21,20 @@ void SceneNode::addChild(SceneNode& child)
     children.push_back(child);
 }
 // hier wird die ID der skybox textur mit uebergeben, damit sie an alle shaderprogramme weitergegeben werden kann
-void SceneNode::draw(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& projectionMatrix, GLuint skyboxTextureID)
+void SceneNode::draw(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& projectionMatrix, GLuint skyboxTextureID, LightSources& lights)
 {
     Mat4 worldTransform {parentWorldTransform*localTransform};
     if (!children.empty())
     {
         for (auto& child : children)
         {
-            child.draw(worldTransform, viewMatrix, projectionMatrix, skyboxTextureID);
+            child.draw(worldTransform, viewMatrix, projectionMatrix, skyboxTextureID, lights);
         }
     }
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
     object.getMaterial().bind();
+    lights.uploadLights(object.getMaterial().getShader());
     glBindVertexArray(object.getVao());
 
     if (skyboxTextureID != 0)
