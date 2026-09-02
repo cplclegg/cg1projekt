@@ -4,44 +4,52 @@
 
 #include "../../include/SpotLight.h"
 
-SpotLight::SpotLight(Vec3& pos, Vec3& dir, Vec3& color, GLfloat innerAngle, GLfloat outerAngle)
-    : position{pos}
-    , direction {dir}
-    , color {color}
-    , angleInnerCone {innerAngle}
-    , angleOuterCone {outerAngle}
+SpotLight::SpotLight(Vec3& pos, Vec3& dir, Vec3& color, GLfloat innerAngle, GLfloat outerAngle, GLfloat intensity)
+    : m_position{pos}
+    , m_direction {dir}
+    , m_color {color}
+    , m_angleInnerCone {innerAngle}
+    , m_angleOuterCone {outerAngle}
+    , m_intensity {intensity}
 {
 }
 
 void SpotLight::setColor(Vec3& color)
 {
-    color = color;
-    dirty = true;
+    m_color = color;
+    m_dirty = true;
 }
 
 void SpotLight::setIntensity(GLfloat intensity)
 {
-    intensity = intensity;
-    dirty = true;
+    m_intensity = intensity;
+    m_dirty = true;
 }
 
 void SpotLight::setDirection(Vec3& dir)
 {
-    direction = dir;
-    dirty = true;
+    m_direction = dir;
+    m_dirty = true;
 }
 
 void SpotLight::setPosition(Vec3& pos)
 {
-    position = pos;
-    dirty = true;
+    m_position = pos;
+    m_dirty = true;
+}
+
+void SpotLight::setCone(GLfloat innerAngle, GLfloat outerAngle)
+{
+    m_angleInnerCone = innerAngle;
+    m_angleOuterCone = outerAngle;
+    m_dirty = true;
 }
 
 void SpotLight::upload(GLuint shader, site_t i)
 {
-    if (!dirty) return;
+    if (!m_dirty) return;
     /*
      * todo
      */
-    dirty = false;
+    m_dirty = false;
 }

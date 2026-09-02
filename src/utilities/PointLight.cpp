@@ -4,29 +4,33 @@
 
 #include "../../include/PointLight.h"
 
-PointLight::PointLight(Vec3& pos, Vec3& color, GLfloat intensity)
-    : position{pos}
-    , color{color}
-    , intensity {intensity}
+PointLight::PointLight(Vec3& pos, Vec3& color, GLfloat constant, GLfloat linear, GLfloat quadratic)
+    : m_position{pos}
+    , m_color{color}
+    , m_constant {constant}
+    , m_linear {linear}
+    , m_quadratic {quadratic}
 {
 }
 
 void PointLight::setPosition(Vec3& pos)
 {
-    position = pos;
-    dirty = true;
+    m_position = pos;
+    m_dirty = true;
 }
 
 void PointLight::setColor(Vec3& color)
 {
-    color = color;
-    dirty = true;
+    m_color = color;
+    m_dirty = true;
 }
 
-void PointLight::setIntensity(GLfloat intensity)
+void PointLight::setAttenuationFactors(GLfloat constant, GLfloat linear, GLfloat quadratic)
 {
-    intensity = intensity;
-    dirty = true;
+    m_constant = constant;
+    m_linear = linear;
+    m_quadratic = quadratic;
+    m_dirty = true;
 }
 
 void PointLight::upload(GLuint shader, size_t i)

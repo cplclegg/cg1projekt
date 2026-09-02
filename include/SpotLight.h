@@ -9,16 +9,17 @@
 
 class SpotLight
 {
-    Vec3 position, direction, color;
-    GLfloat angleInnerCone, angleOuterCone;
-    GLfloat intensity;
-    bool dirty {true};
+    Vec3 m_position, m_direction, m_color;
+    GLfloat m_angleInnerCone, m_angleOuterCone;
+    GLfloat m_intensity;
+    bool m_dirty {true};
 public:
-    SpotLight(Vec3& pos, Vec3& dir, Vec3& color, GLfloat innerAngle, GLfloat outerAngle);
+    SpotLight(Vec3& pos, Vec3& dir, Vec3& color, GLfloat innerAngle, GLfloat outerAngle, GLfloat intensity);
     void setPosition(Vec3& pos);
     void setDirection(Vec3& dir);
     void setColor(Vec3& color);
     void setIntensity(GLfloat intensity);
+    void setCone(GLfloat innerAngle, GLfloat outerAngle);
     void upload(GLuint shader, size_t i);
 };
 

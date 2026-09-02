@@ -10,14 +10,14 @@
 
 class PointLight
 {
-    Vec3 position, color;
-    GLfloat intensity;
-    bool dirty {true};
+    Vec3 m_position, m_color;
+    GLfloat m_constant, m_linear, m_quadratic;
+    bool m_dirty {true};
 public:
-    PointLight(Vec3& pos, Vec3& color, GLfloat intensity);
+    PointLight(Vec3& pos, Vec3& color, GLfloat constant, GLfloat linear, GLfloat quadratic);
     void setPosition(Vec3& pos);
     void setColor(Vec3& color);
-    void setIntensity(GLfloat intensity);
+    void setAttenuationFactors(GLfloat constant, GLfloat linear, GLfloat quadratic);
     void upload(GLuint shader, size_t i);
 };
 
