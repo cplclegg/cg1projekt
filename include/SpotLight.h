@@ -21,7 +21,7 @@ public:
     void setIntensity(GLfloat intensity);
     void setCone(GLfloat innerAngle, GLfloat outerAngle);
     void setDirty();
-    void upload(const GLuint shader, size_t i) const;
+    void upload(GLuint shader, size_t i);
 };
 
 
