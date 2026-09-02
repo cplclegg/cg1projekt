@@ -45,11 +45,18 @@ void SpotLight::setCone(GLfloat innerAngle, GLfloat outerAngle)
     m_dirty = true;
 }
 
-void SpotLight::upload(GLuint shader, site_t i)
+void SpotLight::setDirty()
+{
+    m_dirty = true;
+}
+
+void SpotLight::upload(const GLuint shader, site_t i) const
 {
     if (!m_dirty) return;
     /*
      * todo
      */
+
+
     m_dirty = false;
 }

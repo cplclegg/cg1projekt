@@ -33,12 +33,17 @@ void PointLight::setAttenuationFactors(GLfloat constant, GLfloat linear, GLfloat
     m_dirty = true;
 }
 
-void PointLight::upload(GLuint shader, size_t i)
+void PointLight::setDirty()
 {
-    if (!dirty) return;
+    m_dirty = true;
+}
+
+void PointLight::upload(const GLuint shader, const size_t i)
+{
+    if (!m_dirty) return;
     /*
      * todo
      */
-    dirty = false;
+    m_dirty = false;
 }
 
