@@ -14,8 +14,8 @@ CubeMap::CubeMap(
     const std::filesystem::path& left,
     const std::filesystem::path& top,
     const std::filesystem::path& bot,
-    const std::filesystem::path& front,
-    const std::filesystem::path& back
+    const std::filesystem::path& back,
+    const std::filesystem::path& front
     )
         : m_locations
         {
@@ -101,7 +101,7 @@ void CubeMap::loadImageData()
 {
     bool success {true};
     stbi_set_flip_vertically_on_load(false);
-    for (size_t i = 0; i < 6; ++i)
+  /*  for (size_t i = 0; i < 6; ++i)
     {
         unsigned char *image = stbi_load(
             m_locations[i].c_str(),
@@ -112,11 +112,59 @@ void CubeMap::loadImageData()
             );
         m_imageData.push_back(image);
         success = success && m_imageData[i];
-    }
-    if (!success)
+    } */
+    unsigned char *left = stbi_load(
+            m_locations[0].c_str(),
+            &m_width,
+            &m_height,
+            &m_channels,
+            0
+            );
+    unsigned char *right = stbi_load(
+        m_locations[1].c_str(),
+        &m_width,
+        &m_height,
+        &m_channels,
+        0
+        );
+    unsigned char *top = stbi_load(
+        m_locations[2].c_str(),
+        &m_width,
+        &m_height,
+        &m_channels,
+        0
+        );
+    unsigned char *bot = stbi_load(
+        m_locations[3].c_str(),
+        &m_width,
+        &m_height,
+        &m_channels,
+        0
+        );
+    unsigned char *front = stbi_load(
+        m_locations[4].c_str(),
+        &m_width,
+        &m_height,
+        &m_channels,
+        0
+        );
+    unsigned char *back = stbi_load(
+        m_locations[5].c_str(),
+        &m_width,
+        &m_height,
+        &m_channels,
+        0
+        );
+    if (!(left && right && bot && top && front && back))
     {
         throw std::runtime_error("Error loading image data on cube map creation");
     }
+    m_imageData.push_back(left);
+    m_imageData.push_back(right);
+    m_imageData.push_back(top);
+    m_imageData.push_back(bot);
+    m_imageData.push_back(front);
+    m_imageData.push_back(back);
 }
 
 GLuint CubeMap::createTexture()
@@ -225,6 +273,7 @@ void CubeMap::draw(const Mat4& projection, const Mat4& view) const
     glUniformMatrix4fv(viewLocation, 1, GL_FALSE, cubeView.getMatrix());
     glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, projection.getMatrix());
     glDrawArrays(GL_TRIANGLES, 0, 36);
+    //glfwSwapBuffers(window);
     glBindVertexArray(0);
     glDepthFunc(GL_LESS);
 }
