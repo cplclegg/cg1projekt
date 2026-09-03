@@ -10,21 +10,21 @@
 using namespace std;
 CubeMap::CubeMap(
     ShaderProgram& shader,
-    const std::filesystem::path& right,
-    const std::filesystem::path& left,
-    const std::filesystem::path& top,
-    const std::filesystem::path& bot,
-    const std::filesystem::path& back,
-    const std::filesystem::path& front
+    const std::filesystem::path& posX,
+    const std::filesystem::path& negX,
+    const std::filesystem::path& posY,
+    const std::filesystem::path& negY,
+    const std::filesystem::path& posZ,
+    const std::filesystem::path& negZ
     )
         : m_locations
         {
-            ResourceLocator::getResourcePath(right),
-            ResourceLocator::getResourcePath(left),
-            ResourceLocator::getResourcePath(top),
-            ResourceLocator::getResourcePath(bot),
-            ResourceLocator::getResourcePath(back),
-            ResourceLocator::getResourcePath(front)
+            ResourceLocator::getResourcePath(posX),
+            ResourceLocator::getResourcePath(negX),
+            ResourceLocator::getResourcePath(posY),
+            ResourceLocator::getResourcePath(negY),
+            ResourceLocator::getResourcePath(posZ),
+            ResourceLocator::getResourcePath(negZ)
         }
         , m_shader {shader}
 {
