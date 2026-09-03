@@ -56,6 +56,9 @@ public:
 
     Mat3 getNormalMatrix();
 
+    void invert();
+    Mat4 inverseCopy() const;
+
     Mat4 copyWithoutTranslation() const;
     const GLfloat* getMatrix() const;
     // Testing helpers
