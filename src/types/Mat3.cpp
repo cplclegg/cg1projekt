@@ -198,6 +198,11 @@ Mat3 Mat3::transposeCopy() const
     return result;
 }
 
+const GLfloat* Mat3::getMatrix() const
+{
+    return m_matrix;
+}
+
 // ------------- Utility -------------- //
 
 void Mat3::directPrint() const
