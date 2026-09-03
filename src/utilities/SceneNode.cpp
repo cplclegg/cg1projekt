@@ -28,16 +28,16 @@ void SceneNode::draw(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& project
     //Mat4 worldTransform {};
     if (!children.empty())
     {
-        std::cout << "entered if case for child scene nodes" << std::endl;
+        //std::cout << "entered if case for child scene nodes" << std::endl;
         for (auto& child : children)
         {
-            std::cout << "drawing child" << std::endl;
+            //std::cout << "drawing child" << std::endl;
             child.draw(worldTransform, viewMatrix, projectionMatrix, skyboxTextureID, lights);
         }
     }
 
     Mat3 normalMatrix { (projectionMatrix * viewMatrix * worldTransform).getNormalMatrix() };
-
+    Mat4 cameraWorld {viewMatrix.inverseCopy()};
     object.getMaterial().bind();
     lights.uploadLights(object.getMaterial().getShader());
     glBindVertexArray(object.getVao());
@@ -59,9 +59,12 @@ void SceneNode::draw(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& project
     glUniformMatrix4fv(projLocation, 1, GL_FALSE, projectionMatrix.getMatrix());
     GLint normalLocation = glGetUniformLocation(object.getMaterial().getShader(), "mNormal");
     glUniformMatrix3fv(normalLocation, 1, GL_FALSE, normalMatrix.getMatrix());
-    std::cout << "world transform:\n";
+    GLint viewPosLocation = glGetUniformLocation(object.getMaterial().getShader(), "viewPos");
+    glUniform3f(viewPosLocation, cameraWorld(3,0), cameraWorld(3,1), cameraWorld(3,2));
+    //std::cout << viewMatrix(3,0) << " " << viewMatrix(3,1) << " " << viewMatrix(3,2) << std::endl;
+    /*std::cout << "world transform:\n";
     worldTransform.directPrint();
-    std::cout << std::endl;
+    std::cout << std::endl;*/
     glDrawArrays(GL_TRIANGLES, 0, object.getVertexCount());
 }
 
