@@ -38,6 +38,7 @@ public:
     void transpose();
     Mat3 transposeCopy() const;
     void directPrint() const;
+    const GLfloat* getMatrix() const;
 };
 
 

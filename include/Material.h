@@ -14,6 +14,7 @@ class Material
 private:
     GLuint m_shader;
     TextureData m_diffuseMap;
+    TextureData m_diffuseDetailMap;
     TextureData m_normalMap;
     TextureData m_specularMap;
     TextureData m_emissiveMap;
@@ -26,6 +27,7 @@ public:
     Material(
         GLuint shader,
         const TextureData& diffuse,
+        const TextureData& diffuseDetail,
         const TextureData& normal,
         const TextureData& specular,
         const TextureData& emissive
@@ -34,6 +36,7 @@ public:
     Material(
         GLuint shader,
         const TextureData& diffuse,
+        const TextureData& diffuseDetail,
         const TextureData& normal,
         const TextureData& specular,
         const TextureData& emissive,

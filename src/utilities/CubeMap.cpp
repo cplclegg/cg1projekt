@@ -10,21 +10,21 @@
 using namespace std;
 CubeMap::CubeMap(
     ShaderProgram& shader,
-    const std::filesystem::path& right,
-    const std::filesystem::path& left,
-    const std::filesystem::path& top,
-    const std::filesystem::path& bot,
-    const std::filesystem::path& back,
-    const std::filesystem::path& front
+    const std::filesystem::path& posX,
+    const std::filesystem::path& negX,
+    const std::filesystem::path& posY,
+    const std::filesystem::path& negY,
+    const std::filesystem::path& posZ,
+    const std::filesystem::path& negZ
     )
         : m_locations
         {
-            ResourceLocator::getResourcePath(right),
-            ResourceLocator::getResourcePath(left),
-            ResourceLocator::getResourcePath(top),
-            ResourceLocator::getResourcePath(bot),
-            ResourceLocator::getResourcePath(back),
-            ResourceLocator::getResourcePath(front)
+            ResourceLocator::getResourcePath(posX),
+            ResourceLocator::getResourcePath(negX),
+            ResourceLocator::getResourcePath(posY),
+            ResourceLocator::getResourcePath(negY),
+            ResourceLocator::getResourcePath(posZ),
+            ResourceLocator::getResourcePath(negZ)
         }
         , m_shader {shader}
 {
@@ -78,21 +78,19 @@ void CubeMap::createVboAndVao()
         -1.0f, -1.0f,  1.0f,
          1.0f, -1.0f,  1.0f
     };
-    glGenBuffers(1, &m_vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    glBufferData(GL_ARRAY_BUFFER, 36, skyboxVertices, GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
     glGenVertexArrays(1, &m_vao);
+    glGenBuffers(1, &m_vbo);
     glBindVertexArray(m_vao);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
     glVertexAttribPointer(
         0,
         3,
         GL_FLOAT,
         GL_FALSE,
         3*sizeof(GLfloat),
-        0
+        (void*)0
     );
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -102,22 +100,71 @@ void CubeMap::createVboAndVao()
 void CubeMap::loadImageData()
 {
     bool success {true};
-    for (size_t i = 0; i < 6; ++i)
+    stbi_set_flip_vertically_on_load(false);
+  /*  for (size_t i = 0; i < 6; ++i)
     {
-        m_imageData.push_back(stbi_load(
+        unsigned char *image = stbi_load(
             m_locations[i].c_str(),
             &m_width,
             &m_height,
             &m_channels,
             0
-            ));
+            );
+        m_imageData.push_back(image);
         success = success && m_imageData[i];
-    }
-    if (!success)
+    } */
+    unsigned char *left = stbi_load(
+            m_locations[0].c_str(),
+            &m_width,
+            &m_height,
+            &m_channels,
+            0
+            );
+    unsigned char *right = stbi_load(
+        m_locations[1].c_str(),
+        &m_width,
+        &m_height,
+        &m_channels,
+        0
+        );
+    unsigned char *top = stbi_load(
+        m_locations[2].c_str(),
+        &m_width,
+        &m_height,
+        &m_channels,
+        0
+        );
+    unsigned char *bot = stbi_load(
+        m_locations[3].c_str(),
+        &m_width,
+        &m_height,
+        &m_channels,
+        0
+        );
+    unsigned char *front = stbi_load(
+        m_locations[4].c_str(),
+        &m_width,
+        &m_height,
+        &m_channels,
+        0
+        );
+    unsigned char *back = stbi_load(
+        m_locations[5].c_str(),
+        &m_width,
+        &m_height,
+        &m_channels,
+        0
+        );
+    if (!(left && right && bot && top && front && back))
     {
         throw std::runtime_error("Error loading image data on cube map creation");
     }
-
+    m_imageData.push_back(left);
+    m_imageData.push_back(right);
+    m_imageData.push_back(top);
+    m_imageData.push_back(bot);
+    m_imageData.push_back(front);
+    m_imageData.push_back(back);
 }
 
 GLuint CubeMap::createTexture()
@@ -149,7 +196,6 @@ GLuint CubeMap::createTexture()
     }
     glGenTextures(1, &m_textureName);
     glBindTexture(m_target, m_textureName);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     for (unsigned int i = 0; i < m_imageData.size(); ++i)
     {
         glTexImage2D(
@@ -212,6 +258,7 @@ bool CubeMap::isUsable() const
 
 void CubeMap::draw(const Mat4& projection, const Mat4& view) const
 {
+
     glDepthFunc(GL_LEQUAL);
     glUseProgram(m_shader.getID());
     glBindVertexArray(m_vao);
@@ -226,6 +273,7 @@ void CubeMap::draw(const Mat4& projection, const Mat4& view) const
     glUniformMatrix4fv(viewLocation, 1, GL_FALSE, cubeView.getMatrix());
     glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, projection.getMatrix());
     glDrawArrays(GL_TRIANGLES, 0, 36);
+    //glfwSwapBuffers(window);
     glBindVertexArray(0);
     glDepthFunc(GL_LESS);
 }

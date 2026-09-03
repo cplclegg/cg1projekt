@@ -7,6 +7,7 @@
 Material::Material(
     const GLuint shader,
     const TextureData& diffuse,
+    const TextureData& diffuseDetail,
     const TextureData& normal,
     const TextureData& specular,
     const TextureData& emissive,
@@ -16,6 +17,7 @@ Material::Material(
     )
     : m_shader {shader}
     , m_diffuseMap {diffuse}
+    , m_diffuseDetailMap {diffuseDetail}
     , m_normalMap {normal}
     , m_specularMap {specular}
     , m_emissiveMap {emissive}
@@ -28,12 +30,14 @@ Material::Material(
 Material::Material(
     const GLuint shader,
     const TextureData& diffuse,
+    const TextureData& diffuseDetail,
     const TextureData& normal,
     const TextureData& specular,
     const TextureData& emissive
     )
     : m_shader {shader}
     , m_diffuseMap {diffuse}
+    , m_diffuseDetailMap {diffuseDetail}
     , m_normalMap {normal}
     , m_specularMap {specular}
     , m_emissiveMap {emissive}
@@ -92,6 +96,17 @@ void Material::bind()
         m_emissiveMap.applyParameters();
         GLint emissiveMapUniformLoc = glGetUniformLocation(m_shader, "emissiveMap");
         glUniform1i(emissiveMapUniformLoc, 3);
+    } else
+    {
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+    glActiveTexture(GL_TEXTURE4);
+    if (m_emissiveMap.isUsable())
+    {
+        glBindTexture(GL_TEXTURE_2D, m_diffuseDetailMap.getTextureName());
+        m_diffuseDetailMap.applyParameters();
+        GLint diffuseDetailMapUniformLoc = glGetUniformLocation(m_shader, "diffuseDetailMap");
+        glUniform1i(diffuseDetailMapUniformLoc, 4);
     } else
     {
         glBindTexture(GL_TEXTURE_2D, 0);

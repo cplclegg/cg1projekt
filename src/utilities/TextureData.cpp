@@ -35,7 +35,10 @@ void TextureData::loadImageData()
 
 GLuint TextureData::createTexture()
 {
-    assert(m_imageData != nullptr);
+    if (m_imageData == nullptr)
+    {
+        return 0;
+    }
     assert(m_width > 0);
     assert(m_height > 0);
     assert(m_target == GL_TEXTURE_2D);

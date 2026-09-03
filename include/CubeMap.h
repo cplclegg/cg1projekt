@@ -31,12 +31,12 @@ private:
 public:
     CubeMap(
         ShaderProgram& shader,
-        const std::filesystem::path& right,
-        const std::filesystem::path& left,
-        const std::filesystem::path& top,
-        const std::filesystem::path& bot,
-        const std::filesystem::path& back,
-        const std::filesystem::path& front
+        const std::filesystem::path& posX,
+        const std::filesystem::path& negX,
+        const std::filesystem::path& posY,
+        const std::filesystem::path& negY,
+        const std::filesystem::path& posZ,
+        const std::filesystem::path& negZ
     );
     void loadImageData();
     GLuint createTexture();

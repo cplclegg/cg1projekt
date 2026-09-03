@@ -13,4 +13,7 @@
 #include "Material.h"
 #include "GLContext.h"
 #include "CubeMap.h"
+#include "PointLight.h"
+#include "SpotLight.h"
+#include "LightSources.h"
 #endif //CG1PROJEKT_UTILITIES_H
