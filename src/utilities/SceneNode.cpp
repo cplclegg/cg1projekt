@@ -24,6 +24,7 @@ void SceneNode::addChild(SceneNode& child)
 void SceneNode::draw(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& projectionMatrix, GLuint skyboxTextureID, LightSources& lights)
 {
     Mat4 worldTransform {parentWorldTransform*localTransform};
+
     //Mat4 worldTransform {};
     if (!children.empty())
     {
@@ -34,6 +35,8 @@ void SceneNode::draw(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& project
             child.draw(worldTransform, viewMatrix, projectionMatrix, skyboxTextureID, lights);
         }
     }
+
+    Mat3 normalMatrix { (projectionMatrix * viewMatrix * worldTransform).getNormalMatrix() };
 
     object.getMaterial().bind();
     lights.uploadLights(object.getMaterial().getShader());
@@ -54,6 +57,8 @@ void SceneNode::draw(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& project
     glUniformMatrix4fv(viewLocation, 1, GL_FALSE, viewMatrix.getMatrix());
     GLint projLocation = glGetUniformLocation(object.getMaterial().getShader(), "mProj");
     glUniformMatrix4fv(projLocation, 1, GL_FALSE, projectionMatrix.getMatrix());
+    GLint normalLocation = glGetUniformLocation(object.getMaterial().getShader(), "mNormal");
+    glUniformMatrix3fv(normalLocation, 1, GL_FALSE, normalMatrix.getMatrix());
     std::cout << "world transform:\n";
     worldTransform.directPrint();
     std::cout << std::endl;
