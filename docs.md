@@ -125,6 +125,69 @@ ResourseLocator provides a single static function that takes a ``std::filesystem
 ### Member functions
 - ``std::filesystem::path getResourcePath(const std::filesystem::path& relativePath)`` implements completion of relative path to user-system specific absolute path
 
+## GLcontext
+
+GLcontext provides a static method that initializes the opengl context as well as glfw and opens a window with the provided dimensions.
+
+### Methods
+
+- ``GLFWwindow* GLContext::initializeContext(int width, int height)`` initializes the opengl context as well as glfw and opens a window with the provided dimensions.
+
+## ResourceLocator
+
+ResourceLocator provides a single static method that reads the user specific content root that was determined by meson at build time from the header file created by meson and uses it to complete a path relative to the content root to an absolute path usable for file access.
+
+### Methods
+
+- ``std::filesystem::path ResourceLocator::getResourcePath(const std::filesystem::path& relativePath)`` returns the system specific absolute path to the resource at provided relative location. Only works on the system that the program was built on using meson!
+
+## PointLight
+
+PointLight stores information about a point light, provides data access methods, and a method to upload this light source to a provided shader program.
+
+### Constructors
+
+- ``PointLight::PointLight(const Vec3& pos, const Vec3& color, const GLfloat constant, const GLfloat linear, const GLfloat quadratic)``
+
+### Member functions
+
+- ``void PointLight::upload(const GLuint shader, const size_t i)`` uploads the data to a uniform array of struct PointLight (see shader documentation) at index i
+- ``void PointLight::setPosition(Vec3& pos)``
+- ``void PointLight::setColor(Vec3& color)``
+- ``void PointLight::setAttenuationFactors(GLfloat constant, GLfloat linear, GLfloat quadratic)``
+
+## SpotLight 
+
+PointLight stores information about a spot light, provides data access methods, and a method to upload this light source to a provided shader program.
+
+### Constructors
+
+- ``SpotLight::SpotLight(Vec3& pos, Vec3& dir, Vec3& color, GLfloat innerAngle, GLfloat outerAngle, GLfloat intensity)``
+
+### Member functions
+
+- ``void SpotLight::upload(const GLuint shader, const size_t i)`` uploads the data to a uniform array of struct PointLight (see shader documentation) at index i
+- ``void SpotLight::setColor(Vec3& color)``
+- ``void SpotLight::setIntensity(GLfloat intensity)``
+- ``void SpotLight::setDirection(Vec3& dir)``
+- ``void SpotLight::setPosition(Vec3& pos)``
+- ``void SpotLight::setCone(GLfloat innerAngle, GLfloat outerAngle)``
+
+## LightSources
+
+Stores vectors of point lights and spot lights and provides methods that iterate over those vectors and call the upload methods of the lights contained in them.
+
+### Constructors 
+
+- ``LightSources::LightSources() = default;``
+
+### Member functions
+
+- ``void LightSources::addPointLight(const PointLight& pointLight)``
+- ``void LightSources::addSpotLight(const SpotLight& spotLight)``
+- ``void LightSources::clearAllLights()``
+- ``void LightSources::uploadLights(const GLuint& shader) const`` iterates over both vectors of lights and calls upload, handing through the shader and the index of the current light
+
 # Types
 
 ## Vector Types
