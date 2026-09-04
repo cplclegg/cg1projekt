@@ -166,6 +166,21 @@ component of 1.0.
     gl_FragColor = vec4(result, 1.0);
 ```
 
+So in total the minimal main-function of the fragment shader looks like this:
+```glsl
+void main() {
+    vec3 norm = normalize(fNormal);
+    vec3 viewDir = normalize(viewPos - FragPos);
+
+    vec3 result = vec3(0.0, 0.0, 0.0);
+    for (int i = 0; i < numPointLights; i++) {
+        result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
+    }
+
+    gl_FragColor = vec4(result, 1.0);
+}
+```
+
 ### Texture samplers
 
 The cpu side abstraction layer expects the fragment shader to declare up to 6 samplers.
