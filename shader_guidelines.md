@@ -176,6 +176,12 @@ void main() {
     for (int i = 0; i < numPointLights; i++) {
         result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
     }
+    for (int j = 0; j < numSpotLights; j++) {
+        result += CalcSpotLight(spotLights[j], norm, FragPos, viewDir);
+    } /* remove comment if dir lights have been implemented 
+    for (int i = 0; i < numDirLights; i++) {
+        result += CalcDirLight(dirLights[i], norm, FragPos, viewDir);
+    } */
 
     gl_FragColor = vec4(result, 1.0);
 }
