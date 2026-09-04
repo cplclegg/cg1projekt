@@ -10,12 +10,23 @@ void LightSources::addPointLight(const PointLight& pointLight)
 {
     if (m_pointLights.size() >= 10) throw std::runtime_error("Max point lights exceeded. Max is 10.");
     m_pointLights.push_back(std::make_shared<PointLight>(pointLight));
+}
 
+void LightSources::addLight(const PointLight& pointLight)
+{
+    if (m_pointLights.size() >= 10) throw std::runtime_error("Max point lights exceeded. Max is 10.");
+    m_pointLights.push_back(std::make_shared<PointLight>(pointLight));
 }
 
 void LightSources::addSpotLight(const SpotLight& spotLight)
 {
-    if (m_pointLights.size() >= 2) throw std::runtime_error("Max spot lights exceeded. Max is 2.");
+    if (m_spotLights.size() >= 2) throw std::runtime_error("Max spot lights exceeded. Max is 2.");
+    m_spotLights.push_back(std::make_shared<SpotLight>(spotLight));
+}
+
+void LightSources::addLight(const SpotLight& spotLight)
+{
+    if (m_spotLights.size() >= 2) throw std::runtime_error("Max spot lights exceeded. Max is 2.");
     m_spotLights.push_back(std::make_shared<SpotLight>(spotLight));
 }
 
