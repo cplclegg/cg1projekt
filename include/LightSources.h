@@ -35,6 +35,8 @@ public:
     LightSources();
     void addSpotLight(const SpotLight& spotLight);
     void addPointLight(const PointLight& pointLight);
+    void addLight(const PointLight& pointLight);
+    void addLight(const SpotLight& spotLight);
     void clearAllLights();
     void uploadLights(const GLuint& shader) const;
 };
