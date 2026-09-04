@@ -42,8 +42,8 @@ void LightSources::uploadLights(const GLuint& shader) const
 {
     const GLint numPointLightsLoc = glGetUniformLocation(shader, "numPointLights");
     const GLint numSpotLightsLoc = glGetUniformLocation(shader, "numSpotLights");
-    glUniform1f(numPointLightsLoc, m_pointLights.size());
-    glUniform1f(numSpotLightsLoc, m_spotLights.size());
+    glUniform1i(numPointLightsLoc, m_pointLights.size());
+    glUniform1i(numSpotLightsLoc, m_spotLights.size());
     for (size_t i = 0; i < m_pointLights.size(); ++i)
     {
         m_pointLights[i]->upload(shader, i);
