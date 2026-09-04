@@ -107,8 +107,10 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
     float diffuseCoefficient = max (dot( normal, lightDir.xyz ), 0.0);
 
     // spec
-    vec3 reflectDir = reflect(-lightDir, normal);
-    float specularCoefficient = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
+    //vec3 reflectDir = reflect(-lightDir, normal);                                   // phong
+    //float specularCoefficient = pow(max(dot(viewDir, reflectDir), 0.0), shininess); // phong
+    vec3 halfwayDir = normalize(viewDir + lightDir);                               // blinn-phong
+    float specularCoefficient = pow(max(dot(normal, halfwayDir), 0.0), shininess); // blinn-phong
 
     // calc result
     vec3 ambient = light.pl_color * vec3(texture(diffuseMap, textureCoord));
