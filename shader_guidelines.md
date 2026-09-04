@@ -182,7 +182,7 @@ uniform samplerCube skybox;
 
 ### Texture-related uniforms
 
-The fragment shader can declare up to 3 further uniforms to influence lighting and texture.
+The fragment shader declares up to 3 further uniforms to influence lighting and texture. These are set to standard values if not changed in the corresponding Material object.
 ```glsl
 uniform float shininess;
 uniform vec3 specularColor;
