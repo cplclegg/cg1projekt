@@ -94,9 +94,17 @@ test_exe = executable(
     dependencies : graphics_deps
 )
 
-globe_exe = executable(
-    'globe_demo',
-    'uebungsblaetter/uebung7/earth.cpp',
+#globe_exe = executable(
+#    'globe_demo',
+#    'uebungsblaetter/uebung7/earth.cpp',
+#    include_directories : inc,
+#    link_with : core_lib,
+#    dependencies : graphics_deps
+#)
+
+beispiel_exe = executable(
+    'beispiel',
+    'beispiel/bsp_main.cpp',
     include_directories : inc,
     link_with : core_lib,
     dependencies : graphics_deps
