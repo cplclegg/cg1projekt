@@ -12,7 +12,7 @@ int main()
     constexpr int width {1920};
     constexpr int height {1080};
     auto window = GLContext::initializeContext(width, height);
-
+    LightSources lights;
     // shader erdkugel
     ShaderProgram earthshader {"beispiel/shaders/vertexShader.glsl",
         "beispiel/shaders/fragmentShader.glsl"};
@@ -38,17 +38,14 @@ int main()
 
     //
     TextureData empty {};
-    TextureData c1_base {"beispiel/textures/candles/Candle_1_baseColor.png"};
-    c1_base.createTexture();
-    TextureData c1_normal {"beispiel/textures/candles/Candle_1_normal.png"};
-    c1_normal.createTexture();
+
     TextureData cf_base {"beispiel/textures/candles/Flame_baseColor.png"};
     cf_base.createTexture();
     TextureData cf_emissive {"beispiel/textures/candles/Flame_baseColor.png"};
     cf_emissive.createTexture();
 
     Material candle_fmat {
-        flameshader.getID(),
+        earthshader.getID(),
         cf_base,
         empty,
         empty,
@@ -56,12 +53,19 @@ int main()
         cf_emissive
     };
 
+    // candle 1 renderable setup
+    TextureData c1_base {"beispiel/textures/candles/Candle_1_baseColor.png"};
+    c1_base.createTexture();
+    TextureData c1_normal {"beispiel/textures/candles/Candle_1_normal.png"};
+    c1_normal.createTexture();
+    TextureData c1_specular{"beispiel/textures/candles/Candle_1_specular.jpg"};
+    c1_specular.createTexture();
     Material candle1mat {
-        candleshader.getID(),
+        earthshader.getID(),
         c1_base,
         empty,
         c1_normal,
-        empty,
+        c1_specular,
         empty
     };
     // material-object zusammenfassen
@@ -84,17 +88,75 @@ int main()
         candle_fmat
     };
 
+    // candle 2 renderable setup
+    ObjectData candle2_geometry {"beispiel/objects/candle/candle2.obj"};
+    TextureData c2_base {"beispiel/textures/candles/Candle_2_baseColor.png"};
+    c2_base.createTexture();
+    TextureData c2_normal {"beispiel/textures/candles/Candle_2_normal.png"};
+    c2_normal.createTexture();
+    Material candle2mat {
+        earthshader.getID(),
+        c2_base,
+        empty,
+        c2_normal,
+        empty,
+        empty
+    };
+    Renderable candle2_data {
+        candle2_geometry,
+        candle2mat
+    };
+
+    // candle 3 renderable setup
+    ObjectData candle3_geometry {"beispiel/objects/candle/candle3.obj"};
+    TextureData c3_base {"beispiel/textures/candles/Candle_3_baseColor.png"};
+    c3_base.createTexture();
+    TextureData c3_normal {"beispiel/textures/candles/Candle_3_normal.png"};
+    c3_normal.createTexture();
+    Material candle3mat {
+        earthshader.getID(),
+        c3_base,
+        empty,
+        c3_normal,
+        empty,
+        empty
+    };
+    Renderable candle3_data {
+        candle3_geometry,
+        candle3mat
+    };
 
 
+    // candle scene insertions
+    // cluster 1
     SceneNode candle1_1 {candle1_data};
-    SceneNode candle1_1_f {candle_fdata};
     candle1_1.translate(Vec3{1.0993350744247437, 0.23523379862308502, -1.183178186416626});
+    SceneNode candle1_1_f {candle_fdata};
     candle1_1_f.translate(Vec3{0.0, 0.225, 0.0});
     candle1_1.addChild(candle1_1_f);
-    SceneNode candle1_2_f {candle_fdata};
+    PointLight candle1_1_light {
+        Vec3{1.0993350744247437, 0.23523379862308502+0.225, -1.183178186416626},
+        Vec3{245.0/255.0, 241.0/255.0, 217.0/255.0},
+        1.0, 0.7, 1.8
+    };
+    lights.addLight(candle1_1_light);
+    SceneNode candle2_1 {candle2_data};
+    candle2_1.translate(Vec3{1.0876142978668213, 0.14632248878479004, -1.4463196992874146});
+    SceneNode candle2_1_f {candle_fdata};
+    candle2_1_f.translate(Vec3{0.0, 0.125, 0.0});
+    candle2_1.addChild(candle2_1_f);
+    SceneNode candle3_1 {candle3_data};
+    candle3_1.translate(Vec3{0.8096647262573242, 0.10961973667144775, -1.3286041021347046});
+    SceneNode candle3_1_f {candle_fdata};
+    candle3_1_f.translate(Vec3{0.0, 0.072, 0.0});
+    candle3_1.addChild(candle3_1_f);
+
 
     SceneNode candle1_2 {candle1_data};
     candle1_2.translate(Vec3{-0.3676091432571411, 0.23523379862308502, -1.183178186416626});
+    SceneNode candle1_2_f {candle_fdata};
+    candle1_2_f.translate(Vec3{0.0, 0.225, 0.0});
+    candle1_2.addChild(candle1_2_f);
     Material table_mat {
         earthshader.getID(),
         earth_day,
@@ -103,6 +165,14 @@ int main()
         earth_clouds,
         TextureData {}
     };
+    PointLight candle1_2_light {
+        Vec3{-0.3676091432571411, 0.23523379862308502+0.225, -1.183178186416626},
+        Vec3{245.0/255.0, 241.0/255.0, 217.0/255.0},
+        1.0, 0.7, 1.8
+    };
+    lights.addLight(candle1_2_light);
+
+    // candle 2 scene insertions
 
     // renderable erstellen
     Renderable earth_data {earth_geometry, earth_mat};
@@ -110,6 +180,8 @@ int main()
     SceneNode earth {earth_data};
     earth.addChild(candle1_1);
     earth.addChild(candle1_2);
+    earth.addChild(candle2_1);
+    earth.addChild(candle3_1);
     //
     // cube map
     //
@@ -145,8 +217,8 @@ int main()
     projection.perspective(fovy, aspect, near, far);
 
     PointLight light {Vec3{1.5f, 1.5f, 2.0f}, Vec3{1.0f, 1.0f, 0.0f}, 1.0, 0.022, 0.0019};
-    LightSources lights;
-    lights.addLight(light);
+
+    //lights.addLight(light);
 
     GLfloat radius = 3.0f;
     GLfloat angle = 0.0f;
