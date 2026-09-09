@@ -7,18 +7,34 @@
 #include <thread>
 using namespace std::chrono_literals;
 
+//Zustandsvariable für Interaktion
+bool isMagicActive = false;
+
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    // Reagiere nur auf den Moment des Herunterdrückens = GLFW_PRESS
+    if (key == GLFW_KEY_E && action == GLFW_PRESS)
+    {
+        isMagicActive = !isMagicActive;
+    }
+}
+
 int main()
 {
     constexpr double pi = 3.14159265358979323846;
     constexpr int width {1920};
     constexpr int height {1080};
     auto window = GLContext::initializeContext(width, height);
+
+    //Key Callback übergeben
+    glfwSetKeyCallback(window, keyCallback);
+
     LightSources lights;
     // allgemeiner shader
-    ShaderProgram generic_shader {"beispiel/shaders/vertexShader.glsl",
-        "beispiel/shaders/fragmentShader.glsl"};
+    ShaderProgram generic_shader {"beispiel/shaders/vertexShader.glsl", "beispiel/shaders/fragmentShader.glsl"};
     // placeholder for unused texture on Material construction
     TextureData empty {};
+
 
 
     //
@@ -131,6 +147,29 @@ int main()
         candle3mat
     };
 
+    //crystal Renderable setup
+    // ObjectData crystal_geometry {"beispiel/objects/crystal/crystalTria.obj"};
+    // TextureData crystal_base {"beispiel/textures/crystal/Crystals_Lp_M_Crystals_BaseColor.png"};
+    // crystal_base.createTexture();
+    // TextureData crystal_normal {"beispiel/textures/crystal/Crystals_Lp_M_Crystals_Normal.png"};
+    // crystal_normal.createTexture();
+    // TextureData crystal_emmisive {"beispiel/textures/crystal/Crystals_Lp_M_Crystals_Emissive.png"};
+    // crystal_emmisive.createTexture();
+    
+    // Material crystal_mat {
+    //     generic_shader.getID(),
+    //     crystal_base,
+    //     empty,
+    //     crystal_normal,
+    //     empty,
+    //     crystal_emmisive
+    // };
+    // Renderable crystal_data {
+    //     crystal_geometry,
+    //     crystal_mat
+    // };
+    // SceneNode crystal(crystal_data);
+
 
     // light stand in
     //SceneNode light_standins {};
@@ -215,6 +254,9 @@ int main()
     altar.addChild(candleCluster6);
     altar.addChild(candleCluster7);
     //earth.addChild(light_standins);
+    //crystal.scale(Vec3{0.05f,0.05f,0.05f});
+   // crystal.translate(Vec3{0.0f, 1.65f, 0.0f});
+   // altar.addChild(crystal);
 
     //
     // cave renderable setup
@@ -260,6 +302,8 @@ int main()
 
     Mat4 view {};
 
+    
+
     Vec3 center{0.0, 0.0, 0.0};
     Vec3 up{0.0, 1.0, 0.0};
 
@@ -283,8 +327,32 @@ int main()
     while (!glfwWindowShouldClose(window))
     {
         angle += 0.005;
-        Vec3 eye {radius * (GLfloat)sin(angle), 0.3f, radius*(GLfloat)cos(angle)};
+        Vec3 eye {radius * (GLfloat)sin(angle), 2.0f, radius*(GLfloat)cos(angle)};
         view.lookAt(eye, center, up);
+
+        lights.clearAllLights();
+
+        
+        Vec3 targetColor = isMagicActive ? Vec3{1.0f, 0.0f, 0.0f} : Vec3{245.0f / 255.0f, 241.0f / 255.0f, 217.0f / 255.0f};
+
+        // 3. Farbe der existierenden Objekte setzen
+        candle1_1_light.setColor(targetColor);
+        candle1_2_light.setColor(targetColor);
+        candle1_3_light.setColor(targetColor);
+        candle1_4_light.setColor(targetColor);
+        candle1_5_light.setColor(targetColor);
+        candle1_6_light.setColor(targetColor);
+        candle1_7_light.setColor(targetColor);
+
+        // 4. Lichter mit neuer Farbe wieder der LightSources-Instanz übergeben
+        lights.addLight(candle1_1_light);
+        lights.addLight(candle1_2_light);
+        lights.addLight(candle1_3_light);
+        lights.addLight(candle1_4_light);
+        lights.addLight(candle1_5_light);
+        lights.addLight(candle1_6_light);
+        lights.addLight(candle1_7_light);
+        
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         //altar.draw(transform, view, projection, 0, lights);
         cave.draw(transform, view, projection, 0, lights);
