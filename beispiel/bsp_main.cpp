@@ -17,6 +17,10 @@ int main()
     // allgemeiner shader
     ShaderProgram generic_shader {"beispiel/shaders/vertexShader.glsl",
         "beispiel/shaders/fragmentShader.glsl"};
+    // placeholder for unused texture on Material construction
+    TextureData empty {};
+
+
     //
     // altar renderable setup
     //
@@ -41,8 +45,6 @@ int main()
     // renderable in scene node einbauen
     SceneNode altar {altar_data};
 
-    // placeholder for unused texture on Material construction
-    TextureData empty {};
     //
     // candle flame renderable setup
     //
@@ -213,6 +215,30 @@ int main()
     altar.addChild(candleCluster6);
     altar.addChild(candleCluster7);
     //earth.addChild(light_standins);
+
+    //
+    // cave renderable setup
+    //
+    ObjectData cave_geometry {"beispiel/objects/cave/cave_v3_SCULPTED.obj"};
+    TextureData cave_base {"beispiel/textures/cave/Ground103_1K-JPG_Color.jpg"};
+    cave_base.createTexture();
+    TextureData cave_normal {"beispiel/textures/cave/Ground103_1K-JPG_NormalGL.jpg"};
+    cave_base.createTexture();
+    TextureData cave_specular {"beispiel/textures/cave/Ground103_1K-JPG_Roughness.jpg"};
+    cave_specular.createTexture();
+    TextureData cave_bumpMap {"beispiel/textures/cave/Ground103_1K-JPG_AmbientOcclusion.jpg"};
+    cave_specular.createTexture();
+    Material cave_mat {
+        generic_shader.getID(),
+        cave_base,
+        empty,
+        cave_normal,
+        cave_specular,
+        cave_bumpMap
+    };
+    SceneNode cave {cave_geometry, cave_mat};
+    cave.addChild(altar);
+
     //
     // cube map
     //
@@ -260,8 +286,8 @@ int main()
         Vec3 eye {radius * (GLfloat)sin(angle), 0.3f, radius*(GLfloat)cos(angle)};
         view.lookAt(eye, center, up);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        altar.draw(transform, view, projection, 0, lights);
-        //candle1_1.draw(transform, view, projection, 0, lights);
+        //altar.draw(transform, view, projection, 0, lights);
+        cave.draw(transform, view, projection, 0, lights);
         skybox.draw(projection, view);
         glfwPollEvents();
         glfwSwapBuffers(window);
