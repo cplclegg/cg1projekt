@@ -8,13 +8,15 @@
 #include "Renderable.h"
 #include "LightSources.h"
 #include <vector>
+#include <optional>
 class SceneNode
 {
 private:
-    Renderable object;
+    std::optional<Renderable> object;
     Mat4 localTransform {};
     std::vector<SceneNode> children;
 public:
+    SceneNode();
     SceneNode(Renderable& object);
     SceneNode(ObjectData& geometry, Material& material);
     void addChild(SceneNode& child);

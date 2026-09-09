@@ -16,4 +16,5 @@
 #include "PointLight.h"
 #include "SpotLight.h"
 #include "LightSources.h"
+#include "SceneHelpers.h"
 #endif //CG1PROJEKT_UTILITIES_H

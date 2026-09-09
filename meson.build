@@ -48,7 +48,8 @@ core_sources = files(
     'src/utilities/GLContext.cpp',
     'src/utilities/PointLight.cpp',
     'src/utilities/SpotLight.cpp',
-    'src/utilities/LightSources.cpp'
+    'src/utilities/LightSources.cpp',
+    'src/utilities/SceneHelpers.cpp'
 )
 
 test_sources = files(
@@ -94,9 +95,17 @@ test_exe = executable(
     dependencies : graphics_deps
 )
 
-globe_exe = executable(
-    'globe_demo',
-    'uebungsblaetter/uebung7/earth.cpp',
+#globe_exe = executable(
+#    'globe_demo',
+#    'uebungsblaetter/uebung7/earth.cpp',
+#    include_directories : inc,
+#    link_with : core_lib,
+#    dependencies : graphics_deps
+#)
+
+beispiel_exe = executable(
+    'beispiel',
+    'beispiel/bsp_main.cpp',
     include_directories : inc,
     link_with : core_lib,
     dependencies : graphics_deps
