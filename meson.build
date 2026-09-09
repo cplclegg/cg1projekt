@@ -48,7 +48,8 @@ core_sources = files(
     'src/utilities/GLContext.cpp',
     'src/utilities/PointLight.cpp',
     'src/utilities/SpotLight.cpp',
-    'src/utilities/LightSources.cpp'
+    'src/utilities/LightSources.cpp',
+    'src/utilities/SceneHelpers.cpp'
 )
 
 test_sources = files(
