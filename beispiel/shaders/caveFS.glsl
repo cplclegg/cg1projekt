@@ -23,6 +23,7 @@ in vec2 textureCoord;
 in vec3 fNormal;
 in vec3 FragPos;
 
+
 uniform sampler2D diffuseMap;
 uniform sampler2D detailMap;
 uniform sampler2D normalMap;
@@ -33,6 +34,8 @@ uniform samplerCube skybox; // may be needed for environmental reflections
 uniform float shininess;
 uniform vec3 specularColor;
 uniform vec3 diffuseColor;
+
+uniform float time;
 
 uniform vec3 viewPos;
 uniform int numPointLights;
@@ -56,6 +59,7 @@ void main() {
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
     // tiling coordinates
     vec2 tilingCoord = textureCoord*12;
+    vec2 movingTexCoord = tilingCoord + vec2(time*0.02, time*0.01);
     // lighting stuff
     float distance = length(light.pl_pos - fragPos);
     float attenuation = 1.0 / (light.constant + light.linear*distance + light.quadratic*(distance*distance));
@@ -68,7 +72,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
     //float specularCoefficient = pow(max(dot(viewDir, reflectDir), 0.0), shininess); // phong
     vec3 halfwayDir = normalize(viewDir + lightDir);                               // blinn-phong
     float specularCoefficient = pow(max(dot(normal, halfwayDir), 0.0), shininess); // blinn-phong
-    vec3 veins = texture(detailMap, tilingCoord).rgb;
+    vec3 veins = texture(detailMap, tilingCoord).rgb*texture(emissiveMap, movingTexCoord).rgb;
     float mixFactor = veins.b;
     // calc result
     vec3 ambient = mix(vec3(texture(diffuseMap, tilingCoord)) * attenuation, veins, mixFactor);
