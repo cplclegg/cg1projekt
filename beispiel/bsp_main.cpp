@@ -303,10 +303,13 @@ int main()
 
     GLfloat radius = 3.0f;
     GLfloat angle = 0.0f;
-
+    GLfloat crystal_offset = 0.0f;
     while (!glfwWindowShouldClose(window))
     {
         angle += 0.005;
+        crystal_offset += 0.005;
+        Vec3 crystal_animation {0.0, GLfloat(0.001*sin(crystal_offset)), 0.0};
+        crystal->translate(crystal_animation);
         Vec3 eye {radius * (GLfloat)sin(angle), 1.7f, radius*(GLfloat)cos(angle)};
         view.lookAt(eye, center, up);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
