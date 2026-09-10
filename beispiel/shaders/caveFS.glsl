@@ -54,6 +54,8 @@ void main() {
 }
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
+    // tiling coordinates
+    vec2 tilingCoord = textureCoord*12;
     // lighting stuff
     float distance = length(light.pl_pos - fragPos);
     float attenuation = 1.0 / (light.constant + light.linear*distance + light.quadratic*(distance*distance));
@@ -66,22 +68,22 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
     //float specularCoefficient = pow(max(dot(viewDir, reflectDir), 0.0), shininess); // phong
     vec3 halfwayDir = normalize(viewDir + lightDir);                               // blinn-phong
     float specularCoefficient = pow(max(dot(normal, halfwayDir), 0.0), shininess); // blinn-phong
-    vec3 veins = texture(detailMap, textureCoord).rgb;
+    vec3 veins = texture(detailMap, tilingCoord).rgb;
     float mixFactor = veins.b;
     // calc result
-    vec3 ambient = vec3(texture(diffuseMap, textureCoord)) * attenuation;
+    vec3 ambient = mix(vec3(texture(diffuseMap, tilingCoord)) * attenuation, veins, mixFactor);
 
     vec3 diffuse = light.pl_color
-                    * diffuseCoefficient
-                    * vec3(texture(diffuseMap, textureCoord))
-                    * diffuseColor
-                    * attenuation;
+    * diffuseCoefficient
+    * vec3(texture(diffuseMap, tilingCoord))
+    * diffuseColor
+    * attenuation;
     vec3 specular = light.pl_color
-                    * specularCoefficient
-                    * vec3(texture(diffuseMap, textureCoord))
-                    * texture(specularMap, textureCoord).r
-                    * specularColor
-                    * attenuation;
+    * specularCoefficient
+    * vec3(texture(diffuseMap, tilingCoord))
+    * texture(specularMap, tilingCoord).r
+    * specularColor
+    * attenuation;
     return (ambient + diffuse + specular);
 }
 
