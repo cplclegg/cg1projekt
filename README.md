@@ -65,4 +65,11 @@ Slight adaptions have been made to the code in order to fit it into the class Ob
 
 - Texture loading relies on [``stb_image.h``](https://github.com/nothings/stb/blob/master/stb_image.h) from the stb repository at https://github.com/nothings/stb/tree/master
 
+Following models and Textures:
+https://sketchfab.com/3d-models/candles-set-f09212756bc94764a8bcfcd3c7e38f8e (Kerzen)
+
+https://sketchfab.com/3d-models/stone-table-classical-style-6141975473f34118bc71f91352e55a3d (Steinaltar)
+
+https://sketchfab.com/3d-models/torch-d47f1a85c4c846a392cc1d1afca15295 (Fackeln)
+
 tbc
