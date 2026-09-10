@@ -217,6 +217,25 @@ int main()
     //earth.addChild(light_standins);
 
     //
+    // crystal setup
+    //
+    //ShaderProgram crystal_shader {"tba"};
+    ObjectData crystal_geometry {"beispiel/objects/crystal/crystal.obj"};
+    TextureData crystal_base {"beispiel/textures/crystal/crystal_17_2_baseColor.png"};
+    crystal_base.createTexture();
+    Material crystal_mat {
+        generic_shader.getID(),
+        crystal_base,
+        empty,
+        empty,
+        empty,
+        empty
+    };
+    SceneNode crystal {crystal_geometry, crystal_mat};
+    crystal.scale(Vec3{0.3,0.3,0.3});
+    crystal.translate(Vec3{0.0, 1.35, 0.0});
+    altar.addChild(crystal);
+    //
     // cave renderable setup
     //
     ShaderProgram cave_shader {"beispiel/shaders/vertexShader.glsl", "beispiel/shaders/caveFS.glsl"};
@@ -266,7 +285,7 @@ int main()
     GLfloat fovy   = pi / 2.0f;
     GLfloat aspect = static_cast<GLfloat>(width) / static_cast<GLfloat>(height);
     GLfloat near   = 0.1f;
-    GLfloat far    = 10.0f;
+    GLfloat far    = 20.0f;
 
     projection.perspective(fovy, aspect, near, far);
 
@@ -281,7 +300,7 @@ int main()
     while (!glfwWindowShouldClose(window))
     {
         angle += 0.005;
-        Vec3 eye {radius * (GLfloat)sin(angle), 0.3f, radius*(GLfloat)cos(angle)};
+        Vec3 eye {radius * (GLfloat)sin(angle), 1.7f, radius*(GLfloat)cos(angle)};
         view.lookAt(eye, center, up);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         //altar.draw(transform, view, projection, 0, lights);
