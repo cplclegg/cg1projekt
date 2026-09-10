@@ -247,17 +247,20 @@ int main()
     //
     ShaderProgram cave_shader {"beispiel/shaders/vertexShader.glsl", "beispiel/shaders/caveFS.glsl"};
     ObjectData cave_geometry {"beispiel/objects/cave/cave_v3_SCULPTED.obj"};
-    TextureData cave_base {"beispiel/textures/cave/Ground103_1K-JPG_Color.jpg"};
+    TextureData cave_base {"beispiel/textures/cave/rock_texture.jpg"};
     cave_base.createTexture();
-    TextureData cave_veins{"beispiel/textures/cave/ore_halfmasked.jpg"};
+    TextureData cave_veins{"beispiel/textures/cave/ore_veins_purple.jpg"};
     cave_veins.createTexture();
+    TextureData cave_oremask {"beispiel/textures/cave/cave_oremask.jpg"};
+    cave_oremask.createTexture();
+
     Material cave_mat {
         cave_shader.getID(),
         cave_base,
         cave_veins,
         empty,
         empty,
-        empty
+        cave_oremask
     };
     SceneNode cave {cave_geometry, cave_mat};
     cave.addChild(altar);
@@ -300,13 +303,13 @@ int main()
 
     //lights.addLight(light);
 
-
     GLfloat radius = 3.0f;
     GLfloat angle = 0.0f;
     GLfloat crystal_offset = 0.0f;
+    GLfloat movement_speed = 1.0f;
     while (!glfwWindowShouldClose(window))
     {
-        angle += 0.005;
+        //angle += 0.005;
         crystal_offset += 0.005;
         Vec3 crystal_animation {0.0, GLfloat(0.001*sin(crystal_offset)), 0.0};
         crystal->translate(crystal_animation);
@@ -314,7 +317,7 @@ int main()
         view.lookAt(eye, center, up);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         //altar.draw(transform, view, projection, 0, lights);
-        cave.draw(transform, view, projection, 0, lights);
+        cave.draw(transform, view, projection, 0, lights, glfwGetTime());
         skybox.draw(projection, view);
         glfwPollEvents();
         glfwSwapBuffers(window);
