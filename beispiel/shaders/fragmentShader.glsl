@@ -69,18 +69,18 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
     vec3 veins = texture(detailMap, textureCoord).rgb;
     float mixFactor = veins.b;
     // calc result
-    vec3 ambient = vec3(texture(diffuseMap, textureCoord)) * attenuation;
+    vec3 ambient = light.pl_color * vec3(texture(diffuseMap, textureCoord)) * attenuation;
 
     vec3 diffuse = light.pl_color
                     * diffuseCoefficient
                     * vec3(texture(diffuseMap, textureCoord))
-                    * diffuseColor
+                  //  * diffuseColor
                     * attenuation;
     vec3 specular = light.pl_color
                     * specularCoefficient
-                    * vec3(texture(diffuseMap, textureCoord))
+                  //  * vec3(texture(diffuseMap, textureCoord))
                     * texture(specularMap, textureCoord).r
-                    * specularColor
+                  //  * specularColor
                     * attenuation;
     return (ambient + diffuse + specular);
 }
