@@ -11,7 +11,7 @@
 class SceneHelpers
 {
 public:
-    static SceneNode makeCandleCluster(const Vec3& xzPosition, Renderable& c1, Renderable& c2, Renderable& c3, Renderable& cf);
+    static std::shared_ptr<SceneNode> makeCandleCluster(const Vec3& xzPosition, Renderable& c1, Renderable& c2, Renderable& c3, Renderable& cf);
 };
 
 

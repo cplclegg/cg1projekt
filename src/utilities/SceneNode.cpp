@@ -23,7 +23,7 @@ SceneNode::SceneNode(ObjectData& geometry, Material& material)
 {
 }
 
-void SceneNode::addChild(SceneNode& child)
+void SceneNode::addChild(std::shared_ptr<SceneNode>& child)
 {
     children.push_back(child);
 }
@@ -39,7 +39,7 @@ void SceneNode::draw(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& project
         for (auto& child : children)
         {
             //std::cout << "drawing child" << std::endl;
-            child.draw(worldTransform, viewMatrix, projectionMatrix, skyboxTextureID, lights);
+            child->draw(worldTransform, viewMatrix, projectionMatrix, skyboxTextureID, lights);
         }
     }
     if (!object) return;
@@ -68,10 +68,6 @@ void SceneNode::draw(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& project
     glUniformMatrix3fv(normalLocation, 1, GL_FALSE, normalMatrix.getMatrix());
     GLint viewPosLocation = glGetUniformLocation(object->getMaterial().getShader(), "viewPos");
     glUniform3f(viewPosLocation, cameraWorld(3,0), cameraWorld(3,1), cameraWorld(3,2));
-    //std::cout << viewMatrix(3,0) << " " << viewMatrix(3,1) << " " << viewMatrix(3,2) << std::endl;
-    /*std::cout << "world transform:\n";
-    worldTransform.directPrint();
-    std::cout << std::endl;*/
     glDrawArrays(GL_TRIANGLES, 0, object->getVertexCount());
 }
 
