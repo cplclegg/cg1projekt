@@ -222,19 +222,15 @@ int main()
     ObjectData cave_geometry {"beispiel/objects/cave/cave_v3_SCULPTED.obj"};
     TextureData cave_base {"beispiel/textures/cave/Ground103_1K-JPG_Color.jpg"};
     cave_base.createTexture();
-    TextureData cave_normal {"beispiel/textures/cave/Ground103_1K-JPG_NormalGL.jpg"};
-    cave_base.createTexture();
-    TextureData cave_specular {"beispiel/textures/cave/Ground103_1K-JPG_Roughness.jpg"};
-    cave_specular.createTexture();
-    TextureData cave_bumpMap {"beispiel/textures/cave/Ground103_1K-JPG_AmbientOcclusion.jpg"};
-    cave_specular.createTexture();
+    TextureData cave_veins{"beispiel/textures/cave/cave_emissive.jpg"};
+    cave_veins.createTexture();
     Material cave_mat {
         generic_shader.getID(),
         cave_base,
+        cave_veins,
         empty,
-        cave_normal,
-        cave_specular,
-        cave_bumpMap
+        empty,
+        empty
     };
     SceneNode cave {cave_geometry, cave_mat};
     cave.addChild(altar);
@@ -277,6 +273,8 @@ int main()
 
     //lights.addLight(light);
 
+    SceneNode testAltar {altar_geometry, cave_mat};
+
     GLfloat radius = 3.0f;
     GLfloat angle = 0.0f;
 
@@ -287,7 +285,8 @@ int main()
         view.lookAt(eye, center, up);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         //altar.draw(transform, view, projection, 0, lights);
-        cave.draw(transform, view, projection, 0, lights);
+        //cave.draw(transform, view, projection, 0, lights);
+        testAltar.draw(transform, view, projection, 0, lights);
         skybox.draw(projection, view);
         glfwPollEvents();
         glfwSwapBuffers(window);
