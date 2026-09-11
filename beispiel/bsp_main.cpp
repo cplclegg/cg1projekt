@@ -391,7 +391,6 @@ int main()
         {
             eye = eye + cameraRight*movement_speed*deltaTime;
         }
-        std::cout << "Center: \n" << center(0) << " " << center(1) << " " << center(2) << "\n\n";
         crystal_offset += 0.005;
         Vec3 crystal_animation {0.0, GLfloat(0.001*sin(crystal_offset)), 0.0};
         crystal->translate(crystal_animation);
