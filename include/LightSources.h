@@ -33,10 +33,10 @@ private:
     std::vector<std::shared_ptr<SpotLight>> m_spotLights;
 public:
     LightSources();
-    void addSpotLight(const SpotLight& spotLight);
-    void addPointLight(const PointLight& pointLight);
-    void addLight(const PointLight& pointLight);
-    void addLight(const SpotLight& spotLight);
+    void addSpotLight(std::shared_ptr<SpotLight> spotLight);
+    void addPointLight(std::shared_ptr<PointLight> pointLight);
+    void addLight(std::shared_ptr<PointLight> pointLight);
+    void addLight(std::shared_ptr<SpotLight>spotLight);
     void clearAllLights();
     void uploadLights(const GLuint& shader) const;
 };

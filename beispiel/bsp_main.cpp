@@ -140,11 +140,11 @@ int main()
     //Renderable globe_data {globe, globe_mat};
     // candle clusters scene insertions
     auto candleCluster1 = SceneHelpers::makeCandleCluster(Vec3{1.0993350744247437, 0.0, -1.183178186416626}, candle1_data, candle2_data, candle3_data, candle_fdata);
-    PointLight candle1_1_light {
+    auto candle1_1_light = std::make_shared<PointLight>  (
         Vec3{1.0993350744247437, 0.23523379862308502+0.225, -1.183178186416626},
         Vec3{(245.0/255.0), (241.0/255.0), (217.0/255.0)},
         1.0, 0.6, 1.8
-    };
+    );
     lights.addLight(candle1_1_light);
     //SceneNode l1globe {globe_data};
     //l1globe.scale(Vec3{0.05, 0.05, 0.05});
@@ -152,11 +152,11 @@ int main()
     //light_standins.addChild(l1globe);
 
     auto candleCluster2 = SceneHelpers::makeCandleCluster(Vec3 {-0.3676091432571411, 0.0, -1.183178186416626}, candle1_data, candle2_data, candle3_data, candle_fdata);
-    PointLight candle1_2_light {
+    auto candle1_2_light = std::make_shared<PointLight> (
         Vec3{-0.3676091432571411, 0.23523379862308502+0.225, -1.183178186416626},
         Vec3{(245.0/255.0), (241.0/255.0), (217.0/255.0)},
-        1.0, 0.6, 1.8
-    };
+        1.0, 0.6, 1.8)
+    ;
     lights.addLight(candle1_2_light);
     //SceneNode l2globe {globe_data};
     //l2globe.scale(Vec3{0.05, 0.05, 0.05});
@@ -164,11 +164,11 @@ int main()
     //light_standins.addChild(l2globe);
 
     auto candleCluster3 = SceneHelpers::makeCandleCluster(Vec3{2.901495933532715, 0.0, 0.12495501339435577}, candle1_data, candle2_data, candle3_data, candle_fdata);
-    PointLight candle1_3_light {
+    auto candle1_3_light = std::make_shared<PointLight> (
         Vec3{2.901495933532715, 0.23523379862308502+0.225, 0.12495501339435577},
         Vec3{(245.0/255.0), (241.0/255.0), (217.0/255.0)},
-        1.0, 0.6, 1.8
-    };
+        1.0, 0.6, 1.8)
+    ;
     lights.addLight(candle1_3_light);
     //SceneNode l3globe {globe_data};
     //l3globe.scale(Vec3{0.05, 0.05, 0.05});
@@ -176,35 +176,31 @@ int main()
     //light_standins.addChild(l3globe);
 
     auto candleCluster4 = SceneHelpers::makeCandleCluster(Vec3{2.238408088684082, 0.0, 1.1504048109054565}, candle1_data, candle2_data, candle3_data, candle_fdata);
-    PointLight candle1_4_light {
+    auto candle1_4_light = std::make_shared<PointLight> (
         Vec3{2.238408088684082, 0.23523379862308502+0.225, 1.1504048109054565},
         Vec3{(245.0/255.0), (241.0/255.0), (217.0/255.0)},
-        1.0, 0.6, 1.8
-    };
+        1.0, 0.6, 1.8);
     lights.addLight(candle1_4_light);
 
     auto candleCluster5 = SceneHelpers::makeCandleCluster(Vec3{0.3059954047203064, 0.0, 1.466347336769104}, candle1_data, candle2_data, candle3_data, candle_fdata);
-    PointLight candle1_5_light {
+    auto candle1_5_light = std::make_shared<PointLight> (
         Vec3{0.3059954047203064, 0.23523379862308502+0.225, 1.466347336769104},
         Vec3{(245.0/255.0), (241.0/255.0), (217.0/255.0)},
-        1.0, 0.6, 1.8
-    };
+        1.0, 0.6, 1.8);
     lights.addLight(candle1_5_light);
 
     auto candleCluster6 = SceneHelpers::makeCandleCluster(Vec3{-0.4757641851902008, 0.0, 1.3738290071487427}, candle1_data, candle2_data, candle3_data, candle_fdata);
-    PointLight candle1_6_light {
+    auto candle1_6_light = std::make_shared<PointLight> (
         Vec3{-0.4757641851902008, 0.23523379862308502+0.225, 1.3738290071487427},
         Vec3{(245.0/255.0), (241.0/255.0), (217.0/255.0)},
-        1.0, 0.6, 1.8
-    };
+        1.0, 0.6, 1.8);
     lights.addLight(candle1_6_light);
 
     auto candleCluster7 = SceneHelpers::makeCandleCluster(Vec3{-2.4770402908325195, 0.0, 0.01380294468253851}, candle1_data, candle2_data, candle3_data, candle_fdata);
-    PointLight candle1_7_light {
+    auto candle1_7_light = std::make_shared<PointLight>  (
         Vec3{-2.4770402908325195, 0.23523379862308502+0.225, 0.01380294468253851},
         Vec3{(245.0/255.0), (241.0/255.0), (217.0/255.0)},
-        1.0, 0.6, 1.8
-    };
+        1.0, 0.6, 1.8);
     lights.addLight(candle1_7_light);
 
     altar->addChild(candleCluster1);
