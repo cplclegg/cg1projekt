@@ -291,8 +291,8 @@ int main()
     Mat4 transform {};
 
     Mat4 view {};
-
-    Vec3 center{0.0, 0.0, 0.0};
+    Vec3 eye {3.0, 1.7f, 3.0};
+    Vec3 center{0.0, 1.7, 0.0};
     Vec3 up{0.0, 1.0, 0.0};
 
 
@@ -313,20 +313,81 @@ int main()
     GLfloat angle = 0.0f;
     GLfloat crystal_offset = 0.0f;
     GLfloat movement_speed = 1.0f;
+    GLfloat turn_speed = 1.0f;
+    GLfloat time;
+    GLfloat prevTime {0.0f};
+    GLfloat deltaTime;
+    Vec3 camForward = (center-eye);
+    camForward.normalize();
     GLuint skyboxTexID {skybox.getTextureID()};
     glEnable(GL_DEPTH_TEST);
     glUseProgram(cave_shader.getID());
     GLint alphaLocation = glGetUniformLocation(crystal_shader.getID(), "alpha");
     glUseProgram(0);
     bool interactionKeyPressed {false};
+    glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_TRUE);
     while (!glfwWindowShouldClose(window))
     {
+
+        time = glfwGetTime();
+        deltaTime = time - prevTime;
+        prevTime = time;
+        GLint keyStateW = glfwGetKey(window, GLFW_KEY_W);
+        GLint keyStateA = glfwGetKey(window, GLFW_KEY_A);
+        GLint keyStateS = glfwGetKey(window, GLFW_KEY_S);
+        GLint keyStateD = glfwGetKey(window, GLFW_KEY_D);
+        GLint keyStateSpace = glfwGetKey(window, GLFW_KEY_SPACE);
+        GLint keyStateX = glfwGetKey(window, GLFW_KEY_X);
+
+        if (keyStateW == GLFW_PRESS)
+        {
+            eye = eye+camForward*movement_speed*deltaTime;
+        }
+        if (keyStateS == GLFW_PRESS)
+        {
+            eye = eye-camForward*movement_speed*deltaTime;
+        }
+        if (keyStateSpace == GLFW_PRESS)
+        {
+            eye = eye+(up*movement_speed*deltaTime);
+        }
+        if  (keyStateX == GLFW_PRESS)
+        {
+            eye = eye-(up*movement_speed*deltaTime);
+        }
+        if (keyStateA == GLFW_PRESS)
+        {
+            GLfloat turnDistance = turn_speed*deltaTime;
+            GLfloat oldX = camForward(0);
+            GLfloat oldZ = camForward(2);
+
+            camForward = Vec3 {
+                oldX * (GLfloat)cos(turnDistance) + oldZ * (GLfloat)sin(turnDistance),
+                camForward(1),
+               -oldX * (GLfloat)sin(turnDistance) + oldZ * (GLfloat)cos(turnDistance)
+            };
+            camForward.normalize();
+        }
+        if (keyStateD == GLFW_PRESS)
+        {
+            GLfloat turnDistance = -turn_speed*deltaTime;
+            GLfloat oldX = camForward(0);
+            GLfloat oldZ = camForward(2);
+
+            camForward = Vec3 {
+                oldX * (GLfloat)cos(turnDistance) + oldZ * (GLfloat)sin(turnDistance),
+                camForward(1),
+               -oldX * (GLfloat)sin(turnDistance) + oldZ * (GLfloat)cos(turnDistance)
+            };
+            camForward.normalize();
+        }
+
         //angle += 0.005;
         crystal_offset += 0.005;
         Vec3 crystal_animation {0.0, GLfloat(0.001*sin(crystal_offset)), 0.0};
         crystal->translate(crystal_animation);
-        Vec3 eye {radius * (GLfloat)sin(angle), 1.7f, radius*(GLfloat)cos(angle)};
-        view.lookAt(eye, center, up);
+
+        view.lookAt(eye, eye+camForward, up);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         cave.draw(transform, view, projection, 0, lights, glfwGetTime());
         GLfloat alpha {0.1f};
