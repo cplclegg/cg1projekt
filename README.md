@@ -31,7 +31,7 @@ First set up the meson build directory by navigating to project root directory i
 To build the project run command  
 ``meson compile -C buildDir``  
 
-# Quickstart guide
+# Usage
 
 ## Starting the program
 
