@@ -34,6 +34,7 @@ uniform float shininess;
 uniform vec3 specularColor;
 uniform vec3 diffuseColor;
 
+uniform float alpha;
 uniform float fogDensity;
 
 uniform vec3 viewPos;
@@ -46,38 +47,41 @@ uniform SpotLight[2] spotLights;
 void main() {
     vec3 norm = normalize(fNormal);
     vec3 viewDir = normalize(viewPos - FragPos);
-
+    vec3 incidentDir = -viewDir; // ACHTUNG
+    vec3 reflectDir = reflect(incidentDir, norm);
+    vec3 reflectedColor = texture(skybox, reflectDir).rgb;
     vec3 result = vec3(0.0, 0.0, 0.0);
     for (int i = 0; i < numPointLights; i++) {
         result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
     }
 
-    gl_FragColor = vec4(result, 1.0);
+    float fogStart = 5.0;
+    float fogEnd = 30;
+    //float fogDensity = 0.01;
+    float viewDistance = length(viewPos-FragPos);
+    float fogCoefficient = clamp(1.0 - exp(-fogDensity*viewDistance), 0.0, 1.0);
+    vec3 fogColor = vec3(0.2, 0.2, 0.2);
+    vec3 foggyResult = mix(result, fogColor, fogCoefficient);
+    vec3 foggyReflectedColor = mix(reflectedColor, fogColor, fogCoefficient);
+    float mixFactor = alpha > 0.3 ? 1.0 : 0.5;
+    gl_FragColor = vec4(mix(foggyResult, foggyReflectedColor, mixFactor), alpha);
 }
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
     // lighting stuff
     float distance = length(light.pl_pos - fragPos);
-    vec3 lightDir = normalize(light.pl_pos - fragPos);
     float attenuation = 1.0 / (light.constant + light.linear*distance + light.quadratic*(distance*distance));
-    // fog
-    float fogStart = 2.0;
-    float fogEnd = 8.0;
-    //float fogDensity = 0.01;
-    float viewDistance = length(viewPos-fragPos);
-    float fogCoefficient = clamp(1.0 - exp(-fogDensity*viewDistance), 0.0, 1.0);  // exponential
-    //float fogCoefficient = clamp( (viewDistance - fogStart)/(fogEnd - fogStart), 0, 1 ); // linear
-    vec3 fogColor = vec3(0.2, 0.2, 0.2);
-    // diffuse lighting
+    vec3 lightDir = normalize(light.pl_pos - fragPos);
+    // diff
     float diffuseCoefficient = max (dot( normal, lightDir.xyz ), 0.0);
 
-    // specular lighting
+    // spec
     //vec3 reflectDir = reflect(-lightDir, normal);                                   // phong
     //float specularCoefficient = pow(max(dot(viewDir, reflectDir), 0.0), shininess); // phong
     vec3 halfwayDir = normalize(viewDir + lightDir);                               // blinn-phong
     float specularCoefficient = pow(max(dot(normal, halfwayDir), 0.0), shininess); // blinn-phong
-    //vec3 veins = texture(detailMap, textureCoord).rgb;
-    //float mixFactor = veins.b;
+    vec3 veins = texture(detailMap, textureCoord).rgb;
+    float mixFactor = veins.b;
     // calc result
     vec3 ambient = light.pl_color * vec3(texture(diffuseMap, textureCoord)) * attenuation;
 
@@ -92,7 +96,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
                     * texture(specularMap, textureCoord).r
                   //  * specularColor
                     * attenuation;
-    return mix((ambient + diffuse + specular), fogColor, fogCoefficient);
+    return (ambient + diffuse + specular);
 }
 
 /*

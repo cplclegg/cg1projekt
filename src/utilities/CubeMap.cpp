@@ -277,3 +277,8 @@ void CubeMap::draw(const Mat4& projection, const Mat4& view) const
     glBindVertexArray(0);
     glDepthFunc(GL_LESS);
 }
+
+GLuint CubeMap::getTextureID() const
+{
+    return m_textureName;
+}

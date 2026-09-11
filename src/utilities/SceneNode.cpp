@@ -23,12 +23,12 @@ SceneNode::SceneNode(ObjectData& geometry, Material& material)
 {
 }
 
-void SceneNode::addChild(SceneNode& child)
+void SceneNode::addChild(std::shared_ptr<SceneNode>& child)
 {
     children.push_back(child);
 }
 // hier wird die ID der skybox textur mit uebergeben, damit sie an alle shaderprogramme weitergegeben werden kann
-void SceneNode::draw(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& projectionMatrix, GLuint skyboxTextureID, LightSources& lights)
+void SceneNode::draw(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& projectionMatrix, GLuint skyboxTextureID, LightSources& lights, GLfloat time)
 {
     Mat4 worldTransform {parentWorldTransform*localTransform};
 
@@ -39,7 +39,7 @@ void SceneNode::draw(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& project
         for (auto& child : children)
         {
             //std::cout << "drawing child" << std::endl;
-            child.draw(worldTransform, viewMatrix, projectionMatrix, skyboxTextureID, lights);
+            child->draw(worldTransform, viewMatrix, projectionMatrix, skyboxTextureID, lights, time);
         }
     }
     if (!object) return;
@@ -57,7 +57,8 @@ void SceneNode::draw(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& project
         glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTextureID);
         glUniform1i(skyboxLocation, 6);
     }
-
+    GLint timeLocation = glGetUniformLocation(object->getMaterial().getShader(), "time");
+    glUniform1f(timeLocation, time);
     GLint transformLocation = glGetUniformLocation(object->getMaterial().getShader(), "mWorld");
     glUniformMatrix4fv(transformLocation, 1, GL_FALSE, worldTransform.getMatrix());
     GLint viewLocation = glGetUniformLocation(object->getMaterial().getShader(), "mView");
@@ -68,10 +69,6 @@ void SceneNode::draw(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& project
     glUniformMatrix3fv(normalLocation, 1, GL_FALSE, normalMatrix.getMatrix());
     GLint viewPosLocation = glGetUniformLocation(object->getMaterial().getShader(), "viewPos");
     glUniform3f(viewPosLocation, cameraWorld(3,0), cameraWorld(3,1), cameraWorld(3,2));
-    //std::cout << viewMatrix(3,0) << " " << viewMatrix(3,1) << " " << viewMatrix(3,2) << std::endl;
-    /*std::cout << "world transform:\n";
-    worldTransform.directPrint();
-    std::cout << std::endl;*/
     glDrawArrays(GL_TRIANGLES, 0, object->getVertexCount());
 }
 

@@ -14,7 +14,7 @@ class Material
 private:
     GLuint m_shader;
     TextureData m_diffuseMap;
-    TextureData m_diffuseDetailMap;
+    TextureData m_detailMap;
     TextureData m_normalMap;
     TextureData m_specularMap;
     TextureData m_emissiveMap;

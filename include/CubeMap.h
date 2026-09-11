@@ -52,6 +52,8 @@ public:
     bool isUsable() const;
 
     void draw(const Mat4& projection, const Mat4& view) const;
+
+    [[nodiscard]] GLuint getTextureID() const;
 };
 
 
