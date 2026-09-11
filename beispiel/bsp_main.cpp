@@ -7,12 +7,24 @@
 #include <thread>
 using namespace std::chrono_literals;
 
+bool isMagicActive = false;
+
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    // Reagiere nur auf den Moment des Herunterdrückens = GLFW_PRESS
+    if (key == GLFW_KEY_E && action == GLFW_PRESS)
+    {
+        isMagicActive = !isMagicActive;
+    }
+}
+
 int main()
 {
     constexpr double pi = 3.14159265358979323846;
     constexpr int width {1920};
     constexpr int height {1080};
     auto window = GLContext::initializeContext(width, height);
+    glfwSetKeyCallback(window,keyCallback);
     LightSources lights;
     // allgemeiner shader
     ShaderProgram generic_shader {"beispiel/shaders/vertexShader.glsl",
@@ -215,12 +227,12 @@ int main()
     //
     // crystal setup
     //
-    //ShaderProgram crystal_shader {"tba"};
+    ShaderProgram crystal_shader {"beispiel/shaders/vertexShader.glsl", "beispiel/shaders/crystalFS.glsl"};
     ObjectData crystal_geometry {"beispiel/objects/crystal/crystal.obj"};
     TextureData crystal_base {"beispiel/textures/crystal/crystal_17_2_baseColor.png"};
     crystal_base.createTexture();
     Material crystal_mat {
-        generic_shader.getID(),
+        crystal_shader.getID(),
         crystal_base,
         empty,
         empty,
@@ -230,13 +242,11 @@ int main()
     auto crystal = std::make_shared<SceneNode>(crystal_geometry, crystal_mat);
     crystal->scale(Vec3{0.3,0.3,0.3});
     crystal->translate(Vec3{0.0, 1.35, 0.0});
-    altar->addChild(crystal);
-    PointLight crystal_glow {
+    //altar->addChild(crystal);
+    auto crystal_glow = std::make_shared<PointLight> (
         Vec3{0.0,1.35,0.0},
         Vec3{63.0/255.0, 34.0/255.0,238.0/255.0},
-        1.0, 0.6, 1.8
-
-    };
+        1.0, 0.6, 1.8);
     lights.addLight(crystal_glow);
     //
     // cave renderable setup
@@ -303,17 +313,47 @@ int main()
     GLfloat angle = 0.0f;
     GLfloat crystal_offset = 0.0f;
     GLfloat movement_speed = 1.0f;
+    GLuint skyboxTexID {skybox.getTextureID()};
+    glEnable(GL_DEPTH_TEST);
+    glUseProgram(cave_shader.getID());
+    GLint alphaLocation = glGetUniformLocation(crystal_shader.getID(), "alpha");
+    glUseProgram(0);
+    bool interactionKeyPressed {false};
     while (!glfwWindowShouldClose(window))
     {
-        //angle += 0.005;
+        angle += 0.005;
         crystal_offset += 0.005;
         Vec3 crystal_animation {0.0, GLfloat(0.001*sin(crystal_offset)), 0.0};
         crystal->translate(crystal_animation);
         Vec3 eye {radius * (GLfloat)sin(angle), 1.7f, radius*(GLfloat)cos(angle)};
         view.lookAt(eye, center, up);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        //altar.draw(transform, view, projection, 0, lights);
         cave.draw(transform, view, projection, 0, lights, glfwGetTime());
+        GLfloat alpha {0.1f};
+        Vec3 targetColor{Vec3{245.0f / 255.0f, 241.0f / 255.0f, 217.0f / 255.0f}};
+        if (isMagicActive)
+        {
+            targetColor(0) = 1.0f;
+            targetColor(1) = 0.0f;
+            targetColor(2) = 0.0f;
+            alpha = 1.0f;
+        }
+        glUseProgram(crystal_shader.getID());
+        glUniform1f(alphaLocation, alpha);
+        glUseProgram(0);
+        candle1_1_light->setColor(targetColor);
+        candle1_2_light->setColor(targetColor);
+        candle1_3_light->setColor(targetColor);
+        candle1_4_light->setColor(targetColor);
+        candle1_5_light->setColor(targetColor);
+        candle1_6_light->setColor(targetColor);
+        candle1_7_light->setColor(targetColor);
+        glDepthMask(GL_FALSE);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        crystal->draw(transform, view, projection, skyboxTexID, lights, glfwGetTime());
+        glDisable(GL_BLEND);
+        glDepthMask(GL_TRUE);
         skybox.draw(projection, view);
         glfwPollEvents();
         glfwSwapBuffers(window);
