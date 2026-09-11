@@ -12,7 +12,7 @@ bool isMagicActive = false;
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     // Reagiere nur auf den Moment des Herunterdrückens = GLFW_PRESS
-    if (key == GLFW_KEY_E && action == GLFW_PRESS)
+    if (key == GLFW_KEY_F && action == GLFW_PRESS)
     {
         isMagicActive = !isMagicActive;
     }
@@ -291,7 +291,7 @@ int main()
     Mat4 transform {};
 
     Mat4 view {};
-    Vec3 eye {3.0, 1.7f, 3.0};
+    Vec3 eye {-4.35794, 1.7, 21.8992};
     Vec3 center{0.0, 1.7, 0.0};
     Vec3 up{0.0, 1.0, 0.0};
 
@@ -301,7 +301,7 @@ int main()
     GLfloat fovy   = pi / 2.0f;
     GLfloat aspect = static_cast<GLfloat>(width) / static_cast<GLfloat>(height);
     GLfloat near   = 0.1f;
-    GLfloat far    = 20.0f;
+    GLfloat far    = 30.0f;
 
     projection.perspective(fovy, aspect, near, far);
 
@@ -338,7 +338,9 @@ int main()
         GLint keyStateD = glfwGetKey(window, GLFW_KEY_D);
         GLint keyStateSpace = glfwGetKey(window, GLFW_KEY_SPACE);
         GLint keyStateX = glfwGetKey(window, GLFW_KEY_X);
-
+        GLint keyStateQ = glfwGetKey(window, GLFW_KEY_Q);
+        GLint keyStateE = glfwGetKey(window, GLFW_KEY_E);
+        Vec3 cameraRight = camForward.crossProduct(up);
         if (keyStateW == GLFW_PRESS)
         {
             eye = eye+camForward*movement_speed*deltaTime;
@@ -381,8 +383,15 @@ int main()
             };
             camForward.normalize();
         }
-
-        //angle += 0.005;
+        if (keyStateQ)
+        {
+            eye = eye - cameraRight*movement_speed*deltaTime;
+        }
+        if (keyStateE == GLFW_PRESS)
+        {
+            eye = eye + cameraRight*movement_speed*deltaTime;
+        }
+        std::cout << "Center: \n" << center(0) << " " << center(1) << " " << center(2) << "\n\n";
         crystal_offset += 0.005;
         Vec3 crystal_animation {0.0, GLfloat(0.001*sin(crystal_offset)), 0.0};
         crystal->translate(crystal_animation);
