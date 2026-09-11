@@ -35,6 +35,7 @@ uniform vec3 specularColor;
 uniform vec3 diffuseColor;
 
 uniform float alpha;
+uniform float fogDensity;
 
 uniform vec3 viewPos;
 uniform int numPointLights;
@@ -53,8 +54,17 @@ void main() {
     for (int i = 0; i < numPointLights; i++) {
         result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
     }
+
+    float fogStart = 5.0;
+    float fogEnd = 30;
+    //float fogDensity = 0.01;
+    float viewDistance = length(viewPos-FragPos);
+    float fogCoefficient = clamp(1.0 - exp(-fogDensity*viewDistance), 0.0, 1.0);
+    vec3 fogColor = vec3(0.2, 0.2, 0.2);
+    vec3 foggyResult = mix(result, fogColor, fogCoefficient);
+    vec3 foggyReflectedColor = mix(reflectedColor, fogColor, fogCoefficient);
     float mixFactor = alpha > 0.3 ? 1.0 : 0.5;
-    gl_FragColor = vec4(mix(result, reflectedColor, mixFactor), alpha);
+    gl_FragColor = vec4(mix(foggyResult, foggyReflectedColor, mixFactor), alpha);
 }
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
