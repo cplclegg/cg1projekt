@@ -321,7 +321,7 @@ int main()
     bool interactionKeyPressed {false};
     while (!glfwWindowShouldClose(window))
     {
-        angle += 0.005;
+        //angle += 0.005;
         crystal_offset += 0.005;
         Vec3 crystal_animation {0.0, GLfloat(0.001*sin(crystal_offset)), 0.0};
         crystal->translate(crystal_animation);
@@ -333,9 +333,9 @@ int main()
         Vec3 targetColor{Vec3{245.0f / 255.0f, 241.0f / 255.0f, 217.0f / 255.0f}};
         if (isMagicActive)
         {
-            targetColor(0) = 1.0f;
+            targetColor(0) = 157.0f/255.0f;
             targetColor(1) = 0.0f;
-            targetColor(2) = 0.0f;
+            targetColor(2) = 1.0f;
             alpha = 1.0f;
         }
         glUseProgram(crystal_shader.getID());
