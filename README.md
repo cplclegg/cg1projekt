@@ -35,7 +35,7 @@ To build the project run command
 
 ## Starting the program
 
-Start the program from the command line as you would any binary.
+After building, run the program from the command line as you would any binary.
 
 ## Running unit tests
 
