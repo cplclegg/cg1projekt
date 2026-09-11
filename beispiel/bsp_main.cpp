@@ -147,29 +147,6 @@ int main()
         candle3mat
     };
 
-    //crystal Renderable setup
-    // ObjectData crystal_geometry {"beispiel/objects/crystal/crystalTria.obj"};
-    // TextureData crystal_base {"beispiel/textures/crystal/Crystals_Lp_M_Crystals_BaseColor.png"};
-    // crystal_base.createTexture();
-    // TextureData crystal_normal {"beispiel/textures/crystal/Crystals_Lp_M_Crystals_Normal.png"};
-    // crystal_normal.createTexture();
-    // TextureData crystal_emmisive {"beispiel/textures/crystal/Crystals_Lp_M_Crystals_Emissive.png"};
-    // crystal_emmisive.createTexture();
-    
-    // Material crystal_mat {
-    //     generic_shader.getID(),
-    //     crystal_base,
-    //     empty,
-    //     crystal_normal,
-    //     empty,
-    //     crystal_emmisive
-    // };
-    // Renderable crystal_data {
-    //     crystal_geometry,
-    //     crystal_mat
-    // };
-    // SceneNode crystal(crystal_data);
-
 
     // light stand in
     //SceneNode light_standins {};
@@ -254,9 +231,6 @@ int main()
     altar.addChild(candleCluster6);
     altar.addChild(candleCluster7);
     //earth.addChild(light_standins);
-    //crystal.scale(Vec3{0.05f,0.05f,0.05f});
-   // crystal.translate(Vec3{0.0f, 1.65f, 0.0f});
-   // altar.addChild(crystal);
 
     //
     // cave renderable setup
