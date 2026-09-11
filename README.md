@@ -59,17 +59,21 @@ tba
 tba
 
 # Third party resources
-
+## Functional 3rd party resources
 - ``GLfloat* ObjectData::loadObj(const char* location)`` is heavily based on the source code of [loadObj.c](https://moodle.hs-hannover.de/pluginfile.php/1256047/mod_folder/content/0/Code/loadObj.c?forcedownload=1) provided in the lecture for future use.
 Slight adaptions have been made to the code in order to fit it into the class ObjectData.
 
 - Texture loading relies on [``stb_image.h``](https://github.com/nothings/stb/blob/master/stb_image.h) from the stb repository at https://github.com/nothings/stb/tree/master
 
-Following models and Textures:
-https://sketchfab.com/3d-models/candles-set-f09212756bc94764a8bcfcd3c7e38f8e (Kerzen)
+## 3D models and textures:
+- Candles: https://sketchfab.com/3d-models/candles-set-f09212756bc94764a8bcfcd3c7e38f8e (model and textures)
+- Altar: https://sketchfab.com/3d-models/stone-table-classical-style-6141975473f34118bc71f91352e55a3d (model and textures)
+- Torches (currently unused): https://sketchfab.com/3d-models/torch-d47f1a85c4c846a392cc1d1afca15295 (model and textures)
+- Crystal: https://sketchfab.com/3d-models/stylized-crystal-0a0c75dab0844e7fa5b299d4af858bec (model and textures)
+- Cave texture: https://polyhaven.com/a/dark_rock
+- Ore veins based on https://www.magnific.com/free-vector/cracked-pattern-texture-background_37674304.htm (with custom modifications, shoutout to https://www.photopea.com/)
+- Cave modeled by Justin-Kevin van Wanrooij (Johnny)
+- Cubemap textures drawn by Justin-Kevin van Wanrooij (Johnny)
+- Scene composed by Justin-Kevin van Wanrooij (Johnny)
 
-https://sketchfab.com/3d-models/stone-table-classical-style-6141975473f34118bc71f91352e55a3d (Steinaltar)
 
-https://sketchfab.com/3d-models/torch-d47f1a85c4c846a392cc1d1afca15295 (Fackeln)
-
-tbc
