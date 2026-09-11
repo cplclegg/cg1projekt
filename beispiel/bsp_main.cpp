@@ -317,13 +317,15 @@ int main()
     GLfloat time;
     GLfloat prevTime {0.0f};
     GLfloat deltaTime;
+
     Vec3 camForward = (center-eye);
     camForward.normalize();
     GLuint skyboxTexID {skybox.getTextureID()};
     glEnable(GL_DEPTH_TEST);
-    glUseProgram(cave_shader.getID());
     GLint alphaLocation = glGetUniformLocation(crystal_shader.getID(), "alpha");
-    glUseProgram(0);
+    GLint crystalFogDensityLocation = glGetUniformLocation(crystal_shader.getID(), "fogDensity");
+    GLint caveFogDensityLocation = glGetUniformLocation(cave_shader.getID(), "fogDensity");
+    GLint genericFogDensityLocation = glGetUniformLocation(generic_shader.getID(), "fogDensity");
     bool interactionKeyPressed {false};
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_TRUE);
     while (!glfwWindowShouldClose(window))
@@ -341,6 +343,7 @@ int main()
         GLint keyStateQ = glfwGetKey(window, GLFW_KEY_Q);
         GLint keyStateE = glfwGetKey(window, GLFW_KEY_E);
         Vec3 cameraRight = camForward.crossProduct(up);
+
         if (keyStateW == GLFW_PRESS)
         {
             eye = eye+camForward*movement_speed*deltaTime;
@@ -400,15 +403,22 @@ int main()
         cave.draw(transform, view, projection, 0, lights, glfwGetTime());
         GLfloat alpha {0.1f};
         Vec3 targetColor{Vec3{245.0f / 255.0f, 241.0f / 255.0f, 217.0f / 255.0f}};
+        GLfloat fogDensity = 0.01;
         if (isMagicActive)
         {
             targetColor(0) = 157.0f/255.0f;
             targetColor(1) = 0.0f;
             targetColor(2) = 1.0f;
             alpha = 1.0f;
+            fogDensity = 0.0001f;
         }
         glUseProgram(crystal_shader.getID());
         glUniform1f(alphaLocation, alpha);
+        glUniform1f(crystalFogDensityLocation, fogDensity);
+        glUseProgram(generic_shader.getID());
+        glUniform1f(genericFogDensityLocation, fogDensity);
+        glUseProgram(cave_shader.getID());
+        glUniform1f(caveFogDensityLocation, fogDensity);
         glUseProgram(0);
         candle1_1_light->setColor(targetColor);
         candle1_2_light->setColor(targetColor);
