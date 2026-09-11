@@ -64,6 +64,13 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
     float distance = length(light.pl_pos - fragPos);
     float attenuation = 1.0 / (light.constant + light.linear*distance + light.quadratic*(distance*distance));
     vec3 lightDir = normalize(light.pl_pos - fragPos);
+    // fog
+    float fogStart = 5.0;
+    float fogEnd = 30;
+    float fogDensity = 0.04;
+    float viewDistance = length(viewPos-fragPos);
+    float fogCoefficient = clamp(1.0 - exp(-fogDensity*viewDistance), 0.0, 1.0);
+    vec3 fogColor = vec3(0.3, 0.3, 0.3);
     // diff
     float diffuseCoefficient = max (dot( normal, lightDir.xyz ), 0.0);
 
@@ -75,7 +82,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
     vec3 veins = texture(detailMap, tilingCoord).rgb*texture(emissiveMap, movingTexCoord).rgb;
     float mixFactor = veins.b;
     // calc result
-    vec3 ambient = mix(vec3(texture(diffuseMap, tilingCoord)) * attenuation, veins, mixFactor);
+    vec3 ambient = mix(vec3(texture(diffuseMap, tilingCoord)) * attenuation * light.pl_color, veins, mixFactor);
 
     vec3 diffuse = light.pl_color
     * diffuseCoefficient
@@ -88,7 +95,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
     * texture(specularMap, tilingCoord).r
     * specularColor
     * attenuation;
-    return (ambient + diffuse + specular);
+    return mix((ambient + diffuse + specular), fogColor, fogCoefficient);
 }
 
 /*
