@@ -34,6 +34,8 @@ uniform float shininess;
 uniform vec3 specularColor;
 uniform vec3 diffuseColor;
 
+uniform float fogDensity;
+
 uniform vec3 viewPos;
 uniform int numPointLights;
 uniform int numSpotLights;
@@ -61,7 +63,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
     // fog
     float fogStart = 2.0;
     float fogEnd = 8.0;
-    float fogDensity = 0.01;
+    //float fogDensity = 0.01;
     float viewDistance = length(viewPos-fragPos);
     float fogCoefficient = clamp(1.0 - exp(-fogDensity*viewDistance), 0.0, 1.0);  // exponential
     //float fogCoefficient = clamp( (viewDistance - fogStart)/(fogEnd - fogStart), 0, 1 ); // linear
