@@ -56,18 +56,26 @@ void main() {
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
     // lighting stuff
     float distance = length(light.pl_pos - fragPos);
-    float attenuation = 1.0 / (light.constant + light.linear*distance + light.quadratic*(distance*distance));
     vec3 lightDir = normalize(light.pl_pos - fragPos);
-    // diff
+    float attenuation = 1.0 / (light.constant + light.linear*distance + light.quadratic*(distance*distance));
+    // fog
+    float fogStart = 2.0;
+    float fogEnd = 8.0;
+    float fogDensity = 0.04;
+    float viewDistance = length(viewPos-fragPos);
+    float fogCoefficient = clamp(1.0 - exp(-fogDensity*viewDistance), 0.0, 1.0);  // exponential
+    //float fogCoefficient = clamp( (viewDistance - fogStart)/(fogEnd - fogStart), 0, 1 ); // linear
+    vec3 fogColor = vec3(0.3, 0.3, 0.3);
+    // diffuse lighting
     float diffuseCoefficient = max (dot( normal, lightDir.xyz ), 0.0);
 
-    // spec
+    // specular lighting
     //vec3 reflectDir = reflect(-lightDir, normal);                                   // phong
     //float specularCoefficient = pow(max(dot(viewDir, reflectDir), 0.0), shininess); // phong
     vec3 halfwayDir = normalize(viewDir + lightDir);                               // blinn-phong
     float specularCoefficient = pow(max(dot(normal, halfwayDir), 0.0), shininess); // blinn-phong
-    vec3 veins = texture(detailMap, textureCoord).rgb;
-    float mixFactor = veins.b;
+    //vec3 veins = texture(detailMap, textureCoord).rgb;
+    //float mixFactor = veins.b;
     // calc result
     vec3 ambient = light.pl_color * vec3(texture(diffuseMap, textureCoord)) * attenuation;
 
@@ -82,7 +90,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
                     * texture(specularMap, textureCoord).r
                   //  * specularColor
                     * attenuation;
-    return (ambient + diffuse + specular);
+    return mix((ambient + diffuse + specular), fogColor, fogCoefficient);
 }
 
 /*
