@@ -67,10 +67,10 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
     // fog
     float fogStart = 5.0;
     float fogEnd = 30;
-    float fogDensity = 0.04;
+    float fogDensity = 0.01;
     float viewDistance = length(viewPos-fragPos);
     float fogCoefficient = clamp(1.0 - exp(-fogDensity*viewDistance), 0.0, 1.0);
-    vec3 fogColor = vec3(0.3, 0.3, 0.3);
+    vec3 fogColor = vec3(0.2, 0.2, 0.2);
     // diff
     float diffuseCoefficient = max (dot( normal, lightDir.xyz ), 0.0);
 
