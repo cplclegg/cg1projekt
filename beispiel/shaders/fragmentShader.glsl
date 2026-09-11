@@ -49,6 +49,12 @@ void main() {
     for (int i = 0; i < numPointLights; i++) {
         result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
     }
+    //Nebel
+    float dist = length(viewPos - FragPos);
+    float fogFactor = clamp(1.0 - exp(-dist * 0.20), 0.0, 1.0); // Nebeldichte = 0.20
+    vec3 fogColor = vec3(0.2, 0.2, 0.2); // Muss die selbe Farbe haben wie der ClearColor Aufruf in GLContext
+    result = mix(result, fogColor, fogFactor);
+
 
     gl_FragColor = vec4(result, 1.0);
 }
