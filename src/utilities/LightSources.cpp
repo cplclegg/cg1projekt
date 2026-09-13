@@ -32,8 +32,6 @@ void LightSources::addLight(std::shared_ptr<SpotLight> spotLight)
 
 void LightSources::clearAllLights()
 {
-    for (const auto& pointLight : m_pointLights) pointLight->setDirty();
-    for (const auto& spotLight : m_spotLights) spotLight->setDirty();
     m_pointLights.clear();
     m_spotLights.clear();
 }

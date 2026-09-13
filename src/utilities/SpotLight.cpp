@@ -19,43 +19,31 @@ SpotLight::SpotLight(Vec3& pos, Vec3& dir, Vec3& color, GLfloat innerAngle, GLfl
 void SpotLight::setColor(Vec3& color)
 {
     m_color = color;
-    m_dirty = true;
 }
 
 void SpotLight::setIntensity(GLfloat intensity)
 {
     m_intensity = intensity;
-    m_dirty = true;
 }
 
 void SpotLight::setDirection(Vec3& dir)
 {
     m_direction = dir;
-    m_dirty = true;
 }
 
 void SpotLight::setPosition(Vec3& pos)
 {
     m_position = pos;
-    m_dirty = true;
 }
 
 void SpotLight::setCone(GLfloat innerAngle, GLfloat outerAngle)
 {
     m_angleInnerCone = innerAngle;
     m_angleOuterCone = outerAngle;
-    m_dirty = true;
-}
-
-void SpotLight::setDirty()
-{
-    m_dirty = true;
 }
 
 void SpotLight::upload(const GLuint shader, const size_t i)
 {
-    //if (!m_dirty) return;
-
     const std::string posUniformName {"spotLights[" + std::to_string(i) + "].sl_pos"};
     const std::string colorUniformName {"spotLights[" + std::to_string(i) + "].sl_color"};
     const std::string directionUniformName {"spotLights[" + std::to_string(i) + "].sl_direction"};
@@ -76,6 +64,4 @@ void SpotLight::upload(const GLuint shader, const size_t i)
     glUniform1f(innerAngleLocation, m_angleInnerCone);
     glUniform1f(outerAngleLocation, m_angleOuterCone);
     glUniform1f(intensityLocation, m_intensity);
-
-    m_dirty = false;
 }
