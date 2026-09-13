@@ -68,9 +68,9 @@ void ShaderProgram::createProgram()
     assert(m_vertexShader.isValid() && m_fragmentShader.isValid());
     // create+compile vertex shader
     const char* vertexText = m_vertexShader.getSourceString();
-    std::cout << "===== VERTEX SOURCE =====\n"
+    /*std::cout << "===== VERTEX SOURCE =====\n"
           << vertexText
-          << "\n=========================\n";
+          << "\n=========================\n";*/
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexText, NULL);
     glCompileShader(vertexShader);
@@ -85,10 +85,10 @@ void ShaderProgram::createProgram()
 
     // create+compile fragment shader
     const char* fragmentText = m_fragmentShader.getSourceString();
-
+    /*
     std::cout << "===== FRAGMENT SOURCE =====\n"
               << fragmentText
-              << "\n===========================\n";
+              << "\n===========================\n";*/
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &fragmentText, NULL);
     glCompileShader(fragmentShader);
