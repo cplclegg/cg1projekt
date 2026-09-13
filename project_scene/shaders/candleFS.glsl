@@ -59,6 +59,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
     // lighting stuff
     float distance = length(light.pl_pos - fragPos);
     vec3 lightDir = normalize(light.pl_pos - fragPos);
+    vec3 texNormal = texture(normalMap, textureCoord).rgb;
     float attenuation = 1.0 / (light.constant + light.linear*distance + light.quadratic*(distance*distance));
     // fog
     float fogStart = 2.0;
@@ -77,19 +78,20 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
     vec3 halfwayDir = normalize(viewDir + lightDir);                               // blinn-phong
     float specularCoefficient = pow(max(dot(normal, halfwayDir), 0.0), shininess); // blinn-phong
     // calc result
-    vec3 ambient = light.pl_color * vec3(texture(diffuseMap, textureCoord)) * attenuation;
+    vec3 ambient = light.pl_color * vec3(texture(diffuseMap, textureCoord)) * attenuation * clamp(texture(specularMap, textureCoord).r, 0.4, 1.0);
 
     vec3 diffuse = light.pl_color
-                    * diffuseCoefficient
-                    * vec3(texture(diffuseMap, textureCoord))
-                  //  * diffuseColor
-                    * attenuation;
+                  * diffuseCoefficient
+                  * vec3(texture(diffuseMap, textureCoord))
+                  //* diffuseColor
+                  * texture(specularMap, textureCoord).r
+                  * attenuation;
     vec3 specular = light.pl_color
-                    * specularCoefficient
-                  //  * vec3(texture(diffuseMap, textureCoord))
-                    * texture(specularMap, textureCoord).r
-                  //  * specularColor
-                    * attenuation;
+                  * specularCoefficient
+                  //* vec3(texture(diffuseMap, textureCoord))
+                  * texture(specularMap, textureCoord).r
+                  //* specularColor
+                  * attenuation;
     return mix((ambient + diffuse + specular), fogColor, fogCoefficient);
 }
 

@@ -41,7 +41,7 @@ uniform vec3 viewPos;
 uniform int numPointLights;
 uniform int numSpotLights;
 
-uniform PointLight[10] pointLights;
+uniform PointLight[25] pointLights;
 uniform SpotLight[2] spotLights;
 
 void main() {
