@@ -21,6 +21,7 @@ public:
     SceneNode(ObjectData& geometry, Material& material);
     void addChild(std::shared_ptr<SceneNode>& child);
     void draw(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& projectionMatrix, GLuint skyboxTextureID, LightSources& lights, GLfloat time);
+    void drawNodeOnly(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& projectionMatrix, GLuint skyboxTextureID, LightSources& lights, GLfloat time);
     void translate(const Vec3& vector);
     void scale(const Vec3&);
     void rotateX(const GLfloat&);
