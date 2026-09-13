@@ -13,34 +13,34 @@
 #include <iostream>
 using namespace std;
 ShaderSource::ShaderSource()
-    : buffer {nullptr}
+    : m_buffer {nullptr}
 {
 }
 
 ShaderSource::ShaderSource(const string& path)
-    : sourcePath{path}
-    , buffer {readSourceFile(sourcePath)}
+    : m_sourcePath{path}
+    , m_buffer {readSourceFile(m_sourcePath)}
 {
 }
 
 ShaderSource::ShaderSource(const ShaderSource& other)
-    : sourcePath {other.sourcePath}
-    , buffer {readSourceFile(sourcePath)}
+    : m_sourcePath {other.m_sourcePath}
+    , m_buffer {readSourceFile(m_sourcePath)}
 {
 }
 
 ShaderSource::~ShaderSource()
 {
-    if (buffer) {
-        free(buffer);
-        buffer = nullptr;
+    if (m_buffer) {
+        free(m_buffer);
+        m_buffer = nullptr;
     }
 }
 
 void ShaderSource::loadSourceFile(const string& path)
 {
-    sourcePath = sourcePath;
-    buffer = readSourceFile(path);
+    m_sourcePath = m_sourcePath;
+    m_buffer = readSourceFile(path);
 }
 
 char* ShaderSource::readSourceFile(const std::filesystem::path& relativePath)
@@ -58,16 +58,16 @@ char* ShaderSource::readSourceFile(const std::filesystem::path& relativePath)
     if(!fs.read(buf, length)) throw runtime_error("Error reading shader source code from: " + path.string());
     buf[length] = '\0';
     fs.close();
-    loadSuccess = true;
+    m_loadSuccess = true;
     return buf;
 }
 
 char* ShaderSource::getSourceString() const
 {
-    return buffer;
+    return m_buffer;
 }
 
 bool ShaderSource::isValid() const
 {
-    return loadSuccess;
+    return m_loadSuccess;
 }

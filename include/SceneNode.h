@@ -12,9 +12,9 @@
 class SceneNode
 {
 private:
-    std::optional<Renderable> object;
-    Mat4 localTransform {};
-    std::vector<std::shared_ptr<SceneNode>> children;
+    std::optional<Renderable> m_object;
+    Mat4 m_localTransform {};
+    std::vector<std::shared_ptr<SceneNode>> m_children;
 public:
     SceneNode();
     SceneNode(Renderable& object);

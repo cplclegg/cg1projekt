@@ -18,13 +18,11 @@ PointLight::PointLight(const Vec3& pos, const Vec3& color, const GLfloat constan
 void PointLight::setPosition(Vec3& pos)
 {
     m_position = pos;
-    m_dirty = true;
 }
 
 void PointLight::setColor(Vec3& color)
 {
     m_color = color;
-    m_dirty = true;
 }
 
 void PointLight::setAttenuationFactors(GLfloat constant, GLfloat linear, GLfloat quadratic)
@@ -32,12 +30,6 @@ void PointLight::setAttenuationFactors(GLfloat constant, GLfloat linear, GLfloat
     m_constant = constant;
     m_linear = linear;
     m_quadratic = quadratic;
-    m_dirty = true;
-}
-
-void PointLight::setDirty()
-{
-    m_dirty = true;
 }
 
 void PointLight::upload(const GLuint shader, const size_t i)
@@ -61,7 +53,5 @@ void PointLight::upload(const GLuint shader, const size_t i)
     glUniform1f(constantLocation, m_constant);
     glUniform1f(linearLocation, m_linear);
     glUniform1f(quadraticLocation, m_quadratic);
-
-    m_dirty = false;
 }
 
