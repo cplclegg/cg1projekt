@@ -15,7 +15,6 @@ out vec3 FragPos;
 void main() {
     FragPos = vec3(mWorld * vec4(vPosition, 1.0));
     textureCoord = vTexCoord;
-    fNormal = transpose(inverse(mat3(mWorld))) * vNormal;
-    //fNormal = mNormal * vNormal;
+    fNormal = mNormal * vNormal;
     gl_Position = mProj * mView * mWorld * vec4(vPosition, 1.0);
 }
