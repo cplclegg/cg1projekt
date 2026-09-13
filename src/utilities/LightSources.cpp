@@ -8,13 +8,13 @@ LightSources::LightSources() = default;
 
 void LightSources::addPointLight(std::shared_ptr<PointLight> pointLight)
 {
-    if (m_pointLights.size() >= 10) throw std::runtime_error("Max point lights exceeded. Max is 10.");
+    if (m_pointLights.size() >= 25) throw std::runtime_error("Max point lights exceeded. Max is 10.");
     m_pointLights.push_back(pointLight);
 }
 
 void LightSources::addLight(std::shared_ptr<PointLight> pointLight)
 {
-    if (m_pointLights.size() >= 10) throw std::runtime_error("Max point lights exceeded. Max is 10.");
+    if (m_pointLights.size() >= 25) throw std::runtime_error("Max point lights exceeded. Max is 10.");
     m_pointLights.push_back(pointLight);
 }
 
