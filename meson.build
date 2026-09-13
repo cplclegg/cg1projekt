@@ -105,7 +105,7 @@ test_exe = executable(
 
 project_exe = executable(
     'ProjectTeamFirebrick',
-    'project_scene/bsp_main.cpp',
+    'project_scene/ProjectTeamFirebrick.cpp',
     include_directories : inc,
     link_with : core_lib,
     dependencies : graphics_deps
