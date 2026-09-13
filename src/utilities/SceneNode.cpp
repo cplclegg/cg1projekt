@@ -43,7 +43,8 @@ void SceneNode::draw(Mat4& parentWorldTransform, Mat4& viewMatrix, Mat4& project
         }
     }
     if (!m_object) return;
-    Mat3 normalMatrix { (projectionMatrix * viewMatrix * worldTransform).getNormalMatrix() };
+    Mat4 mvpMatrix {(projectionMatrix * viewMatrix * worldTransform)};
+    Mat3 normalMatrix { mvpMatrix.getNormalMatrix() };
     Mat4 cameraWorld {viewMatrix.inverseCopy()};
     m_object->getMaterial().bind();
     lights.uploadLights(m_object->getMaterial().getShader());
