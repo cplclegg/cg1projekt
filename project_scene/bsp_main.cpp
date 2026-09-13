@@ -9,13 +9,23 @@ using namespace std::chrono_literals;
 
 bool isMagicActive = false;
 
-void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void keyCallback([[maybe_unused]]GLFWwindow* window, [[maybe_unused]]int key, [[maybe_unused]]int scancode, int action, [[maybe_unused]]int mods)
 {
     // Reagiere nur auf den Moment des Herunterdrückens = GLFW_PRESS
     if (key == GLFW_KEY_F && action == GLFW_PRESS)
     {
         isMagicActive = !isMagicActive;
     }
+}
+
+Vec3 rotateAroundAxis(const Vec3& v, const Vec3& axis, GLfloat angle)
+{
+    Vec3 a {axis};
+    a.normalize();
+
+    return v * cos(angle)
+         + a.crossProduct(v) * (GLfloat)sin(angle)
+         + a * (a*v * (1.0f - (GLfloat)cos(angle)));
 }
 
 int main()
@@ -27,8 +37,8 @@ int main()
     glfwSetKeyCallback(window,keyCallback);
     LightSources lights;
     // allgemeiner shader
-    ShaderProgram generic_shader {"beispiel/shaders/vertexShader.glsl",
-        "beispiel/shaders/fragmentShader.glsl"};
+    ShaderProgram generic_shader {"project_scene/shaders/vertexShader.glsl",
+        "project_scene/shaders/fragmentShader.glsl"};
     // placeholder for unused texture on Material construction
     TextureData empty {};
 
@@ -36,10 +46,10 @@ int main()
     //
     // altar renderable setup
     //
-    ObjectData altar_geometry {"beispiel/objects/altar/altar_table.obj"};
-    TextureData altar_base {"beispiel/textures//table/TabMat_baseColor.jpeg"};
+    ObjectData altar_geometry {"project_scene/objects/altar/altar_table.obj"};
+    TextureData altar_base {"project_scene/textures//table/TabMat_baseColor.jpeg"};
     altar_base.createTexture();
-    TextureData altar_spec {"beispiel/textures/table/TabMat_specularf0.png"};
+    TextureData altar_spec {"project_scene/textures/table/TabMat_specularf0.png"};
     altar_spec.createTexture();
 
     // material-object zusammenfassen
@@ -60,10 +70,10 @@ int main()
     //
     // candle flame renderable setup
     //
-    ObjectData candle_flame_geometry {"beispiel/objects/candle/candle_flame.obj"};
-    TextureData cf_base {"beispiel/textures/candles/Flame_baseColor.png"};
+    ObjectData candle_flame_geometry {"project_scene/objects/candle/candle_flame.obj"};
+    TextureData cf_base {"project_scene/textures/candles/Flame_baseColor.png"};
     cf_base.createTexture();
-    TextureData cf_emissive {"beispiel/textures/candles/Flame_baseColor.png"};
+    TextureData cf_emissive {"project_scene/textures/candles/Flame_baseColor.png"};
     cf_emissive.createTexture();
     Material candle_fmat {
         generic_shader.getID(),
@@ -82,12 +92,12 @@ int main()
     // candles renderable setup (3 candles)
     //
     // candle 1 renderable setup
-    ObjectData candle1_geometry {"beispiel/objects/candle/candle1.obj"};
-    TextureData c1_base {"beispiel/textures/candles/Candle_1_baseColor.png"};
+    ObjectData candle1_geometry {"project_scene/objects/candle/candle1.obj"};
+    TextureData c1_base {"project_scene/textures/candles/Candle_1_baseColor.png"};
     c1_base.createTexture();
-    TextureData c1_normal {"beispiel/textures/candles/Candle_1_normal.png"};
+    TextureData c1_normal {"project_scene/textures/candles/Candle_1_normal.png"};
     c1_normal.createTexture();
-    TextureData c1_specular{"beispiel/textures/candles/Candle_1_specular.jpg"};
+    TextureData c1_specular{"project_scene/textures/candles/Candle_1_specular.jpg"};
     c1_specular.createTexture();
     Material candle1mat {
         generic_shader.getID(),
@@ -106,10 +116,10 @@ int main()
 
 
     // candle 2 renderable setup
-    ObjectData candle2_geometry {"beispiel/objects/candle/candle2.obj"};
-    TextureData c2_base {"beispiel/textures/candles/Candle_2_baseColor.png"};
+    ObjectData candle2_geometry {"project_scene/objects/candle/candle2.obj"};
+    TextureData c2_base {"project_scene/textures/candles/Candle_2_baseColor.png"};
     c2_base.createTexture();
-    TextureData c2_normal {"beispiel/textures/candles/Candle_2_normal.png"};
+    TextureData c2_normal {"project_scene/textures/candles/Candle_2_normal.png"};
     c2_normal.createTexture();
     Material candle2mat {
         generic_shader.getID(),
@@ -125,10 +135,10 @@ int main()
     };
 
     // candle 3 renderable setup
-    ObjectData candle3_geometry {"beispiel/objects/candle/candle3.obj"};
-    TextureData c3_base {"beispiel/textures/candles/Candle_3_baseColor.png"};
+    ObjectData candle3_geometry {"project_scene/objects/candle/candle3.obj"};
+    TextureData c3_base {"project_scene/textures/candles/Candle_3_baseColor.png"};
     c3_base.createTexture();
-    TextureData c3_normal {"beispiel/textures/candles/Candle_3_normal.png"};
+    TextureData c3_normal {"project_scene/textures/candles/Candle_3_normal.png"};
     c3_normal.createTexture();
     Material candle3mat {
         generic_shader.getID(),
@@ -144,12 +154,6 @@ int main()
     };
 
 
-    // light stand in
-    //SceneNode light_standins {};
-    //ObjectData globe {"uebungsblaetter/uebung7/earth.obj"};
-    //ShaderProgram globe_shader {"beispiel/shaders/sphereVS.glsl", "beispiel/shaders/sphereFS.glsl"};
-    //Material globe_mat {globe_shader.getID(), empty, empty, empty, empty, empty};
-    //Renderable globe_data {globe, globe_mat};
     // candle clusters scene insertions
     auto candleCluster1 = SceneHelpers::makeCandleCluster(Vec3{1.0993350744247437, 0.0, -1.183178186416626}, candle1_data, candle2_data, candle3_data, candle_fdata);
     auto candle1_1_light = std::make_shared<PointLight>  (
@@ -158,10 +162,6 @@ int main()
         1.0, 0.6, 1.8
     );
     lights.addLight(candle1_1_light);
-    //SceneNode l1globe {globe_data};
-    //l1globe.scale(Vec3{0.05, 0.05, 0.05});
-    //l1globe.translate(Vec3{1.0993350744247437, 0.23523379862308502+0.225, -1.183178186416626});
-    //light_standins.addChild(l1globe);
 
     auto candleCluster2 = SceneHelpers::makeCandleCluster(Vec3 {-0.3676091432571411, 0.0, -1.183178186416626}, candle1_data, candle2_data, candle3_data, candle_fdata);
     auto candle1_2_light = std::make_shared<PointLight> (
@@ -170,10 +170,6 @@ int main()
         1.0, 0.6, 1.8)
     ;
     lights.addLight(candle1_2_light);
-    //SceneNode l2globe {globe_data};
-    //l2globe.scale(Vec3{0.05, 0.05, 0.05});
-    //l2globe.translate(Vec3{-0.3676091432571411, 0.23523379862308502+0.225, -1.183178186416626});
-    //light_standins.addChild(l2globe);
 
     auto candleCluster3 = SceneHelpers::makeCandleCluster(Vec3{2.901495933532715, 0.0, 0.12495501339435577}, candle1_data, candle2_data, candle3_data, candle_fdata);
     auto candle1_3_light = std::make_shared<PointLight> (
@@ -182,10 +178,6 @@ int main()
         1.0, 0.6, 1.8)
     ;
     lights.addLight(candle1_3_light);
-    //SceneNode l3globe {globe_data};
-    //l3globe.scale(Vec3{0.05, 0.05, 0.05});
-    //l3globe.translate(Vec3{2.901495933532715, 0.23523379862308502+0.225, 0.12495501339435577});
-    //light_standins.addChild(l3globe);
 
     auto candleCluster4 = SceneHelpers::makeCandleCluster(Vec3{2.238408088684082, 0.0, 1.1504048109054565}, candle1_data, candle2_data, candle3_data, candle_fdata);
     auto candle1_4_light = std::make_shared<PointLight> (
@@ -222,14 +214,13 @@ int main()
     altar->addChild(candleCluster5);
     altar->addChild(candleCluster6);
     altar->addChild(candleCluster7);
-    //earth.addChild(light_standins);
 
     //
     // crystal setup
     //
-    ShaderProgram crystal_shader {"beispiel/shaders/vertexShader.glsl", "beispiel/shaders/crystalFS.glsl"};
-    ObjectData crystal_geometry {"beispiel/objects/crystal/crystal.obj"};
-    TextureData crystal_base {"beispiel/textures/crystal/crystal_17_2_baseColor.png"};
+    ShaderProgram crystal_shader {"project_scene/shaders/vertexShader.glsl", "project_scene/shaders/crystalFS.glsl"};
+    ObjectData crystal_geometry {"project_scene/objects/crystal/crystal.obj"};
+    TextureData crystal_base {"project_scene/textures/crystal/crystal_17_2_baseColor.png"};
     crystal_base.createTexture();
     Material crystal_mat {
         crystal_shader.getID(),
@@ -242,22 +233,23 @@ int main()
     auto crystal = std::make_shared<SceneNode>(crystal_geometry, crystal_mat);
     crystal->scale(Vec3{0.3,0.3,0.3});
     crystal->translate(Vec3{0.0, 1.35, 0.0});
-    //altar->addChild(crystal);
+
     auto crystal_glow = std::make_shared<PointLight> (
         Vec3{0.0,1.35,0.0},
         Vec3{63.0/255.0, 34.0/255.0,238.0/255.0},
         1.0, 0.6, 1.8);
     lights.addLight(crystal_glow);
+
     //
     // cave renderable setup
     //
-    ShaderProgram cave_shader {"beispiel/shaders/vertexShader.glsl", "beispiel/shaders/caveFS.glsl"};
-    ObjectData cave_geometry {"beispiel/objects/cave/cave_v3_SCULPTED.obj"};
-    TextureData cave_base {"beispiel/textures/cave/rock_texture.jpg"};
+    ShaderProgram cave_shader {"project_scene/shaders/vertexShader.glsl", "project_scene/shaders/caveFS.glsl"};
+    ObjectData cave_geometry {"project_scene/objects/cave/cave_v3_SCULPTED.obj"};
+    TextureData cave_base {"project_scene/textures/cave/rock_texture.jpg"};
     cave_base.createTexture();
-    TextureData cave_veins{"beispiel/textures/cave/ore_veins_purple.jpg"};
+    TextureData cave_veins{"project_scene/textures/cave/ore_veins_purple.jpg"};
     cave_veins.createTexture();
-    TextureData cave_oremask {"beispiel/textures/cave/cave_oremask.jpg"};
+    TextureData cave_oremask {"project_scene/textures/cave/cave_oremask.jpg"};
     cave_oremask.createTexture();
 
     Material cave_mat {
@@ -274,19 +266,24 @@ int main()
     //
     // cube map
     //
-    ShaderProgram skybox_shader {"beispiel/shaders/skyboxVertexShader.glsl",
-        "beispiel/shaders/skyboxFragmentShader.glsl"};
+    ShaderProgram skybox_shader {"project_scene/shaders/skyboxVertexShader.glsl",
+        "project_scene/shaders/skyboxFragmentShader.glsl"};
     CubeMap skybox {
         skybox_shader,
-        "beispiel/skybox/jettelly_space_nebulas_black_RIGHT.png",
-        "beispiel/skybox/jettelly_space_nebulas_black_LEFT.png",
-        "beispiel/skybox/jettelly_space_nebulas_black_UP.png",
-        "beispiel/skybox/jettelly_space_nebulas_black_DOWN.png",
-        "beispiel/skybox/jettelly_space_nebulas_black_FRONT.png",
-        "beispiel/skybox/jettelly_space_nebulas_black_BACK.png"
+        "project_scene/textures/skybox/CubeMap_Sides_Mountains(1).png",
+        "project_scene/textures/skybox/CubeMap_Sides_Mountains(1).png",
+        "project_scene/textures/skybox/CG_Auge_Himmel_BlackHoleV2.png",
+        "project_scene/textures/skybox/CubeMap_Ground_2.png",
+        "project_scene/textures/skybox/CubeMap_Sides_Mountains(1).png",
+        "project_scene/textures/skybox/CubeMap_Sides_Mountains(1).png"
     };
     skybox.createTexture();
     skybox.applyParameters();
+
+
+
+
+
 
     Mat4 transform {};
 
@@ -305,12 +302,6 @@ int main()
 
     projection.perspective(fovy, aspect, near, far);
 
-    PointLight light {Vec3{1.5f, 1.5f, 2.0f}, Vec3{1.0f, 1.0f, 0.0f}, 1.0, 0.022, 0.0019};
-
-    //lights.addLight(light);
-
-    GLfloat radius = 3.0f;
-    GLfloat angle = 0.0f;
     GLfloat crystal_offset = 0.0f;
     GLfloat movement_speed = 1.0f;
     GLfloat turn_speed = 1.0f;
@@ -320,14 +311,96 @@ int main()
 
     Vec3 camForward = (center-eye);
     camForward.normalize();
-    GLuint skyboxTexID {skybox.getTextureID()};
     glEnable(GL_DEPTH_TEST);
     GLint alphaLocation = glGetUniformLocation(crystal_shader.getID(), "alpha");
     GLint crystalFogDensityLocation = glGetUniformLocation(crystal_shader.getID(), "fogDensity");
     GLint caveFogDensityLocation = glGetUniformLocation(cave_shader.getID(), "fogDensity");
     GLint genericFogDensityLocation = glGetUniformLocation(generic_shader.getID(), "fogDensity");
-    bool interactionKeyPressed {false};
+    constexpr GLfloat maxPitch = 1.55334f;
+    GLfloat pitch {0};
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_TRUE);
+
+    //
+    // reflection cubemap
+    //
+    constexpr GLint reflectionCubemapResolutionXY {1024};
+    constexpr GLfloat reflectionRenderFOVY {pi/2};
+    constexpr GLint reflectionAspect {1};
+    constexpr GLfloat reflectionNear   = 0.1f;
+    constexpr GLfloat reflectionFar    = 30.0f;
+
+    Vec3 reflectionEyeVector {0.0, 1.35, 0.0};
+    std::vector reflectionViewVectors {
+        Vec3 {1.0, 0.0, 0.0},
+        Vec3 {-1.0, 0.0, 0.0},
+        Vec3 {0.0, -1.0, 0.0},
+        Vec3 {0.0, 1.0, 0.0},
+        Vec3 {0.0, 0.0, 1.0},
+        Vec3 {0.0, 0.0, -1.0},
+    };
+    std::vector reflectionUpVectors {
+        Vec3 {0.0, -1.0, 0.0},
+        Vec3 {0.0, -1.0, 0.0},
+        Vec3 {0.0, 0.0, -1.0},
+        Vec3 {0.0, 0.0, 1.0},
+        Vec3 {0.0, -1.0, 0.0},
+        Vec3 {0.0, -1.0, 0.0}
+    };
+    Mat4 reflectionRenderView {};
+    Mat4 reflectionRenderProj {};
+    reflectionRenderProj.perspective(reflectionRenderFOVY, reflectionAspect, reflectionNear, reflectionFar);
+
+    Vec3 targetColorREFLECTION {};
+    GLfloat fogDensityREFLECTION = 0.0001f;
+    targetColorREFLECTION(0) = 157.0f/255.0f;
+    targetColorREFLECTION(1) = 0.0f;
+    targetColorREFLECTION(2) = 1.0f;
+
+    glUseProgram(generic_shader.getID());
+    glUniform1f(genericFogDensityLocation, fogDensityREFLECTION);
+    glUseProgram(cave_shader.getID());
+    glUniform1f(caveFogDensityLocation, fogDensityREFLECTION);
+    glUseProgram(0);
+    candle1_1_light->setColor(targetColorREFLECTION);
+    candle1_2_light->setColor(targetColorREFLECTION);
+    candle1_3_light->setColor(targetColorREFLECTION);
+    candle1_4_light->setColor(targetColorREFLECTION);
+    candle1_5_light->setColor(targetColorREFLECTION);
+    candle1_6_light->setColor(targetColorREFLECTION);
+    candle1_7_light->setColor(targetColorREFLECTION);
+
+    GLuint captureFBO, captureRBO;
+    glGenFramebuffers(1, &captureFBO);
+    glGenRenderbuffers(1, &captureRBO);
+
+    GLuint reflectionCubemap;
+    glGenTextures(1, &reflectionCubemap);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, reflectionCubemap);
+
+    for (GLuint i = 0; i < 6; ++i)
+    {
+        GLenum face = GL_TEXTURE_CUBE_MAP_POSITIVE_X + i;
+        glTexImage2D(
+            face,
+            0,
+            GL_RGB,
+            reflectionCubemapResolutionXY,
+            reflectionCubemapResolutionXY,
+            0,
+            GL_RGB,
+            GL_UNSIGNED_BYTE,
+            nullptr);
+    }
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+
+    Mat4 reflectionUnityMatrix {};
+
+
     while (!glfwWindowShouldClose(window))
     {
 
@@ -342,8 +415,10 @@ int main()
         GLint keyStateX = glfwGetKey(window, GLFW_KEY_X);
         GLint keyStateQ = glfwGetKey(window, GLFW_KEY_Q);
         GLint keyStateE = glfwGetKey(window, GLFW_KEY_E);
+        GLint keyStateY = glfwGetKey(window, GLFW_KEY_Y);
+        GLint keyStateC = glfwGetKey(window, GLFW_KEY_C);
         Vec3 cameraRight = camForward.crossProduct(up);
-
+        cameraRight.normalize();
         if (keyStateW == GLFW_PRESS)
         {
             eye = eye+camForward*movement_speed*deltaTime;
@@ -386,6 +461,26 @@ int main()
             };
             camForward.normalize();
         }
+        if (keyStateC == GLFW_PRESS)
+        {
+            GLfloat pitchAmount = turn_speed * deltaTime;
+            if (pitch + pitchAmount < maxPitch)
+            {
+                camForward = rotateAroundAxis(camForward, cameraRight, pitchAmount);
+                pitch += pitchAmount;
+            }
+            camForward.normalize();
+        }
+        if (keyStateY == GLFW_PRESS)
+        {
+            GLfloat pitchAmount = turn_speed * deltaTime;
+            if (pitch - pitchAmount > -maxPitch)
+            {
+                camForward = rotateAroundAxis(camForward, cameraRight, -pitchAmount);
+                pitch -= pitchAmount;
+            }
+            camForward.normalize();
+        }
         if (keyStateQ)
         {
             eye = eye - cameraRight*movement_speed*deltaTime;
@@ -399,8 +494,7 @@ int main()
         crystal->translate(crystal_animation);
 
         view.lookAt(eye, eye+camForward, up);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        cave.draw(transform, view, projection, 0, lights, glfwGetTime());
+
         GLfloat alpha {0.1f};
         Vec3 targetColor{Vec3{245.0f / 255.0f, 241.0f / 255.0f, 217.0f / 255.0f}};
         GLfloat fogDensity = 0.01;
@@ -412,6 +506,32 @@ int main()
             alpha = 1.0f;
             fogDensity = 0.0001f;
         }
+        for (size_t i = 0; i < 6; ++i)
+        {
+            glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+            glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, reflectionCubemapResolutionXY, reflectionCubemapResolutionXY);
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, captureRBO);
+
+            // render passes
+            glViewport(0, 0, reflectionCubemapResolutionXY, reflectionCubemapResolutionXY);
+            GLenum face = GL_TEXTURE_CUBE_MAP_POSITIVE_X + i;
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, face, reflectionCubemap, 0);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            reflectionRenderView.lookAt(reflectionEyeVector, reflectionEyeVector+reflectionViewVectors[i], reflectionUpVectors[i]);
+            cave.drawNodeOnly(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
+            candleCluster1->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
+            candleCluster2->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
+            candleCluster3->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
+            candleCluster4->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
+            candleCluster5->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
+            candleCluster6->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
+            candleCluster7->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
+            skybox.draw(reflectionRenderProj, reflectionRenderView);
+        }
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+        glViewport(0,0,width,height);
         glUseProgram(crystal_shader.getID());
         glUniform1f(alphaLocation, alpha);
         glUniform1f(crystalFogDensityLocation, fogDensity);
@@ -427,16 +547,19 @@ int main()
         candle1_5_light->setColor(targetColor);
         candle1_6_light->setColor(targetColor);
         candle1_7_light->setColor(targetColor);
+        // draw calls
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        cave.draw(transform, view, projection, 0, lights, glfwGetTime());
         glDepthMask(GL_FALSE);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        crystal->draw(transform, view, projection, skyboxTexID, lights, glfwGetTime());
+        crystal->draw(transform, view, projection, reflectionCubemap, lights, glfwGetTime());
         glDisable(GL_BLEND);
         glDepthMask(GL_TRUE);
         skybox.draw(projection, view);
+        // end of draw calls
         glfwPollEvents();
         glfwSwapBuffers(window);
-        std::this_thread::sleep_for(16ms);
+        //std::this_thread::sleep_for(16ms);
     }
-
 }

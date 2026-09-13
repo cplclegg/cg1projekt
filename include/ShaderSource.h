@@ -9,9 +9,9 @@
 class ShaderSource
 {
 private:
-    std::string sourcePath;
-    char* buffer;
-    bool loadSuccess;
+    std::string m_sourcePath;
+    char* m_buffer;
+    bool m_loadSuccess;
     char* readSourceFile(const std::filesystem::path&);
 public:
     ShaderSource();

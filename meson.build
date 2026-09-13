@@ -70,21 +70,21 @@ core_lib = static_library(
     dependencies : graphics_deps
 )
 
-teapot_exe = executable(
-    'teapot_demo',
-    'tests/load_obj_test.cpp',
-    include_directories : inc,
-    link_with : core_lib,
-    dependencies : graphics_deps
-)
+#teapot_exe = executable(
+#    'teapot_demo',
+#    'tests/load_obj_test.cpp',
+#    include_directories : inc,
+#    link_with : core_lib,
+#    dependencies : graphics_deps
+#)
 
-textureTest_exe = executable(
-    'texture_demo',
-    'tests/load_texture_test.cpp',
-    include_directories : inc,
-    link_with : core_lib,
-    dependencies : graphics_deps
-)
+#textureTest_exe = executable(
+#    'texture_demo',
+#    'tests/load_texture_test.cpp',
+#    include_directories : inc,
+#    link_with : core_lib,
+#    dependencies : graphics_deps
+#)
 
 test_exe = executable(
     'unit_tests',
@@ -103,9 +103,9 @@ test_exe = executable(
 #    dependencies : graphics_deps
 #)
 
-beispiel_exe = executable(
-    'beispiel',
-    'beispiel/bsp_main.cpp',
+project_exe = executable(
+    'ProjectTeamFirebrick',
+    'project_scene/bsp_main.cpp',
     include_directories : inc,
     link_with : core_lib,
     dependencies : graphics_deps
