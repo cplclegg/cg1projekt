@@ -9,13 +9,23 @@ using namespace std::chrono_literals;
 
 bool isMagicActive = false;
 
-void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void keyCallback([[maybe_unused]]GLFWwindow* window, [[maybe_unused]]int key, [[maybe_unused]]int scancode, int action, [[maybe_unused]]int mods)
 {
     // Reagiere nur auf den Moment des Herunterdrückens = GLFW_PRESS
     if (key == GLFW_KEY_F && action == GLFW_PRESS)
     {
         isMagicActive = !isMagicActive;
     }
+}
+
+Vec3 rotateAroundAxis(const Vec3& v, const Vec3& axis, GLfloat angle)
+{
+    Vec3 a {axis};
+    a.normalize();
+
+    return v * cos(angle)
+         + a.crossProduct(v) * (GLfloat)sin(angle)
+         + a * (a*v * (1.0f - (GLfloat)cos(angle)));
 }
 
 int main()
@@ -260,15 +270,20 @@ int main()
         "project_scene/shaders/skyboxFragmentShader.glsl"};
     CubeMap skybox {
         skybox_shader,
-        "project_scene/skybox/jettelly_space_nebulas_black_RIGHT.png",
-        "project_scene/skybox/jettelly_space_nebulas_black_LEFT.png",
-        "project_scene/skybox/jettelly_space_nebulas_black_UP.png",
-        "project_scene/skybox/jettelly_space_nebulas_black_DOWN.png",
-        "project_scene/skybox/jettelly_space_nebulas_black_FRONT.png",
-        "project_scene/skybox/jettelly_space_nebulas_black_BACK.png"
+        "project_scene/textures/skybox/CubeMap_Sides_Mountains(1).png",
+        "project_scene/textures/skybox/CubeMap_Sides_Mountains(1).png",
+        "project_scene/textures/skybox/CG_Auge_Himmel_BlackHoleV2.png",
+        "project_scene/textures/skybox/CubeMap_Ground_2.png",
+        "project_scene/textures/skybox/CubeMap_Sides_Mountains(1).png",
+        "project_scene/textures/skybox/CubeMap_Sides_Mountains(1).png"
     };
     skybox.createTexture();
     skybox.applyParameters();
+
+
+
+
+
 
     Mat4 transform {};
 
@@ -287,8 +302,6 @@ int main()
 
     projection.perspective(fovy, aspect, near, far);
 
-    GLfloat radius = 3.0f;
-    GLfloat angle = 0.0f;
     GLfloat crystal_offset = 0.0f;
     GLfloat movement_speed = 1.0f;
     GLfloat turn_speed = 1.0f;
@@ -298,14 +311,121 @@ int main()
 
     Vec3 camForward = (center-eye);
     camForward.normalize();
-    GLuint skyboxTexID {skybox.getTextureID()};
     glEnable(GL_DEPTH_TEST);
     GLint alphaLocation = glGetUniformLocation(crystal_shader.getID(), "alpha");
     GLint crystalFogDensityLocation = glGetUniformLocation(crystal_shader.getID(), "fogDensity");
     GLint caveFogDensityLocation = glGetUniformLocation(cave_shader.getID(), "fogDensity");
     GLint genericFogDensityLocation = glGetUniformLocation(generic_shader.getID(), "fogDensity");
-    bool interactionKeyPressed {false};
+    constexpr GLfloat maxPitch = 1.55334f;
+    GLfloat pitch {0};
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_TRUE);
+
+    //
+    // reflection cubemap
+    //
+    constexpr GLint reflectionCubemapResolutionXY {1024};
+    constexpr GLfloat reflectionRenderFOVY {pi/2};
+    constexpr GLint reflectionAspect {1};
+    constexpr GLfloat reflectionNear   = 0.1f;
+    constexpr GLfloat reflectionFar    = 30.0f;
+
+    Vec3 reflectionEyeVector {0.0, 1.35, 0.0};
+    std::vector reflectionViewVectors {
+        Vec3 {1.0, 0.0, 0.0},
+        Vec3 {-1.0, 0.0, 0.0},
+        Vec3 {0.0, 1.0, 0.0},
+        Vec3 {0.0, -1.0, 0.0},
+        Vec3 {0.0, 0.0, 1.0},
+        Vec3 {0.0, 0.0, -1.0},
+    };
+    std::vector reflectionUpVectors {
+        Vec3 {0.0, -1.0, 0.0},
+        Vec3 {0.0, -1.0, 0.0},
+        Vec3 {0.0, 0.0, 1.0},
+        Vec3 {0.0, 0.0, -1.0},
+        Vec3 {0.0, -1.0, 0.0},
+        Vec3 {0.0, -1.0, 0.0}
+    };
+    Mat4 reflectionRenderView {};
+    Mat4 reflectionRenderProj {};
+    reflectionRenderProj.perspective(reflectionRenderFOVY, reflectionAspect, reflectionNear, reflectionFar);
+
+    Vec3 targetColorREFLECTION {};
+    GLfloat fogDensityREFLECTION = 0.0001f;
+    targetColorREFLECTION(0) = 157.0f/255.0f;
+    targetColorREFLECTION(1) = 0.0f;
+    targetColorREFLECTION(2) = 1.0f;
+
+    glUseProgram(generic_shader.getID());
+    glUniform1f(genericFogDensityLocation, fogDensityREFLECTION);
+    glUseProgram(cave_shader.getID());
+    glUniform1f(caveFogDensityLocation, fogDensityREFLECTION);
+    glUseProgram(0);
+    candle1_1_light->setColor(targetColorREFLECTION);
+    candle1_2_light->setColor(targetColorREFLECTION);
+    candle1_3_light->setColor(targetColorREFLECTION);
+    candle1_4_light->setColor(targetColorREFLECTION);
+    candle1_5_light->setColor(targetColorREFLECTION);
+    candle1_6_light->setColor(targetColorREFLECTION);
+    candle1_7_light->setColor(targetColorREFLECTION);
+
+    GLuint captureFBO, captureRBO;
+    glGenFramebuffers(1, &captureFBO);
+    glGenRenderbuffers(1, &captureRBO);
+
+    GLuint reflectionCubemap;
+    glGenTextures(1, &reflectionCubemap);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, reflectionCubemap);
+
+    for (GLuint i = 0; i < 6; ++i)
+    {
+        GLenum face = GL_TEXTURE_CUBE_MAP_POSITIVE_X + i;
+        glTexImage2D(
+            face,
+            0,
+            GL_RGB,
+            reflectionCubemapResolutionXY,
+            reflectionCubemapResolutionXY,
+            0,
+            GL_RGB,
+            GL_UNSIGNED_BYTE,
+            nullptr);
+    }
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+    glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, reflectionCubemapResolutionXY, reflectionCubemapResolutionXY);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, captureRBO);
+
+    // render passes
+    glViewport(0, 0, reflectionCubemapResolutionXY, reflectionCubemapResolutionXY);
+    Mat4 reflectionUnityMatrix {};
+    for (size_t i = 0; i < 6; ++i)
+    {
+        GLenum face = GL_TEXTURE_CUBE_MAP_POSITIVE_X + i;
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, face, reflectionCubemap, 0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        reflectionRenderView.lookAt(reflectionEyeVector, reflectionEyeVector+reflectionViewVectors[i], reflectionUpVectors[i]);
+        cave.drawNodeOnly(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
+        candleCluster1->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
+        candleCluster2->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
+        candleCluster3->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
+        candleCluster4->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
+        candleCluster5->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
+        candleCluster6->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
+        candleCluster7->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
+        skybox.draw(reflectionRenderProj, reflectionRenderView);
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
+    glViewport(0,0,width,height);
+
+
     while (!glfwWindowShouldClose(window))
     {
 
@@ -320,8 +440,10 @@ int main()
         GLint keyStateX = glfwGetKey(window, GLFW_KEY_X);
         GLint keyStateQ = glfwGetKey(window, GLFW_KEY_Q);
         GLint keyStateE = glfwGetKey(window, GLFW_KEY_E);
+        GLint keyStateY = glfwGetKey(window, GLFW_KEY_Y);
+        GLint keyStateC = glfwGetKey(window, GLFW_KEY_C);
         Vec3 cameraRight = camForward.crossProduct(up);
-
+        cameraRight.normalize();
         if (keyStateW == GLFW_PRESS)
         {
             eye = eye+camForward*movement_speed*deltaTime;
@@ -364,6 +486,26 @@ int main()
             };
             camForward.normalize();
         }
+        if (keyStateC == GLFW_PRESS)
+        {
+            GLfloat pitchAmount = turn_speed * deltaTime;
+            if (pitch + pitchAmount < maxPitch)
+            {
+                camForward = rotateAroundAxis(camForward, cameraRight, pitchAmount);
+                pitch += pitchAmount;
+            }
+            camForward.normalize();
+        }
+        if (keyStateY == GLFW_PRESS)
+        {
+            GLfloat pitchAmount = turn_speed * deltaTime;
+            if (pitch - pitchAmount > -maxPitch)
+            {
+                camForward = rotateAroundAxis(camForward, cameraRight, -pitchAmount);
+                pitch -= pitchAmount;
+            }
+            camForward.normalize();
+        }
         if (keyStateQ)
         {
             eye = eye - cameraRight*movement_speed*deltaTime;
@@ -378,7 +520,6 @@ int main()
 
         view.lookAt(eye, eye+camForward, up);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        cave.draw(transform, view, projection, 0, lights, glfwGetTime());
         GLfloat alpha {0.1f};
         Vec3 targetColor{Vec3{245.0f / 255.0f, 241.0f / 255.0f, 217.0f / 255.0f}};
         GLfloat fogDensity = 0.01;
@@ -405,13 +546,16 @@ int main()
         candle1_5_light->setColor(targetColor);
         candle1_6_light->setColor(targetColor);
         candle1_7_light->setColor(targetColor);
+        // draw calls
+        cave.draw(transform, view, projection, 0, lights, glfwGetTime());
         glDepthMask(GL_FALSE);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        crystal->draw(transform, view, projection, skyboxTexID, lights, glfwGetTime());
+        crystal->draw(transform, view, projection, reflectionCubemap, lights, glfwGetTime());
         glDisable(GL_BLEND);
         glDepthMask(GL_TRUE);
         skybox.draw(projection, view);
+        // end of draw calls
         glfwPollEvents();
         glfwSwapBuffers(window);
         //std::this_thread::sleep_for(16ms);
