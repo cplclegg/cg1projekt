@@ -333,16 +333,16 @@ int main()
     std::vector reflectionViewVectors {
         Vec3 {1.0, 0.0, 0.0},
         Vec3 {-1.0, 0.0, 0.0},
-        Vec3 {0.0, 1.0, 0.0},
         Vec3 {0.0, -1.0, 0.0},
+        Vec3 {0.0, 1.0, 0.0},
         Vec3 {0.0, 0.0, 1.0},
         Vec3 {0.0, 0.0, -1.0},
     };
     std::vector reflectionUpVectors {
         Vec3 {0.0, -1.0, 0.0},
         Vec3 {0.0, -1.0, 0.0},
-        Vec3 {0.0, 0.0, 1.0},
         Vec3 {0.0, 0.0, -1.0},
+        Vec3 {0.0, 0.0, 1.0},
         Vec3 {0.0, -1.0, 0.0},
         Vec3 {0.0, -1.0, 0.0}
     };
@@ -397,33 +397,8 @@ int main()
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
-    glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
-    glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, reflectionCubemapResolutionXY, reflectionCubemapResolutionXY);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, captureRBO);
 
-    // render passes
-    glViewport(0, 0, reflectionCubemapResolutionXY, reflectionCubemapResolutionXY);
     Mat4 reflectionUnityMatrix {};
-    for (size_t i = 0; i < 6; ++i)
-    {
-        GLenum face = GL_TEXTURE_CUBE_MAP_POSITIVE_X + i;
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, face, reflectionCubemap, 0);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        reflectionRenderView.lookAt(reflectionEyeVector, reflectionEyeVector+reflectionViewVectors[i], reflectionUpVectors[i]);
-        cave.drawNodeOnly(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
-        candleCluster1->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
-        candleCluster2->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
-        candleCluster3->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
-        candleCluster4->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
-        candleCluster5->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
-        candleCluster6->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
-        candleCluster7->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
-        skybox.draw(reflectionRenderProj, reflectionRenderView);
-    }
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glBindRenderbuffer(GL_RENDERBUFFER, 0);
-    glViewport(0,0,width,height);
 
 
     while (!glfwWindowShouldClose(window))
@@ -519,7 +494,7 @@ int main()
         crystal->translate(crystal_animation);
 
         view.lookAt(eye, eye+camForward, up);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         GLfloat alpha {0.1f};
         Vec3 targetColor{Vec3{245.0f / 255.0f, 241.0f / 255.0f, 217.0f / 255.0f}};
         GLfloat fogDensity = 0.01;
@@ -531,6 +506,32 @@ int main()
             alpha = 1.0f;
             fogDensity = 0.0001f;
         }
+        for (size_t i = 0; i < 6; ++i)
+        {
+            glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+            glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, reflectionCubemapResolutionXY, reflectionCubemapResolutionXY);
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, captureRBO);
+
+            // render passes
+            glViewport(0, 0, reflectionCubemapResolutionXY, reflectionCubemapResolutionXY);
+            GLenum face = GL_TEXTURE_CUBE_MAP_POSITIVE_X + i;
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, face, reflectionCubemap, 0);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            reflectionRenderView.lookAt(reflectionEyeVector, reflectionEyeVector+reflectionViewVectors[i], reflectionUpVectors[i]);
+            cave.drawNodeOnly(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
+            candleCluster1->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
+            candleCluster2->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
+            candleCluster3->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
+            candleCluster4->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
+            candleCluster5->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
+            candleCluster6->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
+            candleCluster7->draw(reflectionUnityMatrix, reflectionRenderView, reflectionRenderProj, 0, lights, glfwGetTime());
+            skybox.draw(reflectionRenderProj, reflectionRenderView);
+        }
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+        glViewport(0,0,width,height);
         glUseProgram(crystal_shader.getID());
         glUniform1f(alphaLocation, alpha);
         glUniform1f(crystalFogDensityLocation, fogDensity);
@@ -547,6 +548,7 @@ int main()
         candle1_6_light->setColor(targetColor);
         candle1_7_light->setColor(targetColor);
         // draw calls
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         cave.draw(transform, view, projection, 0, lights, glfwGetTime());
         glDepthMask(GL_FALSE);
         glEnable(GL_BLEND);
