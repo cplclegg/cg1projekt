@@ -76,8 +76,6 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
     //float specularCoefficient = pow(max(dot(viewDir, reflectDir), 0.0), shininess); // phong
     vec3 halfwayDir = normalize(viewDir + lightDir);                               // blinn-phong
     float specularCoefficient = pow(max(dot(normal, halfwayDir), 0.0), shininess); // blinn-phong
-    //vec3 veins = texture(detailMap, textureCoord).rgb;
-    //float mixFactor = veins.b;
     // calc result
     vec3 ambient = light.pl_color * vec3(texture(diffuseMap, textureCoord)) * attenuation;
 
@@ -95,32 +93,3 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
     return mix((ambient + diffuse + specular), fogColor, fogCoefficient);
 }
 
-/*
-vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
-
-    // diff
-    vec3 lightDir = normalize(light.pl_pos - fragPos);
-    float distance = length(light.pl_pos - fragPos);
-    float reflectionCoefficient = max (dot( normal, lightDir.xyz ), 0.0);
-    float diffuseCoefficient = (max(reflectionCoefficient, 0.0)); // this is the one to use
-    float attenuation = 1.0 / (light.constant + light.linear*distance + light.quadratic*(distance*distance));
-
-    // spec
-    vec3 reflectDir = reflect(-lightDir, normal);
-    float specularCoefficient = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
-
-    // calc result
-    vec3 ambient = light.pl_color * vec3(texture(diffuseMap, textureCoord));
-    vec3 diffuse = light.pl_color
-                        * diffuseCoefficient
-                        * vec3(texture(diffuseMap, textureCoord))
-                        * diffuseColor
-                        * attenuation;
-    vec3 specular = light.pl_color
-                        * specularCoefficient
-                        * vec3(texture(diffuseMap, textureCoord))
-                        * texture(specularMap, textureCoord).r
-                        * specularColor
-                        * attenuation;
-    return (ambient + diffuse + specular);
-}*/
