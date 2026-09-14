@@ -6,6 +6,18 @@ Justin-Kevin vanWanrooij
 
 https://github.com/cplclegg/cg1projekt
 
+The project scene is a cave in an alien/outer space type setting,
+with mysterious glowing ore veins streaking through the walls and 
+with an organic movement to the glow. Around a bend in the cave there, obscured by fog,
+waits a bigger space, with a ceiling opening to the outside world, exposing the sky .
+In the middle of that space, there is an altar, surrounded by candles. On top of the altar,
+a translucent crystal formation is suspended in mid air, an invisible force slowly moving it up and down.
+Interacting with the scene via the F key changes the entire atmosphere.
+The candlelight suddenly changes to match the ore veins' glow, and the crystal
+has lost its translucency, instead reflecting the cave walls, the sky, and the candle formation,
+but not the altar itself. The fog has lightened at the same time, exposing the true
+shimmering alien surroundings of the scene.
+
 # Build information
 
 This project uses the meson build system.  
@@ -57,6 +69,9 @@ To run unit tests for project first build the project with the comment specified
 
 - ``SPACE`` move up
 - ``X`` move down
+
+- ``C`` - pitch up
+- ``Y`` - pitch down
 
 ## Interaction
 

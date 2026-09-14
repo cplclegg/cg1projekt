@@ -520,7 +520,7 @@ int main()
         GLint keyStateX = glfwGetKey(window, GLFW_KEY_X);
         GLint keyStateQ = glfwGetKey(window, GLFW_KEY_Q);
         GLint keyStateE = glfwGetKey(window, GLFW_KEY_E);
-        GLint keyStateY = glfwGetKey(window, GLFW_KEY_Y);
+        GLint keyStateZ = glfwGetKey(window, GLFW_KEY_Z);
         GLint keyStateC = glfwGetKey(window, GLFW_KEY_C);
         Vec3 cameraRight = camForward.crossProduct(up);
         cameraRight.normalize();
@@ -576,7 +576,7 @@ int main()
             }
             camForward.normalize();
         }
-        if (keyStateY == GLFW_PRESS)
+        if (keyStateZ == GLFW_PRESS)
         {
             GLfloat pitchAmount = turn_speed * deltaTime;
             if (pitch - pitchAmount > -maxPitch)
