@@ -70,8 +70,8 @@ To run unit tests for project first build the project with the comment specified
 - ``SPACE`` move up
 - ``X`` move down
 
-- ``C`` - pitch up
-- ``Y`` - pitch down
+- ``C`` pitch up
+- ``Y`` pitch down
 
 ## Interaction
 
