@@ -1,4 +1,4 @@
-# Computergrafik 1 - Team FireBrick - PROJECT NAME TBA
+# Computergrafik 1 - Team FireBrick
 
 Tom Nir  
 Boris Sokolovic  
