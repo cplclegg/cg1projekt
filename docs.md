@@ -72,18 +72,20 @@ Material combines a shader program, and up to four TextureData (diffuse, normal,
 ## Constructors
 - ``Material(
         GLuint shader,
-        GLuint diffuse,
-        GLuint normal,
-        GLuint specular,
-        GLuint emissive
-        );`` constructs a Material storing the texture names (ID) provided, the shader name (ID) provided, and using default shininess values (32.0f) and colors (white).
+        TextureData diffuse,
+        TextureData detail,
+        TextureData normal,
+        TextureData specular,
+        TextureData emissive
+          );`` constructs a Material storing the texture names (ID) provided, the shader name (ID) provided, and using default shininess values (32.0f) and colors (white).
 - ``Material(
         GLuint shader,
-        GLuint diffuse,
-        GLuint normal,
-        GLuint specular,
-        GLuint emissive,
-        GLfloat shininess,
+        TextureData diffuse,
+        TextureData detail,
+        TextureData normal,
+        TextureData specular,
+        TextureData emissive,
+        TextureData shininess,
         const Vec3& specularColor,
         const Vec3& diffuseColor
         );`` constructs a Material storing the texture names (ID) provided, the shader name (ID) provided, and using the provided shininess and colors.
@@ -107,8 +109,8 @@ Renderable combines all the data needed for a draw call (except any planned inte
 
 ## SceneNode
 
-A scene node is a composite implementation of a scenegraph. It stores a Renderable, its corresponding local transform matrix, and a ``std::vector`` of ``SceneNode`` children. It also provides a member function ``draw()``, which takes parent world transform matrix and a camera transform matrix, and combines them with the localtransform to get the final transform which is to be sent to the shaders corresponding uniform. A call of ``draw()`` is first forwarded to all children (handing through the world transform matrix *calculated from the parent world transform and the local transform* - the root SceneNode object must be given a unity matrix as parent world transform for the draw call - and the camera matrix) and then executed on the SceneNode itself. As a result, a call of ``draw()`` on the root of a scene should draw the whole scene.
-
+A scene node is a composite implementation of a scenegraph. It stores a Renderable, its corresponding local transform matrix, and a ``std::vector`` of ``shared_ptr<SceneNode>`` children. It also provides a member function ``draw()``, which takes parent world transform matrix and a camera transform matrix, and combines them with the localtransform to get the final transform which is to be sent to the shaders corresponding uniform. A call of ``draw()`` is first forwarded to all children (handing through the world transform matrix *calculated from the parent world transform and the local transform* - the root SceneNode object must be given a unity matrix as parent world transform for the draw call - and the camera matrix) and then executed on the SceneNode itself. As a result, a call of ``draw()`` on the root of a scene should draw the whole scene.
+In addition ``draw()`` there exists ``drawNodeOnly()`` which take the same parameters as ``draw()`` but skips iterating over the children.
 ### Constructors
 - ``SceneNode(Renderable& object)`` constructs a SceneNode with the provided Renderable and an empty vector of children
 - ``SceneNode()`` constructs a SceneNode with no Renderable (which could be useful as a root node that has no visual component associated with it) and an empty vector of children ==not yet implemented==
@@ -158,7 +160,7 @@ PointLight stores information about a point light, provides data access methods,
 
 ## SpotLight 
 
-PointLight stores information about a spot light, provides data access methods, and a method to upload this light source to a provided shader program.
+PointLight stores information about a spotlight, provides data access methods, and a method to upload this light source to a provided shader program.
 
 ### Constructors
 
@@ -175,7 +177,7 @@ PointLight stores information about a spot light, provides data access methods, 
 
 ## LightSources
 
-Stores vectors of point lights and spot lights and provides methods that iterate over those vectors and call the upload methods of the lights contained in them.
+Stores vectors of point lights and spotlights and provides methods that iterate over those vectors and call the upload methods of the lights contained in them.
 
 ### Constructors 
 
@@ -319,5 +321,5 @@ Functional methods of each class are tested with equivalence class tests. Each c
 
 The main testing function of a class must ``return 0`` if all the tests called from it have passed, and a non-zero integer if any of the tests have failed. To achieve this, it is recommended to have each unit test ``return 0`` on pass and ``return 1`` on fail. The main testing function can then add up all the return values and return the sum as is. If all tests have passed, the main testing function will ``return 0``, otherwise it will return an integer corresponding to the number of failed tests. 
 
-The same strategy is used in the the main function of ``/tests/unit_tests.cpp``. The exit code returned from this main function is thus the number of total failed tests.
+The same strategy is used in the main function of ``/tests/unit_tests.cpp``. The exit code returned from this main function is thus the number of total failed tests.
 
