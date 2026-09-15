@@ -6,7 +6,6 @@
 #define CG1PROJEKT_RENDERABLE_H
 #include "ObjectData.h"
 #include "Material.h"
-#include "Mat4.h"
 class Renderable
 {
 private:

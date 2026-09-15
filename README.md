@@ -20,7 +20,8 @@ shimmering alien surroundings of the scene.
 
 # Build information
 
-This project uses the meson build system.  
+This project uses the meson build system. For systems where meson and ninja are not available and can not be installed,
+a makefile for GNU make has been added.
 The meson build system is available in most package managers, their website, and on GitHub:  
 https://github.com/mesonbuild/meson  
 https://mesonbuild.com/index.html
@@ -42,6 +43,10 @@ First set up the meson build directory by navigating to project root directory i
 
 To build the project run command  
 ``meson compile -C buildDir``  
+
+### Building with GNU make
+
+
 
 # Usage
 

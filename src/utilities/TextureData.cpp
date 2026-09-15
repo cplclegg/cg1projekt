@@ -10,13 +10,13 @@ using namespace std;
 TextureData::TextureData() = default;
 
 TextureData::TextureData(const std::filesystem::path& relativePath)
-    : m_location { ResourceLocator::getResourcePath(relativePath) }
+    : m_location { relativePath }
 {
     loadImageData();
 }
 
 TextureData::TextureData(const std::filesystem::path& relativePath, GLenum target)
-    : m_location { ResourceLocator::getResourcePath(relativePath) }
+    : m_location { relativePath }
     , m_target {target}
 {
     loadImageData();

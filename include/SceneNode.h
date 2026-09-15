@@ -7,6 +7,7 @@
 #include "Material.h"
 #include "Renderable.h"
 #include "LightSources.h"
+#include "Mat4.h"
 #include <vector>
 #include <optional>
 class SceneNode

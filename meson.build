@@ -17,18 +17,6 @@ graphics_deps = [
     opengl_dep
 ]
 
-conf = configuration_data()
-
-conf.set_quoted(
-    'PROJECT_SOURCE_ROOT',
-    meson.project_source_root()
-)
-
-configure_file(
-    output : 'config.h',
-    configuration : conf
-)
-
 inc = include_directories('include')
 
 core_sources = files(
@@ -39,7 +27,6 @@ core_sources = files(
     'src/utilities/ShaderSource.cpp',
     'src/utilities/ShaderProgram.cpp',
     'src/utilities/ObjectData.cpp',
-    'src/utilities/ResourceLocator.cpp',
     'src/utilities/TextureData.cpp',
     'src/utilities/CubeMap.cpp',
     'src/utilities/Material.cpp',
@@ -59,7 +46,6 @@ test_sources = files(
     'tests/testsrc/Vec3Test.cpp',
     'tests/testsrc/Vec4Test.cpp',
     'tests/testsrc/ObjectDataTest.cpp',
-    'tests/testsrc/ResourceLocatorTest.cpp',
     'tests/testsrc/TextureDataTest.cpp'
 )
 

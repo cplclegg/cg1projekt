@@ -7,7 +7,6 @@
  */
 
 #include "../../include/ShaderSource.h"
-#include "../../include/ResourceLocator.h"
 #include <cassert>
 #include <fstream>
 #include <iostream>
@@ -45,7 +44,7 @@ void ShaderSource::loadSourceFile(const string& path)
 
 char* ShaderSource::readSourceFile(const std::filesystem::path& relativePath)
 {
-    std::filesystem::path path {ResourceLocator::getResourcePath(relativePath)};
+    std::filesystem::path path {relativePath};
     ifstream fs {path, ifstream::in};
     if (!fs.is_open()) throw runtime_error("Error opening shader file: " + path.string());
 

@@ -13,7 +13,6 @@
 #include <string>
 #include <bits/error_constants.h>
 
-#include "ResourceLocator.h"
 using namespace std;
 
 ObjectData::ObjectData() = default;
@@ -38,8 +37,8 @@ void ObjectData::printBuffer() const
     cout << endl;
 }
 
-ObjectData::ObjectData(const std::string& path)
-    : m_buffer {loadObj(path.c_str())}
+ObjectData::ObjectData(const std::string& relativePath)
+    : m_buffer {loadObj(relativePath.c_str())}
 {
 }
 
@@ -49,7 +48,7 @@ ObjectData::~ObjectData() // do NOT delete or free m_buffer, its heap allocated
 
 void ObjectData::importObjectData(const std::filesystem::path& relativePath)
 {
-    m_buffer = loadObj(ResourceLocator::getResourcePath(relativePath).c_str());
+    m_buffer = loadObj(relativePath.c_str());
 }
 
 GLfloat* ObjectData::getBuffer() const

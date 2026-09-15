@@ -5,7 +5,6 @@
 #ifndef CG1PROJEKT_TEXTUREDATA_H
 #define CG1PROJEKT_TEXTUREDATA_H
 
-#include "include/ResourceLocator.h"
 #include <iostream>
 #include <filesystem>
 #include <GL/glew.h>

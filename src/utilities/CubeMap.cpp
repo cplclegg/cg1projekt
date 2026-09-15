@@ -3,7 +3,6 @@
 //
 
 #include "CubeMap.h"
-#include "ResourceLocator.h"
 #include <cassert>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -19,12 +18,12 @@ CubeMap::CubeMap(
     )
         : m_locations
         {
-            ResourceLocator::getResourcePath(posX),
-            ResourceLocator::getResourcePath(negX),
-            ResourceLocator::getResourcePath(posY),
-            ResourceLocator::getResourcePath(negY),
-            ResourceLocator::getResourcePath(posZ),
-            ResourceLocator::getResourcePath(negZ)
+            posX,
+            negX,
+            posY,
+            negY,
+            posZ,
+            negZ
         }
         , m_shader {shader}
 {
@@ -99,20 +98,7 @@ void CubeMap::createVboAndVao()
 
 void CubeMap::loadImageData()
 {
-    bool success {true};
     stbi_set_flip_vertically_on_load(false);
-  /*  for (size_t i = 0; i < 6; ++i)
-    {
-        unsigned char *image = stbi_load(
-            m_locations[i].c_str(),
-            &m_width,
-            &m_height,
-            &m_channels,
-            0
-            );
-        m_imageData.push_back(image);
-        success = success && m_imageData[i];
-    } */
     unsigned char *left = stbi_load(
             m_locations[0].c_str(),
             &m_width,

@@ -6,9 +6,8 @@
 #define CG1PROJEKT_MATERIAL_H
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "../../include/ShaderProgram.h"
-#include "../../include/TextureData.h"
-#include "../../include/Vec3.h"
+#include "TextureData.h"
+#include "Vec3.h"
 class Material
 {
 private:

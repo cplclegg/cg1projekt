@@ -4,7 +4,6 @@
 
 #ifndef CG1PROJEKT_LIGHTSOURCES_H
 #define CG1PROJEKT_LIGHTSOURCES_H
-#include "include/ResourceLocator.h"
 #include <iostream>
 #include <filesystem>
 #include <vector>
