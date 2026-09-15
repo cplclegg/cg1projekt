@@ -79,6 +79,12 @@ To run unit tests for project first build the project with the comment specified
 > Console output of the unit tests is written to ``/buildDir/meson-logs/testlog.txt``.
 > In case of failed tests ``testlog.txt`` will contain debug information printed by the test functions.
 
+### Running unit tests after building with GNU make
+If you built the project with GNU make using ``make all``, run command  
+``build/unit_tests``  
+from the correct working directory.  
+Test results will be printed to the console.
+
 ## Movement keys
 - ``W`` move fowards
 - ``A`` turn left

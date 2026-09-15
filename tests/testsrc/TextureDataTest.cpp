@@ -33,7 +33,7 @@ int textureDataTest()
     glfwMakeContextCurrent(window);
     glewInit();
     std::cout << "Running tests for TextureData" << std::endl;
-    TextureData testtd {"resources/textures/placeholder.png"};
+    TextureData testtd {"tests/crate.png"};
     GLuint id {testtd.createTexture()};
     if (id != 0)
     {
