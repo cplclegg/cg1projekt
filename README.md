@@ -80,6 +80,13 @@ To run unit tests for project first build the project with the comment specified
 > In case of failed tests ``testlog.txt`` will contain debug information printed by the test functions.
 
 ### Running unit tests after building with GNU make
+
+> [!NOTE]
+> Meson enters the builDir setup for the meson build system to run the test executable. For this reason, the relative paths for testing resources in TextureDataTest.cpp, ObjectDataTest.cpp, ShaderTest.cpp
+> contain a prefix of ``../`` needed for successful loading.
+>
+> **This will break unit tests for GNU make builds. Edit the source files mentioned above, remove the ``../``, and rebuild to run unit tests built with GNU make!**
+
 If you built the project with GNU make using ``make all``, run command  
 ``build/unit_tests``  
 from the correct working directory.  

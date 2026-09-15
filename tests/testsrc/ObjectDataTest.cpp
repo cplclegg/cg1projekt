@@ -35,7 +35,7 @@ int objImportTests()
     cout << "Running tests for ObjectData" << endl;
     GLuint vbo {};
     ObjectData ojd1 {};
-    ojd1.importObjectData("tests/teapot.obj");
+    ojd1.importObjectData("../cubefinish2.obj");
     cout << "data imported\n";
     GLfloat* buffer = nullptr;
     buffer = ojd1.getBuffer();
