@@ -38,7 +38,8 @@ https://mesonbuild.com/index.html
 
 ## Building the project
 
-First set up the meson build directory by navigating to project root directory in terminal emulator of your choice and running the command
+First set up the meson build directory by navigating to project root directory in terminal emulator of your choice (you should see subdirectories include, project_scene, src, tests,
+and the makefile, meson.build, this readme, .gitignore, docs.md, and shader_guidelines.md) and running the command
 ``meson setup buildDir``
 
 To build the project run command  
@@ -46,13 +47,28 @@ To build the project run command
 
 ### Building with GNU make
 
+Navigate to the project root directory (you should see subdirectories include, project_scene, src, tests,
+and the makefile, meson.build, this readme, .gitignore, docs.md, and shader_guidelines.md) in the terminal emulator
+of your choice.
 
+From there, run command
+``make all``
 
 # Usage
 
 ## Starting the program
-
-After building, run the program from the command line as you would any binary.
+### If you built using meson
+After building, run the program from the command line as you would any binary. It is imperative your
+working directory is still the project root, as resource loading uses relative locations. In addition to the
+subdirectories mentioned in the building instructions above, you should see a new subdirectory ``buildDir``, which contains
+the project binary. From the correct working directory, run command
+``buildDir/ProjectTeamFirebrick``
+### If you built using GNU make
+After building, run the program from the command line as you would any binary. It is imperative your
+working directory is still the project root, as resource loading uses relative locations. In addition to the
+subdirectories mentioned in the building instructions above, you should see a new subdirectory ``build``, which contains
+the project binary. From the correct working directory, run command
+``build/ProjectTeamFirebrick``
 
 ## Running unit tests
 
